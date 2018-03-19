@@ -26,7 +26,7 @@ class Voter(models.Model):
     # on_delete tells what to do if person is deleted - in that case, do SQL CASCADE
     # This guarantees that a Voter will have a person, it won't become null
     # Default null value for django one to one field is false, so person will never be false
-    person = models.OneToOneField(Person, on_delete=models.CASCADE) 
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
     voting_eligible = models.BooleanField(default=True)
 
 
@@ -76,3 +76,10 @@ class Ballot(models.Model):
     # and referendums in a single place and assigns a voter to this ballet
     # It might also work with many to many, many voters per ballot and many ballots per voter
 
+class Precinct(models.Model):
+    # Precincts have many poll workers
+    poll_worker = models.ManyToManyField(Poll_Worker)
+
+class Poll_Worker(models.Model):
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    precinct = models.OneToOneField(Precinct, on_delete=models.CASCADE)
