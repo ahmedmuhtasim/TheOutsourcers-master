@@ -77,8 +77,8 @@ class Ballot(models.Model):
     # It might also work with many to many, many voters per ballot and many ballots per voter
 
 class Precinct(models.Model):
-    # Precincts have many poll workers
-    poll_worker = models.ManyToManyField(Poll_Worker)
+    name = models.CharField()
+    address = models.CharField()
 
 class Poll_Worker(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
