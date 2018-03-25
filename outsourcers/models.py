@@ -83,3 +83,12 @@ class Precinct(models.Model):
 class Poll_Worker(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
     precinct = models.OneToOneField(Precinct, on_delete=models.CASCADE)
+
+class Election(models.Model):
+    id = models.CharField(max_length=7)
+    ELECTION_TYPES = (
+            ('G', 'General'),
+            ('P', 'Primary')
+    )
+    type = models.CharField(max_length=1, choices=ELECTION_TYPES)
+    ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)
