@@ -26,7 +26,8 @@
 </style>
 <div class="header-container grid">
 	<div class="logo">
-		<img src="va-elect-logo.jpg" />
+		{% load static %}
+		<img src="{% static 'img/va-elect-logo.jpg' %}" />
 	</div>
 	<div class="links">
 		<a href="#vote">Vote</a>
