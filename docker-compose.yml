@@ -6,7 +6,7 @@ services:
   web:
     build: .
     command: > 
-      bash -c "pip install --upgrade django
+      bash -c "pip install --upgrade -r requirements.txt
       && pip install psycopg2-binary
       && python3 manage.py makemigrations
       && python3 manage.py migrate
