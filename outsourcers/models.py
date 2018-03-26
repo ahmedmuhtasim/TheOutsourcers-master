@@ -27,6 +27,20 @@ class Voter(models.Model):
     # This guarantees that a Voter will have a person, it won't become null
     # Default null value for django one to one field is false, so person will never be false
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    voter_number = models.IntegerField()
+    STATUS_TYPES = (
+        ('A', 'Active'),
+        ('I', 'Inactive')
+    )
+    voter_status = models.CharField(max_length=1,
+    choices = STATUS_TYPES)
+    date_registered = models.CharField(max_length=10)
+    street_address = models.CharField(max_length=40)
+    city = models.CharField(max_length=30)
+    state = models.CharField(max_length=2)
+    zip = models.IntegerField(max_length=5)
+    locality = models.CharField(max_length=40)
+
     voting_eligible = models.BooleanField(default=True)
 
 
@@ -78,7 +92,8 @@ class Ballot(models.Model):
 
 class Precinct(models.Model):
     name = models.CharField()
-    address = models.CharField()
+    id = models.IntegerField(max_length=4)
+
 
 class Poll_Worker(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
