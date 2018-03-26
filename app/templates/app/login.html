@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>VA - Board</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/home.css' %}">
+	</head>
+	<body>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			a {
+				text-decoration: none;
+				font-size: 24px;
+			}
+			.center-text {
+				text-align: center;
+			}
+			.grid {
+				display: grid;
+			}
+			.red-text {
+				color: #D0021B;
+			}
+			.blue-text {
+				color: #226FC8;
+			}
+		</style>
+		{% include './components/header.html' %}
+
+		<!-- Start Main Content -->
+		
+
+
+		<!-- End Main Content -->
+		
+		{% include './components/footer.html' %}
+		
+	</body>
+</html>

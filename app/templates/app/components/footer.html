@@ -1,0 +1,45 @@
+<!-- Start Footer -->
+<style>
+	.footer-container {
+		grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+		grid-template-areas:
+		". links links links ."
+		". . legal . ."; 
+		padding: 16pt;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background-color: dodgerblue;
+	}
+	.footer-container, .footer-container a {
+		color: white;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	.footer-container a {
+		padding: 0pt 16pt;
+	}
+	.footer-container .links {
+		grid-area: links;
+		padding-bottom: 12pt;
+	}
+	.footer-container .legal {
+		grid-area: legal;
+	}
+	.footer-container p {
+		padding: 0px;
+		margin: 0px;
+		font-size: 14px;
+	}
+</style>
+<div class="footer-container grid">
+	<div class="links center-text">
+		<a href="#vote">Vote</a>
+		<a href="#results">Results</a>
+		<a href="#past+elections">Past Elections</a>
+		<a href="#profile">Profile</a>
+	</div>
+	<div class="legal center-text">
+		<p>Mauris non tempor quam, et lacinia sapien. Mauris accumsan eros eget libero posuere vulputate. Etiam elit elit, elementum sed varius at, adipiscing vitae est. Sed nec felis pellentesque, lacinia dui sed, </p>
+	</div>
+</div>
+<!-- End Footer -->

@@ -1,0 +1,20 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+a {
+	text-decoration: none;
+	font-size: 24px;
+}
+.center-text {
+	text-align: center;
+}
+.grid {
+	display: grid;
+}
+.red-text {
+	color: #D0021B;
+}
+.blue-text {
+	color: #226FC8;
+}
