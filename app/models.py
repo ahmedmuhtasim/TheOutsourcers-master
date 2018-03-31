@@ -109,8 +109,8 @@ class Voter(models.Model):
 class Election(models.Model):
     id = models.CharField(max_length=7, primary_key=True)
     ELECTION_TYPES = (
-            ('G', 'General'),
-            ('P', 'Primary')
+            ('G', 'general'),
+            ('P', 'primary')
     )
     type = models.CharField(max_length=1, choices=ELECTION_TYPES)
     ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)

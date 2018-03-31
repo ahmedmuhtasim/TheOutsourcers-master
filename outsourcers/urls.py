@@ -23,6 +23,8 @@ from django.conf import settings
 
 
 urlpatterns = [
+    url(r'^elections/$', views.elections),
+    url(r'^elections/+', views.election),
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
