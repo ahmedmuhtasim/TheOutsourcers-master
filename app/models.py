@@ -23,7 +23,7 @@ class Person(models.Model):
 
 
 class Politician(models.Model):
-    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
 
@@ -45,7 +45,7 @@ class Measure(models.Model):
 
 
 class Candidacy(models.Model):
-    measure = models.OneToOneField(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
     politician = models.OneToOneField(Politician, on_delete=models.CASCADE)
     PARTY = (
         ('D', 'Democrat'),
@@ -59,7 +59,7 @@ class Candidacy(models.Model):
 
 
 class Referendum(models.Model):
-    measure = models.OneToOneField(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
     question = models.TextField(blank=True)
     # Choices are linked in the Choice model
 
@@ -113,4 +113,4 @@ class Election(models.Model):
             ('P', 'Primary')
     )
     type = models.CharField(max_length=1, choices=ELECTION_TYPES)
-    ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)
+    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
