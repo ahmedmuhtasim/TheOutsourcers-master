@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>VA - Vote</title>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/login.css' %}">
+		<link rel="stylesheet" href="{% static 'css/vote.css' %}">
+	</head>
+	<body>
+		{% include './components/header.html' %}
+
+		<!-- Start Main Content -->
+			<style>
+				.main-content {
+					grid-template-areas: "main";
+				}
+				.main {
+					text-align: center;
+					align-self: center;
+				}
+				.main p {
+					font-size: 24px;
+				}
+			</style>
+			<div class="main-content grid">
+				<div class="main">
+					<div class="grid ballot-form">
+						{% if is_day_of %}
+							<form method="POST" action="/vote/" class="form">
+							{{form}}
+							<input type="submit" value="Go To Ballot">
+							</form>
+						{% else %}
+							<div class="message">
+								<p>Next General Election: <span class="blue-text">November 6th, 2018</span></p>
+								<h1>Come back then and enter the serial code provided to you by your poll-worker.</h1>
+							</div>
+						{% endif %}
+					</div>
+					
+				</div>
+			</div>
+		<!-- End Main Content -->
+
+		{% include './components/footer.html' %}
+		
+	</body>
+	<script>
+		const dayof = new Date("2018-11-06");
+		const today = new Date("2018-11-06");
+		$(document).ready(function() {
+			console.log(window.location.pathname);
+		});
+	</script>
+</html>

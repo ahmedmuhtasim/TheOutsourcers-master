@@ -25,6 +25,12 @@ from django.conf import settings
 urlpatterns = [
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home),
+	url('login/', views.login),
+	url('signup/', views.signup),
+	url('elections/', views.elections),
+	url('vote/', views.vote),
+	url('submitVote/', views.submit_vote),
+	url('results/', views.results),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 '''
