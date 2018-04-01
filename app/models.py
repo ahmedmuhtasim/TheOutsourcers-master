@@ -27,21 +27,22 @@ class Politician(models.Model):
 
 
 
-class Ballot(models.Model):
-    pass
-    # Votes are NOT stored in ballot - thinking they are read then a choice is updated
-    # This avoids being able to trace the ballot - the ballot simply puts many candidacies
-    # and referendums in a single place and assigns a voter to this ballet
-    # It might also work with many to many, many voters per ballot and many ballots per voter
-
-
 class Measure(models.Model):
     MEASURE_TYPES = (
             ('R', 'Referendum'),
             ('C', 'Candidacy')
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
-    ballot = models.ManyToManyField(Ballot)
+#    ballot = models.ManyToManyField(Ballot)
+
+
+class Ballot(models.Model):
+#    pass
+    measures = models.ManyToManyField(Measure)
+    # Votes are NOT stored in ballot - thinking they are read then a choice is updated
+    # This avoids being able to trace the ballot - the ballot simply puts many candidacies
+    # and referendums in a single place and assigns a voter to this ballet
+    # It might also work with many to many, many voters per ballot and many ballots per voter
 
 
 class Candidacy(models.Model):

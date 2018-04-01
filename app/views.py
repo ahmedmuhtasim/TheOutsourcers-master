@@ -26,18 +26,45 @@ def elections(request):
 		elections.append(json)
 	return JsonResponse({"elections": elections})
 
-def election(request):
-	election_id = ""
-	for letter in request.path[11:]:
-		if letter != '/':
-			election_id += letter
-		else:
-			break
-	election = Election.objects.get(pk=election_id)
+def election(request, pk):
+	election = Election.objects.get(pk=pk)
 	json = {}
 	json["id"] = election.id
 	json["type"] = election.type
 
 #	json["ballot"] = election.ballot
 	return JsonResponse({ election.id : election.type})
+
+def voters(request):
+	args = {}
+	voters =[]
+	for key in request.GET:
+		args[key] = request.GET[key]
+	if "pk" in args:
+		all_voters = Voter.objects.get(pk=args["pk"])
+		all_voters = [all_voters]
+	else:
+		all_voters = Voter.objects.all()
+	for voter in all_voters:
+		voter_info = {}
+		json = {}
+		json["first_name"] = voter.person.first_name
+		json["last_name"] = voter.person.last_name
+		json["SSN"] = voter.person.SSN
+		json["federal_district"] = voter.person.federal_district
+		json["state_district"] = voter.person.federal_district
+		voter_info["voter_number"] = voter.voter_number
+		voter_info["voter_status"] = voter.get_voter_status_display()
+		voter_info["date_registered"] = voter.date_registered
+		voter_info["street_address"] = voter.street_address
+		voter_info["city"] = voter.city
+		voter_info["state"] = voter.state
+		voter_info["zip_code"] = voter.zip_code
+		voter_info["locality"] = voter.locality
+		voter_info["precinct"] = voter.precinct
+		voter_info["voting_eligible"] = voter.voting_eligible
+		json["voter_info"] = [voter_info]
+		voters.append(json)
+	return JsonResponse({"voters": voters})
+
 
