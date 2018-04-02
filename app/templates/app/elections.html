@@ -1,8 +1,13 @@
 <html>
 	<head>
 		<title>VA - Elections</title>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/elections.css' %}">
 	</head>
 	<body>
 		{% include './components/header.html' %}
@@ -10,20 +15,54 @@
 		<!-- Start Main Content -->
 			<style>
 				.main-content {
-					grid-template-areas: "main";
+					grid-template-columns: 1fr min-content 1fr;
+					grid-template-areas: ". main .";
 				}
 				.main {
-					text-align: center;
-					align-self: center;
-				}
-				.main p {
-					font-size: 24px;
 				}
 			</style>
 			<div class="main-content grid">
 				<div class="main">
-					<p>Next General Election: <span class="blue-text">November 6th, 2018</span></p>
-					<p>Deadline to Register: <span class="red-text">October 15th, 2018</span></p>
+					<div class="page-title">
+						<p class="italic text-100 light text-center">Elections</p>
+					</div>
+					<ul class="tab-nav">
+						<li value="open">Open</li>
+						<li value="closed">Closed</li>
+						<li value="future">Future</li>
+						<li value="all">All</li>
+					</ul>
+					<div class="elections-section" id="open">
+						{% for election in election_data.open %}
+							<div class="election">
+								<p class="text-36">{{election.name}}</p>
+								<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_votes}}</span></p>
+							
+								<p class="text-16 italic">{{election.type}}</p>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="elections-section" id="closed">
+						{% for election in election_data.closed %}
+							<div class="election" >
+								<p class="text-36">{{election.name}}</p>
+								<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
+							
+								<p class="text-16 italic">{{election.type}}</p>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="elections-section" id="future">
+						{% for election in election_data.future %}
+						<div class="election">
+								<p class="text-36">{{election.name}}</p>
+								<p><a class="text-16 " href="/locations/{{election.id}}" style="text-decoration: underline">Find Polling Locations</a></p>
+							
+								<p class="text-16 italic">{{election.type}}</p>
+								
+						</div>
+						{% endfor %}
+					</div>
 				</div>
 			</div>
 		<!-- End Main Content -->
@@ -31,4 +70,39 @@
 		{% include './components/footer.html' %}
 		
 	</body>
+	<script>
+		$(".tab-nav li").click(function() {
+			console.log(this);
+			const id = $(this).attr("value");
+			
+			if (id != "all") {
+				$(".main .elections-section").css("display", "none");
+				$(`#${id}`).css("display", "block");
+				console.log({
+					id: id,
+					'#${id}': `#${id}`,
+				});
+			} else {
+				$(".main .elections-section").css("display", "block");
+			}
+			
+		});
+
+		var i = 1;
+
+		
+		const increment = function(target, currentValue, growthRate) {
+			console.log("runnign");
+			let inc = Math.floor(Math.random() * 3);
+			let value = $("#equifax-2018").text();
+			$("#equifax-2018").text(Number(value) + inc);
+		}
+
+		var interval = setInterval(increment, 1000);
+
+
+
+
+		
+	</script>
 </html>

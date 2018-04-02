@@ -7,6 +7,8 @@ from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from .utility_methods import validate_serial_code
 # Create your views here.
+import json
+import urllib
 
 # API
 def elections(request):
@@ -87,7 +89,43 @@ def signup(request):
 
 def page_elections(request):
 	if request.method == "GET":
-		return render(request, 'app/elections.html', {})
+		election_data = {}
+		req = urllib.request.Request('http://localhost:8000/api/elections/')
+		resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+		election_data["body"] = json.loads(resp_json)
+		election_data = {
+			"open": [
+				{
+					"name": "Equifax new President",
+					"id": "equifax-2018",
+					"total_votes": 651,
+					"type": "general",
+					"state": "open"
+				}
+			],
+			"closed": [
+				{
+					"name": "Presidential Race 2012",
+					"id": "pres-2012",
+					"total_votes": 22347000,
+					"type": "general",
+					"state": "closed"
+				}
+			],
+			"future": [
+				{
+					"name": "Midterm 2018",
+					"id": "midterm-2018",
+					"total_votes": 0,
+					"type": "general",
+					"state": "not-yet-open"
+				},
+			]
+		}
+		
+		return render(request, 'app/elections.html', {
+			"election_data": election_data
+		})
 
 @csrf_exempt
 def vote(request):
