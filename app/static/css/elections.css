@@ -3,3 +3,6 @@
 	text-align: inherit;
 	padding: 12pt;
 }
+.page-title {
+	white-space: nowrap;
+}

@@ -16,7 +16,6 @@
 		<div class="main grid">
 			
 			<div class="ballot">
-				<h1>Hi, {{person.name}}</h1>
 				<h2>You have <span id="time-left"></span> time left to finish voting</h2>
 				<form method="POST" action="/submitVote/">
 					{% for election in election_data %}

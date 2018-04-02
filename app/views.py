@@ -127,6 +127,27 @@ def page_elections(request):
 			"election_data": election_data
 		})
 
+def results(request):
+	if request.method == "GET":
+		return render(request, 'app/results.html', {
+		})
+
+def election_result(request, pk):
+	if request.method == "GET":
+		elections = {
+			"pres-2012": {
+				"name": "Presidential Race 2012",
+				"id": "pres-2012",
+				"total_votes": 22347000,
+				"type": "general",
+				"state": "closed"
+			}
+		}
+		return render(request, 'app/election_result.html', {
+			'election': elections[pk],
+			"pk": pk,
+		})
+
 @csrf_exempt
 def vote(request):
 	form = VoteValidationForm
