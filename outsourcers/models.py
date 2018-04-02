@@ -106,4 +106,4 @@ class Election(models.Model):
             ('P', 'Primary')
     )
     type = models.CharField(max_length=1, choices=ELECTION_TYPES)
-    ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)
+ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)

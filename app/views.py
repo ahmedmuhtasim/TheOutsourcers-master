@@ -28,12 +28,12 @@ def elections(request):
 
 def election(request, pk):
 	election = Election.objects.get(pk=pk)
-	json = {}
-	json["id"] = election.id
-	json["type"] = election.type
-
-#	json["ballot"] = election.ballot
-	return JsonResponse({ election.id : election.type})
+	measures = []
+	for measure in election.ballot.measures.all():
+		json = {}
+		json["measure_type"] = measure.get_measure_type_display()
+		measures.append(json)
+	return JsonResponse({ election.id : measures})
 
 def voters(request):
 	args = {}
@@ -66,5 +66,3 @@ def voters(request):
 		json["voter_info"] = [voter_info]
 		voters.append(json)
 	return JsonResponse({"voters": voters})
-
-
