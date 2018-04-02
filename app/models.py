@@ -26,14 +26,12 @@ class Politician(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
-
 class Ballot(models.Model):
     pass
     # Votes are NOT stored in ballot - thinking they are read then a choice is updated
     # This avoids being able to trace the ballot - the ballot simply puts many candidacies
     # and referendums in a single place and assigns a voter to this ballet
     # It might also work with many to many, many voters per ballot and many ballots per voter
-
 
 class Measure(models.Model):
     MEASURE_TYPES = (
@@ -42,7 +40,6 @@ class Measure(models.Model):
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
     ballot = models.ManyToManyField(Ballot)
-
 
 class Candidacy(models.Model):
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
@@ -109,8 +106,9 @@ class Voter(models.Model):
 class Election(models.Model):
     id = models.CharField(max_length=7, primary_key=True)
     ELECTION_TYPES = (
-            ('G', 'General'),
-            ('P', 'Primary')
+            ('G', 'general'),
+            ('P', 'primary')
     )
     type = models.CharField(max_length=1, choices=ELECTION_TYPES)
     ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
+

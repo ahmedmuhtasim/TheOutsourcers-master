@@ -23,6 +23,10 @@ from django.conf import settings
 
 
 urlpatterns = [
+    url(r'^elections/$', views.elections),
+    url(r'^elections/(?P<pk>[0-9-]+)', views.election),
+    url(r'api/elections/', views.elections),
+    url(r'api/voters/', views.voters),
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home),
 	url('login/', views.login),
