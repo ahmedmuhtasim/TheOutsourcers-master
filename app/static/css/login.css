@@ -1,0 +1,84 @@
+.main {
+	grid-template-areas: "formContainer";
+}
+.form-container {
+	margin: auto;
+	grid-template-areas:
+	"form"
+	"alternateOptionBlock";
+	width: 300pt;
+}
+
+.form {
+	grid-area: form;
+	margin-bottom: 50pt;
+}
+.alternate-option-block {
+	grid-area: alternateOptionBlock;
+}
+.form label {
+	display: none;
+}
+.form input {
+	width: 300pt;
+	background-color: #EEEEEE;
+	color: black;
+	border-radius: 3pt;
+	font-size: 16pt;
+	border: none;
+	padding: 12pt 6pt;
+	margin-bottom: 24pt;
+	font-weight: 100;
+	letter-spacing: 1pt;
+	display: block;
+}
+
+.form input::placeholder {
+	color: #929292;
+	font-weight: 200;
+	letter-spacing: 1pt;
+}
+
+.form input[type=submit] {
+	background-color: #226FC8;
+	text-align: center;
+	color: white;
+	margin: 0pt;
+}
+
+.submit-bar * {
+	display: block;
+}
+.submit-bar a, .question span {
+	text-align: center;
+	font-size: 12pt;
+	color: #929292;
+	font-weight: 200;
+	letter-spacing: 0.5pt;
+}
+.submit-bar a {
+	margin: 12pt;
+}
+
+
+.alternate-option-block {
+	grid-template-areas:
+	"question . action";
+}
+.question {
+	grid-area: question;
+	text-align: start;
+}
+
+.action {
+	grid-area: action;
+	text-align: end;
+}
+
+.action-btn {
+	color: #226FC8;
+	border: 2pt solid #226FC8;
+	border-radius: 3pt;
+	padding: 6pt 12pt;
+	background-color: white;
+}

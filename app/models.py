@@ -23,9 +23,15 @@ class Person(models.Model):
 
 
 class Politician(models.Model):
-    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
+class Ballot(models.Model):
+    pass
+    # Votes are NOT stored in ballot - thinking they are read then a choice is updated
+    # This avoids being able to trace the ballot - the ballot simply puts many candidacies
+    # and referendums in a single place and assigns a voter to this ballet
+    # It might also work with many to many, many voters per ballot and many ballots per voter
 
 class Measure(models.Model):
     MEASURE_TYPES = (
@@ -33,20 +39,10 @@ class Measure(models.Model):
             ('C', 'Candidacy')
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
-#    ballot = models.ManyToManyField(Ballot)
-
-
-class Ballot(models.Model):
-#    pass
-    measures = models.ManyToManyField(Measure)
-    # Votes are NOT stored in ballot - thinking they are read then a choice is updated
-    # This avoids being able to trace the ballot - the ballot simply puts many candidacies
-    # and referendums in a single place and assigns a voter to this ballet
-    # It might also work with many to many, many voters per ballot and many ballots per voter
-
+    ballot = models.ManyToManyField(Ballot)
 
 class Candidacy(models.Model):
-    measure = models.OneToOneField(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
     politician = models.OneToOneField(Politician, on_delete=models.CASCADE)
     PARTY = (
         ('D', 'Democrat'),
@@ -60,7 +56,7 @@ class Candidacy(models.Model):
 
 
 class Referendum(models.Model):
-    measure = models.OneToOneField(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
     question = models.TextField(blank=True)
     # Choices are linked in the Choice model
 
@@ -114,4 +110,5 @@ class Election(models.Model):
             ('P', 'primary')
     )
     type = models.CharField(max_length=1, choices=ELECTION_TYPES)
-    ballot = models.OneToOneField(Ballot, on_delete=models.CASCADE)
+    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
+

@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>VA - Board</title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/login.css' %}">
+	</head>
+	<body>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			a {
+				text-decoration: none;
+				font-size: 24px;
+			}
+			.center-text {
+				text-align: center;
+			}
+			.grid {
+				display: grid;
+			}
+			.red-text {
+				color: #D0021B;
+			}
+			.blue-text {
+				color: #226FC8;
+			}
+		</style>
+		{% include './components/header.html' %}
+
+		<!-- Start Main Content -->
+		<div class="main grid">
+			<div class="form-container grid">
+				<form method="POST" action="/login/" class="form login-form">
+					{{form}}
+					<div class="submit-bar">
+						<input type="submit" value="Sign Up">
+					</div>
+				</form>
+				<div class="alternate-option-block grid">
+					<div class="question">
+						<span>Already have an account?</span>
+					</div>
+					<div class="action">
+						<a href="/login/" class="action-btn">Log In</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- End Main Content -->
+		
+		{% include './components/footer.html' %}
+		
+	</body>
+</html>

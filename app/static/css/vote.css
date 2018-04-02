@@ -1,0 +1,15 @@
+.ballot-form {
+	grid-template-areas:
+	"message message message"
+	". form .";
+}
+
+.message {
+	grid-area: message;
+	margin: auto;
+}
+
+.form {
+	grid-area: form;
+	margin: auto;
+}

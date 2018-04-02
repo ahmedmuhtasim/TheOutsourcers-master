@@ -1,0 +1,24 @@
+.main {
+	grid-template-columns: 1fr 3fr 1fr; 
+	grid-template-areas: ". ballot .";
+}
+.ballot {
+	grid-area: ballot;
+}
+.ballot-option {
+	grid-template-columns: 1fr 9fr;
+	grid-template-areas: "radioBtn description";
+	margin: 12pt;
+}
+
+.radio-btn {
+	grid-area: radioBtn;
+	padding: 6pt;
+}
+input[type=radio] {
+	
+}
+
+.description {
+	grid-area: description;
+}
