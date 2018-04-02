@@ -5,7 +5,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from utility_methods import validate_serial_code
+from .utility_methods import validate_serial_code
 # Create your views here.
 
 # API
