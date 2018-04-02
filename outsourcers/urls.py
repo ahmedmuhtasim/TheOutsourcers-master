@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'api/elections/', views.elections),
     url(r'api/voters/', views.voters),
 	url('admin/', admin.site.urls),
-	url(r'^$', views.home),
+	# url(r'^$', views.home),
 	url('login/', views.login),
 	url('signup/', views.signup),
 	url('elections/', views.elections),

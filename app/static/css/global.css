@@ -1,6 +1,21 @@
 body {
 	margin: 0px;
 	padding: 0px;
+	display: grid;
+	grid-template-areas:
+	"header"
+	"main"
+	"footer";
+}
+.header-container {
+	grid-area: header;
+}
+.main {
+	grid-area: main;
+	min-height: 85vh;
+}
+.footer-container {
+	grid-area: footer;
 }
 a {
 	text-decoration: none;

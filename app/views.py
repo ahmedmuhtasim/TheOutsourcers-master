@@ -100,7 +100,7 @@ def vote(request):
 	form = VoteValidationForm
 	if request.method == "GET":
 		is_day_of = False
-		day_of = date(2018, 4, 1)
+		day_of = date(2018, 4, 2)
 		today = date.today()
 		is_day_of = today == day_of
 		return render(request, 'app/vote.html', {
