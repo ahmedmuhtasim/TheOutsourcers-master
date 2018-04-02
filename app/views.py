@@ -5,16 +5,10 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
+from utility_methods import validate_serial_code
 # Create your views here.
 
-def home(request):
-	''' GET DATA FROM API & FORMAT
-	req = urllib.request.Request('http://exp-api:8000/exp/home')
-	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-	response = json.loads(resp_json)
-	'''
-	return render(request, 'app/home.html', {})
-
+# API
 def elections(request):
 	args = {}
 	elections = []
@@ -68,6 +62,15 @@ def voters(request):
 	return JsonResponse({"voters": voters})
 	#return render(request, 'app/home.html', {})
 
+#PAGES
+def home(request):
+	''' GET DATA FROM API & FORMAT
+	req = urllib.request.Request('http://exp-api:8000/exp/home')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	response = json.loads(resp_json)
+	'''
+	return render(request, 'app/home.html', {})
+
 def login(request):
 	if request.method == "GET":
 		form = LoginForm
@@ -82,18 +85,9 @@ def signup(request):
 			"form": form,
 		})
 
-def elections(request):
+def page_elections(request):
 	if request.method == "GET":
 		return render(request, 'app/elections.html', {})
-
-
-# pseudomethod to validate a given serial code
-def validate_serial_code(code):
-	codes = ["12345", "helloworld", "wololo"]
-	for i in range(len(codes)):
-		if code == codes[i]:
-			return True
-	return False
 
 @csrf_exempt
 def vote(request):
@@ -168,7 +162,6 @@ def vote(request):
 	return JsonResponse({
 		"message": "Invalid Request"
 	})
-
 
 @csrf_exempt
 def submit_vote(request):
