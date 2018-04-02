@@ -129,7 +129,33 @@ def page_elections(request):
 
 def results(request):
 	if request.method == "GET":
+		election_data = {}
+		election_data = {
+			"open": [
+				{
+					"name": "Equifax new President",
+					"id": "equifax-2018",
+					"total_votes": 651,
+					"type": "general",
+					"state": "open"
+				}
+			],
+			"closed": [
+				{
+					"name": "Presidential Race 2012",
+					"id": "pres-2012",
+					"total_votes": 22347000,
+					"type": "general",
+					"state": "closed",
+					"winner": {
+						"name": "Barack Obama",
+						"id": "bho"
+					}
+				}
+			],
+		}
 		return render(request, 'app/results.html', {
+			"election_data": election_data
 		})
 
 def election_result(request, pk):
