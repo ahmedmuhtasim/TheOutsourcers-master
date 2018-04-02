@@ -33,7 +33,7 @@ urlpatterns = [
 	url('elections/', views.page_elections),
 	url('vote/', views.vote),
 	url('submitVote/', views.submit_vote),
-	# url('results/', views.results),
+	url('results/', views.results),
 	url(r'^results/(?P<pk>[0-9a-zA-Z-]+)', views.election_result),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
