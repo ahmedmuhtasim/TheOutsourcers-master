@@ -116,6 +116,6 @@ class Voter(models.Model):
     # Can they vote? The voter must check in - once they check in, voting_eligible will become True
     # When they cannot vote - so they have not checked in/election over, should be False
     # voting_eligible should be made false with a ballot submission
-    voting_eligible = models.BooleanField(default=False)    
+    voter_key = models.CharField(max_length=12, null=True)
 
 
