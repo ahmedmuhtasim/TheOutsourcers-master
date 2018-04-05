@@ -1,6 +1,18 @@
 from django.db import models
 
 
+class Election(models.Model):
+    id = models.CharField(max_length=7, primary_key=True)
+    ELECTION_TYPES = (
+            ('G', 'general'),
+            ('P', 'primary')
+    )
+    type = models.CharField(max_length=1, choices=ELECTION_TYPES)
+
+    def __str__(self):
+        return self.id
+
+
 class Office(models.Model):
     title = models.CharField(max_length=30)
     term = models.IntegerField()
@@ -27,7 +39,10 @@ class Politician(models.Model):
 
 
 class Ballot(models.Model):
-    pass
+    election = models.OneToOneField(Election, on_delete=models.CASCADE, primary_key=True)
+    def __str__(self):
+        return str(self.pk)
+
     # Votes are NOT stored in ballot - thinking they are read then a choice is updated
     # This avoids being able to trace the ballot - the ballot simply puts many candidacies
     # and referendums in a single place and assigns a voter to this ballet
@@ -39,7 +54,8 @@ class Measure(models.Model):
             ('C', 'Candidacy')
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
-    ballot = models.ManyToManyField(Ballot)
+    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
+
 
 class Candidacy(models.Model):
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
@@ -102,13 +118,4 @@ class Voter(models.Model):
     # voting_eligible should be made false with a ballot submission
     voting_eligible = models.BooleanField(default=False)    
 
-
-class Election(models.Model):
-    id = models.CharField(max_length=7, primary_key=True)
-    ELECTION_TYPES = (
-            ('G', 'general'),
-            ('P', 'primary')
-    )
-    type = models.CharField(max_length=1, choices=ELECTION_TYPES)
-    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
 
