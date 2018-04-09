@@ -15,14 +15,26 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.urls import path
-from app import views
-
 from django.conf.urls.static import static
 from django.conf import settings
+from app import views
 
+#router.register("voters", VoterViewSet)
+#router.register("ballots", BallotViewSet)
+request_override_map = {
+    'get': 'get',
+    'post': 'post',
+    'put': 'put',
+    'delete': 'delete'
+}
+voter_endpoint = views.VoterViewSet.as_view(request_override_map)
+election_endpoint = views.ElectionViewSet.as_view(request_override_map)
 
 urlpatterns = [
+    url(r'^api/voters/(?P<pk>[0-9-]+)', voter_endpoint, name='voter-detail'),
+    url(r'^api/voters/', voter_endpoint, name='voter-list'),
+    url(r'^api/elections/(?P<pk>[0-9-]+)', election_endpoint, name='election-detail'),
+    url(r'^api/elections/', election_endpoint, name='election-list'),
     url(r'^api/elections/(?P<pk>[0-9-]+)', views.election),
     url('api/elections/', views.elections),
     url('api/voters/', views.voters),
