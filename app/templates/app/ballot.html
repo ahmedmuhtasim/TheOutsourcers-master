@@ -10,8 +10,11 @@
 		<link rel="stylesheet" href="{% static 'css/ballot.css' %}">
 	</head>
 	<body>
-		{% include './components/header.html' %}
-
+		{% if logged_on %}
+			{% include './components/loggedInHeader.html' %}
+		{% else %}
+			{% include './components/header.html' %}
+		{% endif %}
 		<!-- Start Main Content -->
 		<div class="main grid">
 			

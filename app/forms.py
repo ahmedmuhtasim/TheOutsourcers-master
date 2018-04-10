@@ -13,9 +13,9 @@ class SignupForm(forms.Form):
 	#add role field
 
 class LoginForm(forms.Form):
-	first_name = forms.CharField(label='first name', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
-	last_name = forms.CharField(label='last name', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
-	ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Last 4 Digits of your SSN'}))
+	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+	#ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Last 4 Digits of your SSN'}))
+	password = forms.CharField(label='password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 class VoteValidationForm(forms.Form):
 	serial_code = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Serial Code'}))

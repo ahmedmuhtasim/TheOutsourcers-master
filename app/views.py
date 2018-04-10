@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
 from django.db import IntegrityError
 from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
@@ -14,7 +14,9 @@ from rest_framework import viewsets, status
 from rest_framework.renderers import JSONRenderer
 # Create your views here.
 import json
+from django.urls import reverse
 import urllib
+from django.views.decorators.csrf import csrf_exempt
 
 # API
 def elections(request):
@@ -68,53 +70,73 @@ def voters(request):
 		json["voter_info"] = [voter_info]
 		voters.append(json)
 	return JsonResponse({"voters": voters})
-	#return render(request, 'app/home.html', {})
+	#return render(request, "app/home.html", {})
 
+def is_logged_on(request):
+	auth = request.COOKIES.get("auth")
+	return auth
 
 #PAGES
 def home(request):
-	''' GET DATA FROM API & FORMAT
-	req = urllib.request.Request('http://exp-api:8000/exp/home')
-	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	""" GET DATA FROM API & FORMAT
+	req = urllib.request.Request("http://exp-api:8000/exp/home")
+	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	response = json.loads(resp_json)
-	'''
-	return render(request, 'app/home.html', {})
+	"""
 
+	#logged_on = is_logged_on(request)
+	logged_on = False
+	return render(request, "app/home.html", {
+		"logged_on": logged_on
+	})
+
+@csrf_exempt
 def login(request):
+	#logged_on = is_logged_on(request)
+	logged_on = False
 	if request.method == "GET":
 		form = LoginForm
-		return render(request, 'app/login.html', {
+		return render(request, "app/login.html", {
 			"form": form,
 		})
-
+		
+@csrf_exempt
 def signup(request):
+	#logged_on = is_logged_on(request)
+	logged_on = False
+	form = SignupForm
+
 	if request.method == "GET":
-		form = SignupForm
-		return render(request, 'app/signup.html', {
+		
+		return render(request, "app/signup.html", {
 			"form": form,
+			"logged_on": logged_on
 		})
 	elif request.method == "POST":
 		data = SignupForm(request.POST)
-		form = SignupForm
 
 		if (data.password != data.confirm_password):
-			return render(request, 'app/signup.html', {
-			"form": form,
+			return render(request, "app/signup.html", {
+				"form": form,
+				"logged_on": logged_on
 			})
 		else:
-			return signup_confirmation.html
+			return HttpResponseRedirect(reverse('signup_confirmation'))
 
 def signup_confirmation(request):
-	if request.method == "GET":
-		return render(request, 'app/signup_confirmation.html', {
-			
-		})
+	#logged_on = is_logged_on(request)
+	logged_on = False
+	return render(request, "app/signup_confirmation.html", {
+		"logged_on": logged_on
+	})
 
 def page_elections(request):
+	# logged_on = is_logged_on(request)
+	logged_on = False
 	if request.method == "GET":
 		election_data = {}
-		req = urllib.request.Request('http://localhost:8000/api/elections/')
-		resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+		req = urllib.request.Request("http://localhost:8000/api/elections/")
+		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		election_data["body"] = json.loads(resp_json)
 		election_data = {
 			"open": [
@@ -146,11 +168,14 @@ def page_elections(request):
 			]
 		}
 
-		return render(request, 'app/elections.html', {
-			"election_data": election_data
+		return render(request, "app/elections.html", {
+			"election_data": election_data,
+			"logged_on": logged_on
 		})
 
 def results(request):
+	#logged_on = is_logged_on(request)
+	logged_on = False
 	if request.method == "GET":
 		election_data = {}
 		election_data = {
@@ -177,11 +202,14 @@ def results(request):
 				}
 			],
 		}
-		return render(request, 'app/results.html', {
+		return render(request, "app/results.html", {
 			"election_data": "election_data",
+			"logged_on": logged_on
 		})
 
 def election_result(request, pk):
+	#logged_on = is_logged_on(request)
+	logged_on = False
 	if request.method == "GET":
 		elections = {
 			"pres-2012": {
@@ -192,27 +220,30 @@ def election_result(request, pk):
 				"state": "closed"
 			}
 		}
-		return render(request, 'app/election_result.html', {
-			'election': elections[pk],
+		return render(request, "app/election_result.html", {
+			"election": elections[pk],
 			"pk": pk,
+			"logged_on": logged_on
 		})
 
 @csrf_exempt
 def vote(request):
+	#logged_on = is_logged_on(request)
+	logged_on = False
 	form = VoteValidationForm
 	if request.method == "GET":
 		is_day_of = False
 		day_of = date(2018, 4, 2)
 		today = date.today()
 		is_day_of = today == day_of
-		return render(request, 'app/vote.html', {
-			'form': form,
-			'is_day_of': is_day_of
+		return render(request, "app/vote.html", {
+			"form": form,
+			"is_day_of": is_day_of
 		})
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
 		if form.is_valid():
-			if validate_serial_code(form.cleaned_data['serial_code']):
+			if validate_serial_code(form.cleaned_data["serial_code"]):
 				election_data = [
 					{
 						"name": "Presidential Contest",
@@ -258,13 +289,14 @@ def vote(request):
 					}
 				]
 				person = {
-					'name': 'Luke Masters',
-					'id': 'awh4Rtxu12'
+					"name": "Luke Masters",
+					"id": "awh4Rtxu12"
 				}
-				return render(request, 'app/ballot.html', {
-					'form': BallotForm,
-					'election_data': election_data,
-					'person': person,
+				return render(request, "app/ballot.html", {
+					"form": BallotForm,
+					"election_data": election_data,
+					"person": person,
+					"logged_on": logged_on
 				})
 
 	return JsonResponse({
@@ -277,9 +309,20 @@ def submit_vote(request):
 	return JsonResponse(data)
 
 def results(request):
+	#logged_on = is_logged_on(request)
+	logged_on = False
 	if request.method == "GET":
-		return render(request, 'app/results.html', {})
+		return render(request, "app/results.html", {
+			"logged_on": logged_on
+		})
 
+def signout(request):
+	logged_on = is_logged_on(request)
+	# If we received a GET request instead of a POST request
+	response = HttpResponseRedirect(reverse('home'))
+	response.delete_cookie('auth')
+
+	return response
 
 class BallotViewSet(ModelViewSet):
     serializer_class = BallotSerializer
@@ -293,16 +336,16 @@ class VoterViewSet(viewsets.ModelViewSet):
 
    def delete(self, request, format=None, pk=None):
       if pk is None:
-         return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to delete an entry'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Please specify ID to delete an entry"}, status=status.HTTP_400_BAD_REQUEST)
       else:
          try:
             result = self.model.objects.get(pk=pk)
             result.delete()
          except self.model.DoesNotExist:
-            return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404 - Not Found", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
          except IntegrityError:
-            return Response({'status': '400 - Bad Request', 'result': 'User is a foreign key to other models and thus cannot be deleted'}, status=status.HTTP_409_CONFLICT)
-         return Response({'status': '204 - No Content', 'response': "Successfully deleted user"})
+            return Response({"status": "400 - Bad Request", "result": "User is a foreign key to other models and thus cannot be deleted"}, status=status.HTTP_409_CONFLICT)
+         return Response({"status": "204 - No Content", "response": "Successfully deleted user"})
 
    def get(self, request, format=None, pk=None):
       is_many = True
@@ -313,35 +356,35 @@ class VoterViewSet(viewsets.ModelViewSet):
             result = self.model.objects.get(pk=pk)
             is_many = False
          except self.model.DoesNotExist:
-            return Response({'status': '404', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
       serializer = self.serializer_class(result, many=is_many)
-      return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
+      return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
 
    def post(self, request, format=None, pk=None):
       if pk is None:
          serializer = self.serializer_class(data=request.data)
          if serializer.is_valid():
             serializer.save()
-            return Response({'status': '201 - Created', 'result': serializer.data}, status=status.HTTP_201_CREATED)
-         return Response({'status': '400 - Bad Request', 'missing data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "201 - Created", "result": serializer.data}, status=status.HTTP_201_CREATED)
+         return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
       else:
-         return Response({'status': '400 - Bad Request', 'result': 'Cannot POST data to an already created id'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Cannot POST data to an already created id"}, status=status.HTTP_400_BAD_REQUEST)
 
    def put(self, request, format=None, pk=None):
       if pk is None:
-         return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to update an entry'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Please specify ID to update an entry"}, status=status.HTTP_400_BAD_REQUEST)
       else:
          try:
             result = self.model.objects.get(pk=pk)
          except self.model.DoesNotExist:
-            return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404 - Not Found", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
          serializer = self.serializer_class(result, data=request.data)
          if serializer.is_valid():
             serializer.save()
-            return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
-         return Response({'status': '400 - Bad Request', 'missing data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
+         return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class ElectionViewSet(viewsets.ModelViewSet):
    renderer_classes = (JSONRenderer, )
@@ -351,16 +394,16 @@ class ElectionViewSet(viewsets.ModelViewSet):
 
    def delete(self, request, format=None, pk=None):
       if pk is None:
-         return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to delete an entry'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Please specify ID to delete an entry"}, status=status.HTTP_400_BAD_REQUEST)
       else:
          try:
             result = self.model.objects.get(pk=pk)
             result.delete()
          except self.model.DoesNotExist:
-            return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404 - Not Found", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
          except IntegrityError:
-            return Response({'status': '400 - Bad Request', 'result': 'User is a foreign key to other models and thus cannot be deleted'}, status=status.HTTP_409_CONFLICT)
-         return Response({'status': '204 - No Content', 'response': "Successfully deleted user"})
+            return Response({"status": "400 - Bad Request", "result": "User is a foreign key to other models and thus cannot be deleted"}, status=status.HTTP_409_CONFLICT)
+         return Response({"status": "204 - No Content", "response": "Successfully deleted user"})
 
    def get(self, request, format=None, pk=None):
       is_many = True
@@ -371,32 +414,32 @@ class ElectionViewSet(viewsets.ModelViewSet):
             result = self.model.objects.get(pk=pk)
             is_many = False
          except self.model.DoesNotExist:
-            return Response({'status': '404', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
       serializer = self.serializer_class(result, many=is_many)
-      return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
+      return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
 
    def post(self, request, format=None, pk=None):
       if pk is None:
          serializer = self.serializer_class(data=request.data)
          if serializer.is_valid():
             serializer.save()
-            return Response({'status': '201 - Created', 'result': serializer.data}, status=status.HTTP_201_CREATED)
-         return Response({'status': '400 - Bad Request', 'missing data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "201 - Created", "result": serializer.data}, status=status.HTTP_201_CREATED)
+         return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
       else:
-         return Response({'status': '400 - Bad Request', 'result': 'Cannot POST data to an already created id'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Cannot POST data to an already created id"}, status=status.HTTP_400_BAD_REQUEST)
 
    def put(self, request, format=None, pk=None):
       if pk is None:
-         return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to update an entry'}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"status": "400 - Bad Request", "result": "Please specify ID to update an entry"}, status=status.HTTP_400_BAD_REQUEST)
       else:
          try:
             result = self.model.objects.get(pk=pk)
          except self.model.DoesNotExist:
-            return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"status": "404 - Not Found", "result": "User with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
          serializer = self.serializer_class(result, data=request.data)
          if serializer.is_valid():
             serializer.save()
-            return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
-         return Response({'status': '400 - Bad Request', 'missing data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
+         return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
