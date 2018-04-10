@@ -41,6 +41,7 @@ urlpatterns = [
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home),
 	url('login/', views.login),
+    url('signupConfirmation/', views.signup_confirmation),
 	url('signup/', views.signup),
 	url('elections/', views.page_elections),
 	url('vote/', views.vote),
@@ -48,7 +49,7 @@ urlpatterns = [
 	url(r'^results/(?P<pk>[0-9a-zA-Z-]+)', views.election_result, name='specific-results'),
 
 	url(r'^results/', views.results, name='all-results'),
-		
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 '''

@@ -104,6 +104,12 @@ def signup(request):
 		else:
 			return signup_confirmation.html
 
+def signup_confirmation(request):
+	if request.method == "GET":
+		return render(request, 'app/signup_confirmation.html', {
+			
+		})
+
 def page_elections(request):
 	if request.method == "GET":
 		election_data = {}
