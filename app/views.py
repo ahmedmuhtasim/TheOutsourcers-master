@@ -93,6 +93,16 @@ def signup(request):
 		return render(request, 'app/signup.html', {
 			"form": form,
 		})
+	elif request.method == "POST":
+		data = SignupForm(request.POST)
+		form = SignupForm
+
+		if (data.password != data.confirm_password):
+			return render(request, 'app/signup.html', {
+			"form": form,
+			})
+		else:
+			return signup_confirmation.html
 
 def page_elections(request):
 	if request.method == "GET":
@@ -129,7 +139,7 @@ def page_elections(request):
 				},
 			]
 		}
-		
+
 		return render(request, 'app/elections.html', {
 			"election_data": election_data
 		})
@@ -274,7 +284,7 @@ class VoterViewSet(viewsets.ModelViewSet):
    queryset = Voter.objects.all()
    serializer_class = VoterSerializer
    model = Voter
-   
+
    def delete(self, request, format=None, pk=None):
       if pk is None:
          return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to delete an entry'}, status=status.HTTP_400_BAD_REQUEST)
@@ -287,7 +297,7 @@ class VoterViewSet(viewsets.ModelViewSet):
          except IntegrityError:
             return Response({'status': '400 - Bad Request', 'result': 'User is a foreign key to other models and thus cannot be deleted'}, status=status.HTTP_409_CONFLICT)
          return Response({'status': '204 - No Content', 'response': "Successfully deleted user"})
-      
+
    def get(self, request, format=None, pk=None):
       is_many = True
       if pk is None:
@@ -298,10 +308,10 @@ class VoterViewSet(viewsets.ModelViewSet):
             is_many = False
          except self.model.DoesNotExist:
             return Response({'status': '404', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
-      
+
       serializer = self.serializer_class(result, many=is_many)
       return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
-   
+
    def post(self, request, format=None, pk=None):
       if pk is None:
          serializer = self.serializer_class(data=request.data)
@@ -320,7 +330,7 @@ class VoterViewSet(viewsets.ModelViewSet):
             result = self.model.objects.get(pk=pk)
          except self.model.DoesNotExist:
             return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
-         
+
          serializer = self.serializer_class(result, data=request.data)
          if serializer.is_valid():
             serializer.save()
@@ -332,7 +342,7 @@ class ElectionViewSet(viewsets.ModelViewSet):
    queryset = Election.objects.all()
    serializer_class = ElectionSerializer
    model = Election
-   
+
    def delete(self, request, format=None, pk=None):
       if pk is None:
          return Response({'status': '400 - Bad Request', 'result': 'Please specify ID to delete an entry'}, status=status.HTTP_400_BAD_REQUEST)
@@ -345,7 +355,7 @@ class ElectionViewSet(viewsets.ModelViewSet):
          except IntegrityError:
             return Response({'status': '400 - Bad Request', 'result': 'User is a foreign key to other models and thus cannot be deleted'}, status=status.HTTP_409_CONFLICT)
          return Response({'status': '204 - No Content', 'response': "Successfully deleted user"})
-      
+
    def get(self, request, format=None, pk=None):
       is_many = True
       if pk is None:
@@ -356,10 +366,10 @@ class ElectionViewSet(viewsets.ModelViewSet):
             is_many = False
          except self.model.DoesNotExist:
             return Response({'status': '404', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
-      
+
       serializer = self.serializer_class(result, many=is_many)
       return Response({'status': '200 - OK', 'result': serializer.data}, status=status.HTTP_200_OK)
-   
+
    def post(self, request, format=None, pk=None):
       if pk is None:
          serializer = self.serializer_class(data=request.data)
@@ -378,7 +388,7 @@ class ElectionViewSet(viewsets.ModelViewSet):
             result = self.model.objects.get(pk=pk)
          except self.model.DoesNotExist:
             return Response({'status': '404 - Not Found', 'result': 'User with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
-         
+
          serializer = self.serializer_class(result, data=request.data)
          if serializer.is_valid():
             serializer.save()
