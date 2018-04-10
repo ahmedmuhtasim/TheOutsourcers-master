@@ -70,6 +70,7 @@ def voters(request):
 	return JsonResponse({"voters": voters})
 	#return render(request, 'app/home.html', {})
 
+
 #PAGES
 def home(request):
 	''' GET DATA FROM API & FORMAT
@@ -161,7 +162,7 @@ def results(request):
 			],
 		}
 		return render(request, 'app/results.html', {
-			"election_data": election_data
+			"election_data": "election_data",
 		})
 
 def election_result(request, pk):
