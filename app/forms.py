@@ -1,14 +1,16 @@
 from django import forms
+from choices import ROLE_CHOICES
 
 class SignupForm(forms.Form):
 	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
 	first_name = forms.CharField(label='first name', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
 	last_name = forms.CharField(label='last name', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
-	email = forms.EmailField(label='email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+	#email = forms.EmailField(label='email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
 	password = forms.CharField(label='password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 	confirm_password = forms.CharField(label='confirm password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
-	ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Last 4 Digits of your SSN'}))
-
+	ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Social Security Number'}))
+	role = forms.CharField(label='role', max_length=2, max_choices=ROLE_CHOICES)
+	#add role field
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))

@@ -59,3 +59,8 @@ STATES_CHOICES = (
 	('WI', 'Wisconsin' ),
 	('WY', 'Wyoming' )
 )
+
+ROLE_CHOICES = (
+	('PW', 'Poll Worker'),
+	('SA', 'System Admin')
+)
