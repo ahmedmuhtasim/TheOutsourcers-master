@@ -7,6 +7,8 @@ class SignupForm(forms.Form):
 	email = forms.EmailField(label='email', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
 	password = forms.CharField(label='password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 	confirm_password = forms.CharField(label='confirm password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
+	ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Last 4 Digits of your SSN'}))
+
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
