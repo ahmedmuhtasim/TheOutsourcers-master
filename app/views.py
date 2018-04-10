@@ -5,7 +5,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code
+from .utility_methods import validate_serial_code, gen_alphanumeric
 from rest_framework.generics import *
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -17,6 +17,7 @@ import json
 from django.urls import reverse
 import urllib
 from django.views.decorators.csrf import csrf_exempt
+
 
 # API
 def elections(request):
@@ -84,26 +85,79 @@ def home(request):
 	response = json.loads(resp_json)
 	"""
 
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	return render(request, "app/home.html", {
 		"logged_on": logged_on
 	})
 
 @csrf_exempt
 def login(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
+	form = LoginForm
 	if request.method == "GET":
-		form = LoginForm
+		
 		return render(request, "app/login.html", {
 			"form": form,
 		})
+	elif request.method == "POST":
+		f = LoginForm(request.POST)
+
+		# Check if the form instance is invalid
+		if not f.is_valid():
+			# Form was bad -- send them back to login page and show them an error
+			return render(request, 'app/login.html', {
+				"form": form,
+				"logged_on": logged_on,
+				"errorMessage": "Form input invalid",
+			})
+
+		# Sanitize username and password fields
+		username = f.cleaned_data['username']
+		password = f.cleaned_data['password']
+
+		user_results = User.objects.filter(username=username)
+
+		if len(user_results) != 1:
+			return render(request, 'app/login.html', {
+				"form": form,
+				"logged_on": logged_on,
+				"errorMessage": "Username or Password Incorrect"
+			})
+
+		user = user_results[0]
+
+		# check password
+		if user.password != password:
+			return render(request, 'app/login.html', {
+				"form": form,
+				"logged_on": logged_on,
+				"errorMessage": "Username or Password Incorrect"
+			})
+
+		""" If we made it here, we can log them in. """
+		# Set their login cookie and redirect to back to wherever they came from
+		authenticator = gen_alphanumeric(30)
+		
+		auth = Authenticator(
+			token=authenticator,
+			user_id=user.pk
+		)
+		auth.save()
+		
+		message = "okie dokie"
+		response = HttpResponseRedirect(reverse('home'))
+		response.set_cookie("auth", authenticator)
+		response.set_cookie("responseMessage", message)
+
+		return response
+		
 		
 @csrf_exempt
 def signup(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	form = SignupForm
 
 	if request.method == "GET":
@@ -124,15 +178,15 @@ def signup(request):
 			return HttpResponseRedirect(reverse('signup_confirmation'))
 
 def signup_confirmation(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	return render(request, "app/signup_confirmation.html", {
 		"logged_on": logged_on
 	})
 
 def page_elections(request):
 	# logged_on = is_logged_on(request)
-	logged_on = False
+	
 	if request.method == "GET":
 		election_data = {}
 		req = urllib.request.Request("http://localhost:8000/api/elections/")
@@ -174,8 +228,8 @@ def page_elections(request):
 		})
 
 def results(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	if request.method == "GET":
 		election_data = {}
 		election_data = {
@@ -208,8 +262,8 @@ def results(request):
 		})
 
 def election_result(request, pk):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	if request.method == "GET":
 		elections = {
 			"pres-2012": {
@@ -228,8 +282,8 @@ def election_result(request, pk):
 
 @csrf_exempt
 def vote(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	form = VoteValidationForm
 	if request.method == "GET":
 		is_day_of = False
@@ -309,8 +363,8 @@ def submit_vote(request):
 	return JsonResponse(data)
 
 def results(request):
-	#logged_on = is_logged_on(request)
-	logged_on = False
+	logged_on = is_logged_on(request)
+	
 	if request.method == "GET":
 		return render(request, "app/results.html", {
 			"logged_on": logged_on

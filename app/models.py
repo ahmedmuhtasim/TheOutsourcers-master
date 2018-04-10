@@ -1,7 +1,6 @@
 from django.db import models
 from .choices import ROLE_CHOICES
 
-
 class User(models.Model):
 	username = models.CharField(max_length=250)
 	first_name = models.CharField(max_length=250)
@@ -9,6 +8,7 @@ class User(models.Model):
 	password = models.CharField(max_length=250) # hash stored
 	ssn = models.CharField(max_length=250) # hash stored
 	join_date = models.DateTimeField(auto_now=True)
+	
 	role = models.CharField(
 		max_length=2,
 		choices = ROLE_CHOICES
@@ -16,6 +16,14 @@ class User(models.Model):
 
 	def __str__(self):
 		return self.username
+
+class Authenticator(models.Model):
+	user_id = models.CharField(max_length=250)
+	token = models.CharField(max_length=250, primary_key=True)
+	date_created = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.token
 
 class Election(models.Model):
     id = models.CharField(max_length=7, primary_key=True)
