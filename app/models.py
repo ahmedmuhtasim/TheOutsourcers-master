@@ -7,6 +7,7 @@ class User(models.Model):
 	last_name = models.CharField(max_length=250)
 	password = models.CharField(max_length=250) # hash stored
 	ssn = models.CharField(max_length=250) # hash stored
+	dob = models.DateTimeField()
 	join_date = models.DateTimeField(auto_now=True)
 	
 	role = models.CharField(
