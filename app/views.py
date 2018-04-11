@@ -18,6 +18,8 @@ from django.urls import reverse
 import urllib
 from django.views.decorators.csrf import csrf_exempt
 
+import hmac
+from django.contrib.auth.hashers import make_password, check_password
 
 # API
 def elections(request):
@@ -99,13 +101,13 @@ def login(request):
 	if logged_on:
 		# Handle user not logged in while trying to create a listing
 		return HttpResponseRedirect(reverse('home'))
-		
+
 	form = LoginForm
 	if request.method == "GET":
-		
 		return render(request, "app/login.html", {
 			"form": form,
 		})
+
 	elif request.method == "POST":
 		f = LoginForm(request.POST)
 
@@ -134,7 +136,7 @@ def login(request):
 		user = user_results[0]
 
 		# check password
-		if user.password != password:
+		if check_password(password, user.password):
 			return render(request, 'app/login.html', {
 				"form": form,
 				"logged_on": logged_on,
@@ -221,8 +223,8 @@ def signup(request):
 			username = username,
 			first_name = first_name,
 			last_name = last_name,
-			password = password,
-			ssn = ssn,
+			password = make_password(password),
+			ssn = make_password(ssn),
 			dob = dob,
 			role = role
 		)
@@ -252,7 +254,7 @@ def signup_confirmation(request):
 	})
 
 def page_elections(request):
-	# logged_on = is_logged_on(request)
+	logged_on = is_logged_on(request)
 	
 	if request.method == "GET":
 		election_data = {}
