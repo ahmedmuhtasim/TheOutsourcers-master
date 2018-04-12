@@ -79,7 +79,7 @@ class Measure(models.Model):
             ('C', 'Candidacy')
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
-    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE)
+    ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE, related_name='measures')
 
 
 class Candidacy(models.Model):

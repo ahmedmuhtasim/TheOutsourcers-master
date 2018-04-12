@@ -22,15 +22,16 @@ class PoliticianSerializer(serializers.ModelSerializer):
         model = Politician
         fields = "__all__"
 
-class BallotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ballot
-        fields = "__all__"
-
 class MeasureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Measure
         fields = "__all__"
+
+class BallotSerializer(serializers.ModelSerializer):
+    measures = MeasureSerializer(many=True)
+    class Meta:
+        model = Ballot
+        fields = ('election', 'measures')
 
 class CandidacySerializer(serializers.ModelSerializer):
     class Meta:
