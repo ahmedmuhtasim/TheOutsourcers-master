@@ -30,17 +30,19 @@ request_override_map = {
 voter_endpoint = views.VoterViewSet.as_view(request_override_map)
 election_endpoint = views.ElectionViewSet.as_view(request_override_map)
 ballot_endpoint = views.BallotViewSet.as_view(request_override_map)
+person_endpoint = views.PersonViewSet.as_view(request_override_map)
 
 urlpatterns = [
+    # Internal API Endpoints
     url(r'^api/voters/(?P<pk>[0-9-]+)', voter_endpoint, name='voter-detail'),
     url(r'^api/voters/', voter_endpoint, name='voter-list'),
     url(r'^api/elections/(?P<pk>[0-9-]+)', election_endpoint, name='election-detail'),
     url(r'^api/elections/', election_endpoint, name='election-list'),
     url(r'^api/ballots/(?P<pk>[0-9-]+)', ballot_endpoint, name='ballot-detail'),
     url(r'^api/ballots/', ballot_endpoint, name='ballot-list'),
-    url(r'^api/elections/(?P<pk>[0-9-]+)', views.election),
-    url('api/elections/', views.elections),
-    url('api/voters/', views.voters),
+    url(r'^api/persons/(?P<pk>[0-9-]+)', person_endpoint, name='person-detail'),
+    url(r'^api/persons/', person_endpoint, name='person-list'),
+
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home, name='home'),
 	url('login/', views.login),
