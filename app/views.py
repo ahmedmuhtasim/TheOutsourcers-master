@@ -1026,3 +1026,61 @@ class ReferendumViewSet(viewsets.ModelViewSet):
 				serializer.save()
 				return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
 			return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class CandidacyViewSet(viewsets.ModelViewSet):
+	renderer_classes = (JSONRenderer, )
+	queryset = Candidacy.objects.all()
+	serializer_class = CandidacySerializer
+	model = Candidacy
+
+	def delete(self, request, format=None, pk=None):
+		if pk is None:
+			return Response({"status": "400 - Bad Request", "result": "Please specify ID to delete an entry"}, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			try:
+				result = self.model.objects.get(pk=pk)
+				result.delete()
+			except self.model.DoesNotExist:
+				return Response({"status": "404 - Not Found", "result": str(self.model) + " with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+			except IntegrityError:
+				return Response({"status": "400 - Bad Request", "result": str(self.model) + " is a foreign key to other models and thus cannot be deleted"}, status=status.HTTP_409_CONFLICT)
+			return Response({"status": "204 - No Content", "response": "Successfully deleted " + str(self.model)})
+
+	def get(self, request, format=None, pk=None):
+		is_many = True
+		if pk is None:
+			result = self.model.objects.all()
+		else:
+			try:
+				result = self.model.objects.get(pk=pk)
+				is_many = False
+			except self.model.DoesNotExist:
+				return Response({"status": "404", "result": str(self.model) + " with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+		serializer = self.serializer_class(result, many=is_many)
+		return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
+
+	def post(self, request, format=None, pk=None):
+		if pk is None:
+			serializer = self.serializer_class(data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response({"status": "201 - Created", "result": serializer.data}, status=status.HTTP_201_CREATED)
+			return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			return Response({"status": "400 - Bad Request", "result": "Cannot POST data to an already created id"}, status=status.HTTP_400_BAD_REQUEST)
+
+	def put(self, request, format=None, pk=None):
+		if pk is None:
+			return Response({"status": "400 - Bad Request", "result": "Please specify ID to update an entry"}, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			try:
+				result = self.model.objects.get(pk=pk)
+			except self.model.DoesNotExist:
+				return Response({"status": "404 - Not Found", "result":  str(self.model) + " with given id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+			serializer = self.serializer_class(result, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response({"status": "200 - OK", "result": serializer.data}, status=status.HTTP_200_OK)
+			return Response({"status": "400 - Bad Request", "missing data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
