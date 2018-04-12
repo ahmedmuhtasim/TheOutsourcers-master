@@ -60,7 +60,7 @@ class Person(models.Model):
 
 
 class Politician(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='politicians')
 
 
 class Ballot(models.Model):
@@ -83,7 +83,7 @@ class Measure(models.Model):
 
 
 class Candidacy(models.Model):
-    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
     politician = models.OneToOneField(Politician, on_delete=models.CASCADE)
     PARTY = (
         ('D', 'Democrat'),
@@ -97,13 +97,13 @@ class Candidacy(models.Model):
 
 
 class Referendum(models.Model):
-    measure = models.ForeignKey(Measure, on_delete=models.CASCADE)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='referendums')
     question = models.TextField(blank=True)
     # Choices are linked in the Choice model
 
 
 class Choice(models.Model):
-    question = models.ForeignKey(Referendum, on_delete=models.CASCADE)
+    question = models.ForeignKey(Referendum, on_delete=models.CASCADE, related_name='choices')
     choice_text = models.CharField(max_length=200)
     # Votes are tallied in this model for ease of tallying and lack of tracking
     votes = models.IntegerField(default=0)
