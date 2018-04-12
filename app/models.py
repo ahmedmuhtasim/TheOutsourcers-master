@@ -49,7 +49,8 @@ class Office(models.Model):
     area_of_governance = models.CharField(max_length=1, choices=AOG)
     federal_district = models.IntegerField()
     state_district = models.IntegerField()
-
+    def __str__(self):
+        return str(self.title)
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
@@ -61,7 +62,8 @@ class Person(models.Model):
 
 class Politician(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='politicians')
-
+    def __str__(self):
+        return str(self.person.first_name) + " " + str(self.person.last_name)
 
 class Ballot(models.Model):
     election = models.OneToOneField(Election, on_delete=models.CASCADE, primary_key=True)
@@ -100,14 +102,16 @@ class Referendum(models.Model):
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='referendums')
     question = models.TextField(blank=True)
     # Choices are linked in the Choice model
-
+    def __str__(self):
+        return str(self.question)
 
 class Choice(models.Model):
     question = models.ForeignKey(Referendum, on_delete=models.CASCADE, related_name='choices')
     choice_text = models.CharField(max_length=200)
     # Votes are tallied in this model for ease of tallying and lack of tracking
     votes = models.IntegerField(default=0)
-
+    def __str__(self):
+        return str(self.choice_text)
 
 class Precinct(models.Model):
     name = models.CharField(max_length=250)

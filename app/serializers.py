@@ -27,10 +27,16 @@ class CandidacySerializer(serializers.ModelSerializer):
         model = Candidacy
         fields = "__all__"
 
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = "__all__"
+
 class ReferendumSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True)
     class Meta:
         model = Referendum
-        fields = "__all__"
+        fields = ('question', 'choices')
 
 class MeasureSerializer(serializers.ModelSerializer):
     referendums = ReferendumSerializer(many=True)
@@ -44,11 +50,6 @@ class BallotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ballot
         fields = ('election', 'measures')
-
-class ChoiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Choice
-        fields = "__all__"
 
 class PrecinctSerializer(serializers.ModelSerializer):
     class Meta:

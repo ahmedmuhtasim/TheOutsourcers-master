@@ -33,6 +33,9 @@ ballot_endpoint = views.BallotViewSet.as_view(request_override_map)
 person_endpoint = views.PersonViewSet.as_view(request_override_map)
 precinct_endpoint = views.PrecinctViewSet.as_view(request_override_map)
 measure_endpoint = views.MeasureViewSet.as_view(request_override_map)
+politician_endpoint = views.PoliticianViewSet.as_view(request_override_map)
+office_endpoint = views.OfficeViewSet.as_view(request_override_map)
+referendum_endpoint = views.ReferendumViewSet.as_view(request_override_map)
 
 urlpatterns = [
     # Internal API Endpoints
@@ -48,6 +51,12 @@ urlpatterns = [
     url(r'^api/precincts/', precinct_endpoint, name='precinct-list'),
     url(r'^api/measures/(?P<pk>[0-9-]+)', measure_endpoint, name='measure-detail'),
     url(r'^api/measures/', measure_endpoint, name='measure-list'),
+    url(r'^api/politicians/(?P<pk>[0-9-]+)', politician_endpoint, name='politician-detail'),
+    url(r'^api/politicians/', politician_endpoint, name='politician-list'),
+    url(r'^api/offices/(?P<pk>[0-9-]+)', office_endpoint, name='office-detail'),
+    url(r'^api/offices/', office_endpoint, name='office-list'),
+    url(r'^api/referendums/(?P<pk>[0-9-]+)', referendum_endpoint, name='referendum-detail'),
+    url(r'^api/referendums/', referendum_endpoint, name='referendum-list'),
 
 
 	url('admin/', admin.site.urls),
