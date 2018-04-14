@@ -18,4 +18,6 @@ def validate_serial_code(code):
 def gen_alphanumeric(length=16):
 	return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(length))
 
-
+def is_logged_on(request):
+	auth = request.COOKIES.get("auth")
+	return auth
