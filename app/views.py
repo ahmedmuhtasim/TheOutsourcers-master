@@ -366,62 +366,64 @@ def vote(request):
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
 		if form.is_valid():
-                        election = validate_serial_code(form.cleaned_data["serial_code"]);
-                        if election:
-                                election_data = [
-				        {
-						"name": "Presidential Contest",
-						"type": "main",
-						"id": "pres-2012",
-						"candidates": [
-							{
-								"id": 0,
-								"candidate": "Barack Obama",
-								"running_mate": "Joe Biden",
-								"party": "Democrat"
-							},
-							{
-								"id": 1,
-								"candidate": "Mitt Romney",
-								"running_mate": "Paul Ryan",
-								"party": "Republican"
-							},
-							{
-								"id": 2,
-								"candidate": "Gary Johnson",
-								"running_mate": "James P. Gray",
-								"party": "Libertarian"
-							},
-						]
-					},
-					{
-						"name": "House of Reps. District 5",
-						"type": "",
-						"id": "dist-5",
-						"candidates": [
-							{
-								"id": 0,
-								"candidate": "Elisabeth Motsinger",
-								"party": "Democrat"
-							},
-							{
-								"id": 1,
-								"candidate": "Virginia Foxx",
-								"party": "Republican"
-							},
-						]
-					}
-				]
-                                person = {
-					"name": "Luke Masters",
-					"id": "awh4Rtxu12"
-				}
-                                return render(request, "app/ballot.html", {
-					"form": BallotForm,
-					"election_data": election_data,
-					"person": person,
-					"logged_on": logged_on
-				})
+			voter = validate_serial_code(form.cleaned_data["serial_code"])
+			election = voter.election
+			ballot = election.ballot
+			if election:
+					election_data = [
+			{
+			"name": "Presidential Contest",
+			"type": "main",
+			"id": "pres-2012",
+			"candidates": [
+				{
+					"id": 0,
+					"candidate": "Barack Obama",
+					"running_mate": "Joe Biden",
+					"party": "Democrat"
+				},
+				{
+					"id": 1,
+					"candidate": "Mitt Romney",
+					"running_mate": "Paul Ryan",
+					"party": "Republican"
+				},
+				{
+					"id": 2,
+					"candidate": "Gary Johnson",
+					"running_mate": "James P. Gray",
+					"party": "Libertarian"
+				},
+			]
+		},
+		{
+			"name": "House of Reps. District 5",
+			"type": "",
+			"id": "dist-5",
+			"candidates": [
+				{
+					"id": 0,
+					"candidate": "Elisabeth Motsinger",
+					"party": "Democrat"
+				},
+				{
+					"id": 1,
+					"candidate": "Virginia Foxx",
+					"party": "Republican"
+				},
+			]
+		}
+	]
+					person = {
+		"name": "Luke Masters",
+		"id": "awh4Rtxu12"
+	}
+					return render(request, "app/ballot.html", {
+		"form": BallotForm,
+		"election_data": ballot,
+		"person": person,
+		"logged_on": logged_on
+	})
 
 	return JsonResponse({
 		"message": "Invalid Request"
@@ -430,7 +432,18 @@ def vote(request):
 @csrf_exempt
 def submit_vote(request):
 	data = request.POST
-	return JsonResponse(data)
+	for key in data.keys():
+		measure = Measure.objects.get(pk=key)
+		if measure.measure_type == 'C':
+			candidacy = Candidacy.objects.get(pk=data[key])
+			candidacy.votes += 1
+			candidacy.save()
+		else:
+			choice = Choice.objects.get(pk=data[key])
+			choice.votes += 1
+			choice.save()
+
+	return HttpResponse("Vote Submitted!")
 
 def results(request):
 	logged_on = is_logged_on(request)

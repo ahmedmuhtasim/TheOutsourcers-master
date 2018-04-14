@@ -82,7 +82,13 @@ class Measure(models.Model):
     )
     measure_type = models.CharField(max_length=1, choices=MEASURE_TYPES)
     ballot = models.ForeignKey(Ballot, on_delete=models.CASCADE, related_name='measures')
-
+    def __str__(self):
+        #if self.measure_type == "C":
+        #    return "Candidates"
+        #else:
+        #    return "Referendums"
+        return self.candidacies.filter()[:1].get().office.title if self.measure_type == 'C' else "Referendum"
+            
 
 class Candidacy(models.Model):
     measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
@@ -128,7 +134,6 @@ class Voter(models.Model):
     # This guarantees that a Voter will have a person, it won't become null
     # Default null value for django one to one field is false, so person will never be false
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    voter_number = models.IntegerField()
     STATUS_TYPES = (
         ('A', 'Active'),
         ('I', 'Inactive')
@@ -145,6 +150,7 @@ class Voter(models.Model):
     # Can they vote? The voter must check in - once they check in, voting_eligible will become True
     # When they cannot vote - so they have not checked in/election over, should be False
     # voting_eligible should be made false with a ballot submission
-    voter_key = models.CharField(max_length=12, null=True)
-    election = models.OneToOneField(Election, on_delete=models.SET_NULL, null=True)
-
+    voter_number = models.CharField(max_length=12, null=True)
+    election = models.OneToOneField(Election, on_delete=models.SET_NULL, null=True, blank=True)
+    def __str__(self):
+        return self.voter_number

@@ -21,31 +21,48 @@
 			<div class="ballot">
 				<h2>You have <span id="time-left"></span> time left to finish voting</h2>
 				<form method="POST" action="/submitVote/">
-					{% for election in election_data %}
+					{% for measure in election_data.measures.all %}
 					<div class="ballot-section">
 						<div class="ballot-header">
-							{% if election.type == "main" %}
-							<p class="text-48 italic light">{{election.name}}</p>
+							{% if measure.type == "main" %}
+							<p class="text-48 italic light">{{measure.measure_type}}</p>
 							{% else %}
-							<p class="text-30 italic light">{{election.name}}</p>
+							<p class="text-30 italic light">{{measure}}</p>
 							{% endif %}
 							<hr>
 						</div>
-						{% for candidate in election.candidates %}
-							<div class="ballot-option grid">
-								<div class="radio-btn">
-									<input type="radio" name={{election.id}} value={{candidate.id}}>
+						{% if measure.candidacies.all %}
+							{% for candidate in measure.candidacies.all %}
+								<div class="ballot-option grid">
+									<div class="radio-btn">
+										<input type="radio" name={{measure.id}} value={{candidate.id}}>
+									</div>
+									<div class="description">
+										<h2>{{candidate.politician}}</h2>
+										{% if election.type == "main" %}
+										<h3>{{candidate.running_mate}}</h3>
+										{% endif %}
+										
+										<p>{{candidate.party_affiliation}}</p>
+									</div>
 								</div>
-								<div class="description">
-									<h2>{{candidate.candidate}}</h2>
-									{% if election.type == "main" %}
-									<h3>{{candidate.running_mate}}</h3>
-									{% endif %}
-									
-									<p>{{candidate.party}}</p>
-								</div>
-							</div>
-						{% endfor %}
+							{% endfor %}
+						{% endif %}
+						{% if measure.referendums.all %}
+							{% for referendum in measure.referendums.all %}
+								<h2>{{referendum}}</h2>
+								{% for choice in referendum.choices.all %}
+									<div class="ballot-option grid">
+										<div class="radio-btn">
+											<input type="radio" name={{measure.id}} value={{choice.id}}>
+										</div>
+										<div class="description">
+											<h3>{{choice.choice_text}}</h3>
+										</div>
+									</div>
+								{% endfor %}
+							{% endfor %}
+						{% endif %}
 					</div>
 					{% endfor %}
 					<div class="submit-section">

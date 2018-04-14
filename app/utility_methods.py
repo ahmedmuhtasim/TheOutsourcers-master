@@ -3,12 +3,13 @@ import random, string
 from app.models import Voter, Election
 
 def validate_serial_code(code):
-        if Voter.objects.get(voter_key=code):
-            voter = Voter.objects.get(pk=code)
+        try:
+            voter = Voter.objects.get(voter_number=code)
             if voter.election:
-                return voter.election
+                return voter
             return None
-        return None
+        except:
+            return None
         #for i in range(len(codes)):
         #	if code == codes[i]:
 	#		return True
