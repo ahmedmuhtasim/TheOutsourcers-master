@@ -356,7 +356,7 @@ def vote(request):
 	form = VoteValidationForm
 	if request.method == "GET":
 		is_day_of = False
-		day_of = date(2018, 4, 2)
+		day_of = date(2018, 4, 14)
 		today = date.today()
 		is_day_of = today == day_of
 		return render(request, "app/vote.html", {
@@ -366,9 +366,10 @@ def vote(request):
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
 		if form.is_valid():
-			if validate_serial_code(form.cleaned_data["serial_code"]):
-				election_data = [
-					{
+                        election = validate_serial_code(form.cleaned_data["serial_code"]);
+                        if election:
+                                election_data = [
+				        {
 						"name": "Presidential Contest",
 						"type": "main",
 						"id": "pres-2012",
@@ -411,11 +412,11 @@ def vote(request):
 						]
 					}
 				]
-				person = {
+                                person = {
 					"name": "Luke Masters",
 					"id": "awh4Rtxu12"
 				}
-				return render(request, "app/ballot.html", {
+                                return render(request, "app/ballot.html", {
 					"form": BallotForm,
 					"election_data": election_data,
 					"person": person,
