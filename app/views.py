@@ -1,29 +1,17 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
-from django.db import IntegrityError
+from django.http import JsonResponse, HttpResponseRedirect
 from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_alphanumeric
+from .utility_methods import validate_serial_code, gen_alphanumeric, is_logged_on
 from rest_framework.generics import *
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
 from .serializers import *
-from rest_framework import viewsets, status
-from rest_framework.renderers import JSONRenderer
-# Create your views here.
 import json
 from django.urls import reverse
 import urllib
-from django.views.decorators.csrf import csrf_exempt
-
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
-
-def is_logged_on(request):
-	auth = request.COOKIES.get("auth")
-	return auth
 
 #PAGES
 def home(request):

@@ -1,18 +1,11 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import *
-from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
-from datetime import date
-from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code
-# Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.renderers import JSONRenderer
 from .serializers import *
 from rest_framework.response import Response
 import json
-import urllib
 
 # API
 def elections(request):
@@ -66,7 +59,6 @@ def voters(request):
 		json["voter_info"] = [voter_info]
 		voters.append(json)
 	return JsonResponse({"voters": voters})
-	#return render(request, 'app/home.html', {})
 
 
 class VoterViewSet(viewsets.ModelViewSet):
