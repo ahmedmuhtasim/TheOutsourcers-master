@@ -13,7 +13,7 @@ import urllib
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
 
-#PAGES
+# Pages
 def home(request):
 	""" GET DATA FROM API & FORMAT
 	req = urllib.request.Request("http://exp-api:8000/exp/home")
@@ -27,6 +27,103 @@ def home(request):
 		"logged_on": logged_on
 	})
 
+def results(request):
+	logged_on = is_logged_on(request)
+	
+	if request.method == "GET":
+		election_data = {}
+		election_data = {
+			"open": [
+				{
+					"name": "Equifax new President",
+					"id": "equifax-2018",
+					"total_votes": 651,
+					"type": "general",
+					"state": "open"
+				}
+			],
+			"closed": [
+				{
+					"name": "Presidential Race 2012",
+					"id": "pres-2012",
+					"total_votes": 22347000,
+					"type": "general",
+					"state": "closed",
+					"winner": {
+						"name": "Barack Obama",
+						"id": "bho"
+					}
+				}
+			],
+		}
+		return render(request, "app/results.html", {
+			"election_data": "election_data",
+			"logged_on": logged_on
+		})
+
+def election_result(request, pk):
+	logged_on = is_logged_on(request)
+	
+	if request.method == "GET":
+		elections = {
+			"pres-2012": {
+				"name": "Presidential Race 2012",
+				"id": "pres-2012",
+				"total_votes": 22347000,
+				"type": "general",
+				"state": "closed"
+			}
+		}
+		return render(request, "app/election_result.html", {
+			"election": elections[pk],
+			"pk": pk,
+			"logged_on": logged_on
+		})
+
+def page_elections(request):
+	logged_on = is_logged_on(request)
+	
+	if request.method == "GET":
+		election_data = {}
+		req = urllib.request.Request("http://localhost:8000/api/elections/")
+		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
+		election_data["body"] = json.loads(resp_json)
+		election_data = {
+			"open": [
+				{
+					"name": "Equifax new President",
+					"id": "equifax-2018",
+					"total_votes": 651,
+					"type": "general",
+					"state": "open"
+				}
+			],
+			"closed": [
+				{
+					"name": "Presidential Race 2012",
+					"id": "pres-2012",
+					"total_votes": 22347000,
+					"type": "general",
+					"state": "closed"
+				}
+			],
+			"future": [
+				{
+					"name": "Midterm 2018",
+					"id": "midterm-2018",
+					"total_votes": 0,
+					"type": "general",
+					"state": "not-yet-open"
+				},
+			]
+		}
+
+		return render(request, "app/elections.html", {
+			"election_data": election_data,
+			"logged_on": logged_on
+		})
+
+# Signup/Login Flow
 @csrf_exempt
 def login(request):
 	logged_on = is_logged_on(request)
@@ -186,102 +283,15 @@ def signup_confirmation(request):
 		"logged_on": logged_on
 	})
 
-def page_elections(request):
+def signout(request):
 	logged_on = is_logged_on(request)
-	
-	if request.method == "GET":
-		election_data = {}
-		req = urllib.request.Request("http://localhost:8000/api/elections/")
-		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
-		election_data["body"] = json.loads(resp_json)
-		election_data = {
-			"open": [
-				{
-					"name": "Equifax new President",
-					"id": "equifax-2018",
-					"total_votes": 651,
-					"type": "general",
-					"state": "open"
-				}
-			],
-			"closed": [
-				{
-					"name": "Presidential Race 2012",
-					"id": "pres-2012",
-					"total_votes": 22347000,
-					"type": "general",
-					"state": "closed"
-				}
-			],
-			"future": [
-				{
-					"name": "Midterm 2018",
-					"id": "midterm-2018",
-					"total_votes": 0,
-					"type": "general",
-					"state": "not-yet-open"
-				},
-			]
-		}
+	# If we received a GET request instead of a POST request
+	response = HttpResponseRedirect(reverse('home'))
+	response.delete_cookie('auth')
 
-		return render(request, "app/elections.html", {
-			"election_data": election_data,
-			"logged_on": logged_on
-		})
+	return response
 
-def results(request):
-	logged_on = is_logged_on(request)
-	
-	if request.method == "GET":
-		election_data = {}
-		election_data = {
-			"open": [
-				{
-					"name": "Equifax new President",
-					"id": "equifax-2018",
-					"total_votes": 651,
-					"type": "general",
-					"state": "open"
-				}
-			],
-			"closed": [
-				{
-					"name": "Presidential Race 2012",
-					"id": "pres-2012",
-					"total_votes": 22347000,
-					"type": "general",
-					"state": "closed",
-					"winner": {
-						"name": "Barack Obama",
-						"id": "bho"
-					}
-				}
-			],
-		}
-		return render(request, "app/results.html", {
-			"election_data": "election_data",
-			"logged_on": logged_on
-		})
-
-def election_result(request, pk):
-	logged_on = is_logged_on(request)
-	
-	if request.method == "GET":
-		elections = {
-			"pres-2012": {
-				"name": "Presidential Race 2012",
-				"id": "pres-2012",
-				"total_votes": 22347000,
-				"type": "general",
-				"state": "closed"
-			}
-		}
-		return render(request, "app/election_result.html", {
-			"election": elections[pk],
-			"pk": pk,
-			"logged_on": logged_on
-		})
-
+# Vote/Ballot Flow
 @csrf_exempt
 def vote(request):
 	logged_on = is_logged_on(request)
@@ -364,19 +374,3 @@ def vote(request):
 def submit_vote(request):
 	data = request.POST
 	return JsonResponse(data)
-
-def results(request):
-	logged_on = is_logged_on(request)
-	
-	if request.method == "GET":
-		return render(request, "app/results.html", {
-			"logged_on": logged_on
-		})
-
-def signout(request):
-	logged_on = is_logged_on(request)
-	# If we received a GET request instead of a POST request
-	response = HttpResponseRedirect(reverse('home'))
-	response.delete_cookie('auth')
-
-	return response
