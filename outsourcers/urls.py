@@ -76,6 +76,13 @@ urlpatterns = [
 	url(r'^results/(?P<pk>[0-9a-zA-Z-]+)', views.election_result, name='specific-results'),
 
 	url(r'^results/', views.results, name='all-results'),
+	url('api/searchVoters/', views_api.search_voters),
+	
+	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
+	
+	url('getVoterSerialCode/', views.get_voter_serial_code, name='pollworker_dashboard'),
+	
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

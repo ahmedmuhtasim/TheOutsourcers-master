@@ -13,7 +13,7 @@ import urllib
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
 
-# Pages
+# Public Pages
 def home(request):
 	""" GET DATA FROM API & FORMAT
 	req = urllib.request.Request("http://exp-api:8000/exp/home")
@@ -291,7 +291,9 @@ def signout(request):
 
 	return response
 
-# Vote/Ballot Flow
+# START PROTECTED PAGES
+
+# Start Vote/Ballot Flow
 @csrf_exempt
 def vote(request):
 	logged_on = is_logged_on(request)
@@ -388,18 +390,34 @@ def submit_vote(request):
 
 	return HttpResponse("Vote Submitted!")
 
-def results(request):
-	logged_on = is_logged_on(request)
+def pollworker_dashboard(request):
 	
-	if request.method == "GET":
-		return render(request, "app/results.html", {
-			"logged_on": logged_on
-		})
-
-def signout(request):
 	logged_on = is_logged_on(request)
-	# If we received a GET request instead of a POST request
-	response = HttpResponseRedirect(reverse('home'))
-	response.delete_cookie('auth')
+	# If the authenticator cookie wasn't set...
+	if not logged_on:
+		return HttpResponseRedirect(reverse('home'))
+	
+	auth = Authenticator.objects.get(token=request.COOKIES.get("auth"))
+	user = User.objects.get(pk=auth.user_id)
 
-	return response
+	# even if the user is logged in, they need to be a pollworker to access this page
+	if user.role != "PW":
+		return HttpResponseRedirect(reverse('home'))
+
+	return render(request, "app/pollworker_dashboard.html", {
+		"auth": auth,
+		"role": user.role
+	})
+	
+@csrf_exempt
+def get_voter_serial_code(request):
+	if request.method == "GET":
+		return render(request, 'app/getVoterSerialCode.html', {
+			
+		})
+	elif request.method == "POST":
+		# print out paper
+		pass
+
+# End Vote/Ballot Flow
+# END PROTECTED PAGES

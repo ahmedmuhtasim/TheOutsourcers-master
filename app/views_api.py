@@ -60,6 +60,93 @@ def voters(request):
 		voters.append(json)
 	return JsonResponse({"voters": voters})
 
+def search_voters(request):
+	args = {
+		"firstName": "",
+		"lastName": "",
+		"voterNumber": "",
+	}
+	for key in request.GET:
+		args[key] = request.GET[key]
+
+	voters = [
+		{
+				"voter_number" : "020342357",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Garcia",
+				"first_name" : "Juan",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "12345",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Doe",
+				"first_name" : "John",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "1",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Chan",
+				"first_name" : "Jackie",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "1",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Baratheon",
+				"first_name" : "Joffrey",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+	]
+
+	matching_voters = []
+	for voter in voters:
+		fn = voter["first_name"] == args["firstName"]
+		ln = voter["last_name"] == args["lastName"]
+		vn = voter["voter_number"] == args["voterNumber"]
+
+		if fn and ln and vn:
+			matching_voters.append(voter)
+	return JsonResponse({
+		'voters': matching_voters,
+		'status': '200 - OK',
+		'test': '<h1>' + 'hello' + '</h1>',
+		'args': args
+	})
+
+
+
+
+
 
 class VoterViewSet(viewsets.ModelViewSet):
 	renderer_classes = (JSONRenderer, )

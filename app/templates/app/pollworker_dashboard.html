@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<title>VA - PW Dashboard</title>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/pollworkerDashboard.css' %}">
+	</head>
+	<body>
+		{% if logged_on %}
+			{% include './components/loggedInHeader.html' %}
+		{% else %}
+			{% include './components/header.html' %}
+		{% endif %}
+		<!-- Start Main Content -->
+			<style>
+				.main-content {
+					grid-template-columns: 1fr 10fr 1fr;
+					grid-template-areas: ". main .";
+				}
+			</style>
+			<div class="main-content grid">
+				<div class="main pollworker-dashboard grid">
+
+					<div class="title">
+						<p class="italic text-64 light text-center">Pollworker Dashboard</p>
+						
+					</div>
+					<div class="search form" id="search">
+						<div>
+							<input placeholder="First Name"
+								id="firstName"
+								value="Juan"
+								required>
+						</div>
+						<div>
+							<input placeholder="Last Name"
+								id="lastName"
+								value="Garcia"
+								required>
+						</div>
+						<div>
+							<input placeholder="Voter Number"
+								id="voterNumber"
+								value="020342357"
+								required>
+						</div>
+						<div>
+							<input type="submit" 
+								id="searchVoter" 
+								value="Search">
+						</div>
+					</div>
+					<div class="results" id="results">
+					</div>
+				</div>
+
+			</div>
+	</body>
+	<script>
+		$('#searchVoter').click(function() {
+			
+			const firstName = $('#firstName').val();
+			const lastName = $('#lastName').val();
+			const voterNumber = $('#voterNumber').val();
+
+			if (!firstName || !lastName || !voterNumber) {
+				return false;
+			} else {
+				const url = `http://localhost:8000/api/searchVoters/?
+					firstName=${firstName}&
+					lastName=${lastName}&
+					voterNumber=${voterNumber}&`;
+
+				console.log({
+					url: url,
+				})
+				fetch(url, {
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+						'content-type': 'application/json'
+					},
+					method: 'GET', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				}).then((response) => {
+					return response.json();
+				}).then((data) => {
+					console.log({
+						status: 'retrieved',
+						data: data,
+					});
+					const voters = data.voters;
+					voters.forEach((voter) => {
+						console.log({
+							voter : voter,
+						});
+						let markup = `
+							<div>
+								<h1>${voter.first_name + ' ' + voter.last_name }</h1>
+								<h3>First 4 Digits of VN: ${voter.voter_number.substring(0, 4)}</h3>
+								<form class="form" method="GET" action="/getVoterSerialCode/">
+									<input type="hidden" value="${voter.voter_number}">
+									<input type="Submit" value="Get Serial Code">
+								</form>
+								<hr>
+							</div>
+						`;
+						$('#results').append(markup);
+					});
+				});
+
+				
+			}
+
+			console.log({
+				firstName,
+				lastName,
+				voterNumber
+			});
+		})
+	</script>
+</html>
