@@ -33,19 +33,20 @@
 						<div>
 							<input placeholder="First Name"
 								id="firstName"
-								value="Juan"
+								value="John"
 								required>
+
 						</div>
 						<div>
 							<input placeholder="Last Name"
 								id="lastName"
-								value="Garcia"
+								value="Newsom"
 								required>
 						</div>
 						<div>
 							<input placeholder="Voter Number"
 								id="voterNumber"
-								value="020342357"
+								value="2"
 								required>
 						</div>
 						<div>
@@ -104,7 +105,7 @@
 							<div>
 								<h1>${voter.first_name + ' ' + voter.last_name }</h1>
 								<h3>First 4 Digits of VN: ${voter.voter_number.substring(0, 4)}</h3>
-								<form class="form" method="POST" action="/getVoterSerialCode/">
+								<form class="form" method="GET" action="/getVoterSerialCode/">
 									<input type="hidden" name="voter_number" value="${voter.voter_number}">
 									<input type="hidden" name="election_id" value="${1}">
 									<input type="Submit" value="Get Serial Code">

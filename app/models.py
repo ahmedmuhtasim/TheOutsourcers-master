@@ -18,7 +18,6 @@ class User(models.Model):
 	def __str__(self):
 		return self.username
 
-
 class Authenticator(models.Model):
 	user_id = models.CharField(max_length=250)
 	token = models.CharField(max_length=250, primary_key=True)

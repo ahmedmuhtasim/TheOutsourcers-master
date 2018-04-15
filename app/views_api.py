@@ -5,6 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.renderers import JSONRenderer
 from .serializers import *
 from rest_framework.response import Response
+import urllib
 import json
 
 # API
@@ -128,19 +129,30 @@ def search_voters(request):
 		},
 	]
 
+	req = urllib.request.Request('http://localhost:8000/api/voters/')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	response = json.loads(resp_json)
+
+	voters = response["result"]
+
 	matching_voters = []
 	for voter in voters:
-		fn = voter["first_name"] == args["firstName"]
-		ln = voter["last_name"] == args["lastName"]
+		# first name, last, etc not provided so we have to query
+
+		person = Person.objects.get(pk=voter["person"])
+
+		fn = person.first_name == args["firstName"]
+		ln = person.last_name == args["lastName"]
 		vn = voter["voter_number"] == args["voterNumber"]
 
 		if fn and ln and vn:
+			voter["first_name"] = person.first_name
+			voter["last_name"] = person.last_name
 			matching_voters.append(voter)
 	return JsonResponse({
 		'voters': matching_voters,
 		'status': '200 - OK',
-		'test': '<h1>' + 'hello' + '</h1>',
-		'args': args
+		'args': args,
 	})
 
 

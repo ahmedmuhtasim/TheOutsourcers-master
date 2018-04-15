@@ -416,7 +416,7 @@ def get_voter_serial_code(request):
 		2) generate new alphanumeric serialCode
 		3) hit evan's api endpoint and send it the new serialCode
 	'''
-
+	args = {}
 	for key in request.GET:
 		args[key] = request.GET[key]
 
