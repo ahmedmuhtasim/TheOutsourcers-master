@@ -89,7 +89,10 @@ class Measure(models.Model):
 		#    return "Candidates"
 		#else:
 		#    return "Referendums"
-		return self.candidacies.filter()[:1].get().office.title if self.measure_type == 'C' else "Referendum"
+                try:
+                    return self.candidacies.filter()[:1].get().office.title if self.measure_type == 'C' else self.referendums.filter()[:1].get().question
+                except:
+                    return "Nothing!"
 				
 class Candidacy(models.Model):
 	measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
