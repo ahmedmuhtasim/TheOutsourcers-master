@@ -347,17 +347,36 @@ def submit_vote(request):
 	s = VoterSerialCodes.objects.get(serial_code=serial_code)
 	s.finished = True
 	s.save()
+
+	print_data = {}
+
 	for key in data.keys():
 		if key != "serial_code":
 			measure = Measure.objects.get(pk=key)
 			if measure.measure_type == 'C':
 				candidacy = Candidacy.objects.get(pk=data[key])
+				print_data[key] = str(data[key])
 				candidacy.votes += 1
 				candidacy.save()
 			else:
 				choice = Choice.objects.get(pk=data[key])
+				print_data[key] = str(data[key])
 				choice.votes += 1
 				choice.save()
+
+	# 3) TODO
+	# Print the page
+	EVAN_IP = "172.27.98.179"
+	EVAN_PORT = "5000"
+	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
+	# build the body
+	values = print_data
+
+	encoded_values = urllib.parse.urlencode(values).encode('ascii')
+	req = urllib.request.Request(PRINT_URL, encoded_values)
+	
+	with urllib.request.urlopen(req) as response:
+		response.read()
 
 	return render(request, "app/submitVote.html", {
 		
@@ -419,21 +438,20 @@ def get_voter_serial_code(request):
 
 	# 3) TODO
 	# Print the page
-	'''
-		EVAN_IP = "172.27.98.179"
-		EVAN_PORT = "5000"
-		PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
-		# build the body
-		values = {
-			'voter' : serial_code,
-		}
+	EVAN_IP = "172.27.98.179"
+	EVAN_PORT = "5000"
+	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
+	# build the body
+	values = {
+		'voter' : serial_code,
+	}
 
-		encoded_values = urllib.parse.urlencode(values).encode('ascii')
-		req = urllib.request.Request(PRINT_URL, encoded_values)
-		
-		with urllib.request.urlopen(req) as response:
-			response.read()
-	'''
+	encoded_values = urllib.parse.urlencode(values).encode('ascii')
+	req = urllib.request.Request(PRINT_URL, encoded_values)
+	
+	with urllib.request.urlopen(req) as response:
+		response.read()
+	
 	# Once everything's done, just redirect back to the dashboard
 	return HttpResponseRedirect(reverse('pollworker_dashboard'))
 
