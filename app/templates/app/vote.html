@@ -35,7 +35,7 @@
 						{% if is_day_of %}
 							<form method="POST" action="/vote/" class="form">
 							{{form}}
-							<input type="submit" value="Go To Ballot">
+							<input type="submit" value="Go To Ballot" id="submitForm">
 							</form>
 						{% else %}
 							<div class="message">
@@ -58,5 +58,11 @@
 		$(document).ready(function() {
 			console.log(window.location.pathname);
 		});
+		
+		$("#id_serial_code").on('input', function() {
+			if ($(this).val().length === 13) {
+				$("#submitForm").click();
+			}
+		})
 	</script>
 </html>

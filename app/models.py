@@ -96,16 +96,19 @@ class Measure(models.Model):
 				
 class Candidacy(models.Model):
 	measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
-	politician = models.OneToOneField(Politician, on_delete=models.CASCADE)
+	politician = models.ForeignKey(Politician, on_delete=models.CASCADE)
 	PARTY = (
 		('D', 'Democrat'),
 		('R', 'Republican'),
 		('I', 'Independent'),
 	)
 	party_affiliation = models.CharField(max_length=3, choices=PARTY)
-	office = models.OneToOneField(Office, on_delete=models.CASCADE)
+	office = models.ForeignKey(Office, on_delete=models.CASCADE)
 	# Votes are tallied in this model for ease of tallying and lack of tracking
 	votes = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.politician.__str__() + " for " + self.office.__str__()
 
 class Referendum(models.Model):
 	measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='referendums')

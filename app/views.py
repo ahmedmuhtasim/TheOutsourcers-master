@@ -312,8 +312,15 @@ def vote(request):
 		form = VoteValidationForm(request.POST)
 		if form.is_valid():
 			voter = validate_serial_code(form.cleaned_data["serial_code"])
-			election = voter.election
-			ballot = election.ballot
+			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
+				return JsonResponse({
+					"type": str(type(voter)),
+					
+				})
+			if voter.election:
+				election = voter.election
+				ballot = election.ballot
+			
 			if election:
 					election_data = [
 			{

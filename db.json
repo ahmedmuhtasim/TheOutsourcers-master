@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$100000$HHyukdE8rX2y$gKCl+AUKFk7AIQerXImfDgsIilnEEF4K5YIcquGbv54=",
-        "last_login": "2018-04-15T16:09:14.698Z",
+        "last_login": "2018-04-15T19:03:27.120Z",
         "is_superuser": true,
         "username": "root",
         "first_name": "",
@@ -15,6 +15,24 @@
         "date_joined": "2018-04-15T16:09:07.688Z",
         "groups": [],
         "user_permissions": []
+    }
+},
+{
+    "model": "app.election",
+    "pk": "2012-09",
+    "fields": {
+        "type": "G"
+    }
+},
+{
+    "model": "app.office",
+    "pk": 1,
+    "fields": {
+        "title": "President",
+        "term": 4,
+        "area_of_governance": "F",
+        "federal_district": 1,
+        "state_district": 0
     }
 },
 {
@@ -411,6 +429,77 @@
         "SSN": "34",
         "federal_district": 1,
         "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 37,
+    "fields": {
+        "first_name": "Barack",
+        "last_name": "Obama",
+        "SSN": "123456789",
+        "federal_district": 1,
+        "state_district": 49
+    }
+},
+{
+    "model": "app.person",
+    "pk": 38,
+    "fields": {
+        "first_name": "Mitt",
+        "last_name": "Romney",
+        "SSN": "987654321",
+        "federal_district": 1,
+        "state_district": 12
+    }
+},
+{
+    "model": "app.politician",
+    "pk": 1,
+    "fields": {
+        "person": 37
+    }
+},
+{
+    "model": "app.politician",
+    "pk": 2,
+    "fields": {
+        "person": 38
+    }
+},
+{
+    "model": "app.ballot",
+    "pk": "2012-09",
+    "fields": {}
+},
+{
+    "model": "app.measure",
+    "pk": 1,
+    "fields": {
+        "measure_type": "C",
+        "ballot": "2012-09"
+    }
+},
+{
+    "model": "app.candidacy",
+    "pk": 1,
+    "fields": {
+        "measure": 1,
+        "politician": 1,
+        "party_affiliation": "D",
+        "office": 1,
+        "votes": 0
+    }
+},
+{
+    "model": "app.candidacy",
+    "pk": 2,
+    "fields": {
+        "measure": 1,
+        "politician": 2,
+        "party_affiliation": "R",
+        "office": 1,
+        "votes": 0
     }
 },
 {
@@ -1013,6 +1102,186 @@
         "precinct": "0405",
         "voter_number": "34",
         "election": null
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2018-04-15T19:05:42.422Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "election"
+        ],
+        "object_id": "2012-09",
+        "object_repr": "2012-09",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2018-04-15T19:05:44.945Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "ballot"
+        ],
+        "object_id": "2012-09",
+        "object_repr": "2012-09",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2018-04-15T19:06:11.479Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "measure"
+        ],
+        "object_id": "1",
+        "object_repr": "Nothing!",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2018-04-15T19:06:32.343Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "person"
+        ],
+        "object_id": "37",
+        "object_repr": "Barack Obama",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2018-04-15T19:06:36.271Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "politician"
+        ],
+        "object_id": "1",
+        "object_repr": "Barack Obama",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2018-04-15T19:07:00.733Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "office"
+        ],
+        "object_id": "1",
+        "object_repr": "President",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2018-04-15T19:07:06.952Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "candidacy"
+        ],
+        "object_id": "1",
+        "object_repr": "Barack Obama for President",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2018-04-15T19:07:32.016Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "person"
+        ],
+        "object_id": "38",
+        "object_repr": "Mitt Romney",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2018-04-15T19:07:33.447Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "politician"
+        ],
+        "object_id": "2",
+        "object_repr": "Mitt Romney",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2018-04-15T19:07:39.031Z",
+        "user": [
+            "root"
+        ],
+        "content_type": [
+            "app",
+            "candidacy"
+        ],
+        "object_id": "2",
+        "object_repr": "Mitt Romney for President",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
     }
 }
 ]
