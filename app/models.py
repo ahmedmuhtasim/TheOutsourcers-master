@@ -18,6 +18,7 @@ class User(models.Model):
 	def __str__(self):
 		return self.username
 
+
 class Authenticator(models.Model):
 	user_id = models.CharField(max_length=250)
 	token = models.CharField(max_length=250, primary_key=True)
@@ -155,3 +156,9 @@ class Voter(models.Model):
 	election = models.OneToOneField(Election, on_delete=models.SET_NULL, null=True, blank=True)
 	def __str__(self):
 		return self.person.__str__()
+
+class VoterSerialCodes(models.Model):
+	voter = models.ForeignKey(Voter, on_delete=models.SET_NULL, null=True, blank=True)
+	serial_code = models.CharField(max_length=250)
+	election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True)
+	finished = models.BooleanField()

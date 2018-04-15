@@ -80,7 +80,7 @@ urlpatterns = [
 	
 	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
 	
-	url('getVoterSerialCode/', views.get_voter_serial_code, name='pollworker_dashdddboard'),
+	url('getVoterSerialCode/', views.get_voter_serial_code),
 	
 	url('seed', views_api.seed_voters),
 
@@ -90,5 +90,6 @@ urlpatterns = [
 admin creds
 user: root
 pw: outsourcers
+
 
 '''

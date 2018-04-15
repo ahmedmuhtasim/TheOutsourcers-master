@@ -104,8 +104,9 @@
 							<div>
 								<h1>${voter.first_name + ' ' + voter.last_name }</h1>
 								<h3>First 4 Digits of VN: ${voter.voter_number.substring(0, 4)}</h3>
-								<form class="form" method="POST" action="http://172.27.98.179:5000/voternumber">
-									<input type="hidden" name="voter" value="${voter.voter_number}">
+								<form class="form" method="POST" action="/getVoterSerialCode/">
+									<input type="hidden" name="voter_number" value="${voter.voter_number}">
+									<input type="hidden" name="election_id" value="${1}">
 									<input type="Submit" value="Get Serial Code">
 								</form>
 								<hr>

@@ -19,3 +19,11 @@ admin.site.register(Election)
 
 admin.site.register(User)
 admin.site.register(Authenticator)
+
+
+'''
+	admin creds
+	user: root
+	pw: outsourcers
+
+'''

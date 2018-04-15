@@ -167,11 +167,11 @@ def login(request):
 		user = user_results[0]
 
 		# check password
-		if check_password(password, user.password):
+		if not check_password(password, user.password):
 			return render(request, 'app/login.html', {
 				"form": form,
 				"logged_on": logged_on,
-				"errorMessage": "Username or Password Incorrect"
+				"errorMessage": "Password Incorrect"
 			})
 
 		""" If we made it here, we can log them in. """
@@ -411,13 +411,58 @@ def pollworker_dashboard(request):
 	
 @csrf_exempt
 def get_voter_serial_code(request):
-	if request.method == "GET":
-		return render(request, 'app/getVoterSerialCode.html', {
-			
+	'''
+		1) update Voter's election field to the currently administered election
+		2) generate new alphanumeric serialCode
+		3) hit evan's api endpoint and send it the new serialCode
+	'''
+
+	for key in request.GET:
+		args[key] = request.GET[key]
+
+	if "voter_number" not in args or "election_id" not in args:
+		return JsonResponse({
+			"status": "404 - Not Found",
+			"message": "Please provide both voter_number and election_id"
 		})
-	elif request.method == "POST":
-		# print out paper
-		pass
+	
+	# initialize reused vars
+	serial_code = gen_alphanumeric(12)
+	the_voter = Voter.objects.get(voter_number=args["voter_number"])
+	the_election = Election.objects.get(pk=args["election_id"])
+
+	# 1)
+	the_voter.update(election=the_election)
+	the_voter.save()
+
+	# 2) 
+	new_serial = VoterSerialCodes(
+		voter = the_voter,
+		election = the_election,
+		serial_code = serial_code
+	)
+	new_serial.save()
+
+	# 3) TODO
+	# Print the page
+	EVAN_IP = "172.27.98.179"
+	EVAN_PORT = "5000"
+	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
+	# build the body
+	values = {
+		'voter' : serial_code,
+	}
+
+	encoded_values = urllib.parse.urlencode(values).encode('ascii')
+	req = urllib.request.Request(PRINT_URL, encoded_values)
+	
+	with urllib.request.urlopen(req) as response:
+		response.read()
+
+	# Once everything's done, just redirect back to the dashboard
+	reverse('pollworker_dashboard')
+
+
 
 # End Vote/Ballot Flow
 # END PROTECTED PAGES
