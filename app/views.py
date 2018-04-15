@@ -303,7 +303,7 @@ def vote(request):
 		is_day_of = False
 		day_of = date(2018, 4, 14)
 		today = date.today()
-		is_day_of = today == day_of
+		is_day_of = True
 		return render(request, "app/vote.html", {
 			"form": form,
 			"is_day_of": is_day_of
@@ -359,11 +359,11 @@ def vote(request):
 			]
 		}
 	]
-					person = {
+	person = {
 		"name": "Luke Masters",
 		"id": "awh4Rtxu12"
 	}
-					return render(request, "app/ballot.html", {
+	return render(request, "app/ballot.html", {
 		"form": BallotForm,
 		"election_data": ballot,
 		"person": person,

@@ -21,3 +21,62 @@ def gen_alphanumeric(length=16):
 def is_logged_on(request):
 	auth = request.COOKIES.get("auth")
 	return auth
+
+voters = [
+	{
+			"voter_number" : "020342357",
+			"voter_status" : "active",
+			"date_registered" : "2007-08-20",
+			"last_name" : "Garcia",
+			"first_name" : "Juan",
+			"street_address" : "123 Main Street",
+			"city" : "Charlottesville",
+			"state" : "VA",
+			"zip" : "22902",
+			"locality" : "ALBEMARLE COUNTY",
+			"precinct" : "405-CALE",
+			"precinct_id" : "0405"
+	},
+	{
+			"voter_number" : "12345",
+			"voter_status" : "active",
+			"date_registered" : "2007-08-20",
+			"last_name" : "Doe",
+			"first_name" : "John",
+			"street_address" : "123 Main Street",
+			"city" : "Charlottesville",
+			"state" : "VA",
+			"zip" : "22902",
+			"locality" : "ALBEMARLE COUNTY",
+			"precinct" : "405-CALE",
+			"precinct_id" : "0405"
+	},
+	{
+			"voter_number" : "1",
+			"voter_status" : "active",
+			"date_registered" : "2007-08-20",
+			"last_name" : "Chan",
+			"first_name" : "Jackie",
+			"street_address" : "123 Main Street",
+			"city" : "Charlottesville",
+			"state" : "VA",
+			"zip" : "22902",
+			"locality" : "ALBEMARLE COUNTY",
+			"precinct" : "405-CALE",
+			"precinct_id" : "0405"
+	},
+	{
+			"voter_number" : "1",
+			"voter_status" : "active",
+			"date_registered" : "2007-08-20",
+			"last_name" : "Baratheon",
+			"first_name" : "Joffrey",
+			"street_address" : "123 Main Street",
+			"city" : "Charlottesville",
+			"state" : "VA",
+			"zip" : "22902",
+			"locality" : "ALBEMARLE COUNTY",
+			"precinct" : "405-CALE",
+			"precinct_id" : "0405"
+	},
+]

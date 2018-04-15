@@ -1,1 +1,1018 @@
-{}
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$100000$HHyukdE8rX2y$gKCl+AUKFk7AIQerXImfDgsIilnEEF4K5YIcquGbv54=",
+        "last_login": "2018-04-15T16:09:14.698Z",
+        "is_superuser": true,
+        "username": "root",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-04-15T16:09:07.688Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "app.person",
+    "pk": 1,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Smith",
+        "SSN": "0",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 2,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Smith",
+        "SSN": "0",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 3,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Jacobsson",
+        "SSN": "1",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 4,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Newsom",
+        "SSN": "2",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 5,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Mangum",
+        "SSN": "3",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 6,
+    "fields": {
+        "first_name": "John",
+        "last_name": "Garcia",
+        "SSN": "4",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 7,
+    "fields": {
+        "first_name": "Sam",
+        "last_name": "Smith",
+        "SSN": "5",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 8,
+    "fields": {
+        "first_name": "Sam",
+        "last_name": "Jacobsson",
+        "SSN": "6",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 9,
+    "fields": {
+        "first_name": "Sam",
+        "last_name": "Newsom",
+        "SSN": "7",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 10,
+    "fields": {
+        "first_name": "Sam",
+        "last_name": "Mangum",
+        "SSN": "8",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 11,
+    "fields": {
+        "first_name": "Sam",
+        "last_name": "Garcia",
+        "SSN": "9",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 12,
+    "fields": {
+        "first_name": "Anakin",
+        "last_name": "Smith",
+        "SSN": "10",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 13,
+    "fields": {
+        "first_name": "Anakin",
+        "last_name": "Jacobsson",
+        "SSN": "11",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 14,
+    "fields": {
+        "first_name": "Anakin",
+        "last_name": "Newsom",
+        "SSN": "12",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 15,
+    "fields": {
+        "first_name": "Anakin",
+        "last_name": "Mangum",
+        "SSN": "13",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 16,
+    "fields": {
+        "first_name": "Anakin",
+        "last_name": "Garcia",
+        "SSN": "14",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 17,
+    "fields": {
+        "first_name": "Clark",
+        "last_name": "Smith",
+        "SSN": "15",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 18,
+    "fields": {
+        "first_name": "Clark",
+        "last_name": "Jacobsson",
+        "SSN": "16",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 19,
+    "fields": {
+        "first_name": "Clark",
+        "last_name": "Newsom",
+        "SSN": "17",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 20,
+    "fields": {
+        "first_name": "Clark",
+        "last_name": "Mangum",
+        "SSN": "18",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 21,
+    "fields": {
+        "first_name": "Clark",
+        "last_name": "Garcia",
+        "SSN": "19",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 22,
+    "fields": {
+        "first_name": "Tony",
+        "last_name": "Smith",
+        "SSN": "20",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 23,
+    "fields": {
+        "first_name": "Tony",
+        "last_name": "Jacobsson",
+        "SSN": "21",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 24,
+    "fields": {
+        "first_name": "Tony",
+        "last_name": "Newsom",
+        "SSN": "22",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 25,
+    "fields": {
+        "first_name": "Tony",
+        "last_name": "Mangum",
+        "SSN": "23",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 26,
+    "fields": {
+        "first_name": "Tony",
+        "last_name": "Garcia",
+        "SSN": "24",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 27,
+    "fields": {
+        "first_name": "Spittony",
+        "last_name": "Smith",
+        "SSN": "25",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 28,
+    "fields": {
+        "first_name": "Spittony",
+        "last_name": "Jacobsson",
+        "SSN": "26",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 29,
+    "fields": {
+        "first_name": "Spittony",
+        "last_name": "Newsom",
+        "SSN": "27",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 30,
+    "fields": {
+        "first_name": "Spittony",
+        "last_name": "Mangum",
+        "SSN": "28",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 31,
+    "fields": {
+        "first_name": "Spittony",
+        "last_name": "Garcia",
+        "SSN": "29",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 32,
+    "fields": {
+        "first_name": "Toni",
+        "last_name": "Smith",
+        "SSN": "30",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 33,
+    "fields": {
+        "first_name": "Toni",
+        "last_name": "Jacobsson",
+        "SSN": "31",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 34,
+    "fields": {
+        "first_name": "Toni",
+        "last_name": "Newsom",
+        "SSN": "32",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 35,
+    "fields": {
+        "first_name": "Toni",
+        "last_name": "Mangum",
+        "SSN": "33",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.person",
+    "pk": 36,
+    "fields": {
+        "first_name": "Toni",
+        "last_name": "Garcia",
+        "SSN": "34",
+        "federal_district": 1,
+        "state_district": 2
+    }
+},
+{
+    "model": "app.precinct",
+    "pk": "0405",
+    "fields": {
+        "name": "405-CALE"
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 1,
+    "fields": {
+        "person": 2,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "0",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 2,
+    "fields": {
+        "person": 3,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "1",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 3,
+    "fields": {
+        "person": 4,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "2",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 4,
+    "fields": {
+        "person": 5,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "3",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 5,
+    "fields": {
+        "person": 6,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "4",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 6,
+    "fields": {
+        "person": 7,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "5",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 7,
+    "fields": {
+        "person": 8,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "6",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 8,
+    "fields": {
+        "person": 9,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "7",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 9,
+    "fields": {
+        "person": 10,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "8",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 10,
+    "fields": {
+        "person": 11,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "9",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 11,
+    "fields": {
+        "person": 12,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "10",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 12,
+    "fields": {
+        "person": 13,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "11",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 13,
+    "fields": {
+        "person": 14,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "12",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 14,
+    "fields": {
+        "person": 15,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "13",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 15,
+    "fields": {
+        "person": 16,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "14",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 16,
+    "fields": {
+        "person": 17,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "15",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 17,
+    "fields": {
+        "person": 18,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "16",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 18,
+    "fields": {
+        "person": 19,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "17",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 19,
+    "fields": {
+        "person": 20,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "18",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 20,
+    "fields": {
+        "person": 21,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "19",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 21,
+    "fields": {
+        "person": 22,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "20",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 22,
+    "fields": {
+        "person": 23,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "21",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 23,
+    "fields": {
+        "person": 24,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "22",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 24,
+    "fields": {
+        "person": 25,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "23",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 25,
+    "fields": {
+        "person": 26,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "24",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 26,
+    "fields": {
+        "person": 27,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "25",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 27,
+    "fields": {
+        "person": 28,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "26",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 28,
+    "fields": {
+        "person": 29,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "27",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 29,
+    "fields": {
+        "person": 30,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "28",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 30,
+    "fields": {
+        "person": 31,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "29",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 31,
+    "fields": {
+        "person": 32,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "30",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 32,
+    "fields": {
+        "person": 33,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "31",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 33,
+    "fields": {
+        "person": 34,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "32",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 34,
+    "fields": {
+        "person": 35,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "33",
+        "election": null
+    }
+},
+{
+    "model": "app.voter",
+    "pk": 35,
+    "fields": {
+        "person": 36,
+        "voter_status": "A",
+        "date_registered": "2007-08-20",
+        "street_address": "123 Main Street",
+        "city": "Charlottesville",
+        "state": "VA",
+        "zip_code": "22902",
+        "locality": "ALBEMARLE COUNTY",
+        "precinct": "0405",
+        "voter_number": "34",
+        "election": null
+    }
+}
+]

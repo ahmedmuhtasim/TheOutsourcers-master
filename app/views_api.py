@@ -144,6 +144,126 @@ def search_voters(request):
 	})
 
 
+def seed_voters(request):
+	fn = ["John", "Sam", "Anakin", "Clark", "Tony", "Spittony", "Toni"]
+	ln = ["Smith", "Jacobsson", "Newsom", "Mangum", "Garcia"]
+	i = 0
+	precinct = Precinct(
+		name="405-CALE",
+		id="0405"
+	)
+	precinct.save()
+	for f in fn:
+		for l in ln:
+			p = Person(
+				first_name=f,
+				last_name=l,
+				SSN=str(i),
+				federal_district=1,
+				state_district=2
+			)
+			
+			p.save()
+
+			voter = {
+				"voter_number" : str(i),
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : ln,
+				"first_name" : fn,
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+			}
+
+			
+
+			v = Voter(
+				person=Person.objects.get(pk=p.pk),
+				voter_status="A",
+				date_registered=voter["date_registered"],
+				street_address=voter["street_address"],
+				city=voter["city"],
+				state=voter["state"],
+				zip_code=voter["zip"],
+				locality=voter["locality"],
+				precinct=Precinct.objects.get(id=voter["precinct_id"]),
+				voter_number=voter["voter_number"],
+			
+			)
+			
+			v.save()
+
+			i += 1
+
+
+
+
+	'''
+	voters = [
+		{
+				"voter_number" : "020342357",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Garcia",
+				"first_name" : "Juan",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "12345",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Doe",
+				"first_name" : "John",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "1",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Chan",
+				"first_name" : "Jackie",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+		{
+				"voter_number" : "1",
+				"voter_status" : "active",
+				"date_registered" : "2007-08-20",
+				"last_name" : "Baratheon",
+				"first_name" : "Joffrey",
+				"street_address" : "123 Main Street",
+				"city" : "Charlottesville",
+				"state" : "VA",
+				"zip" : "22902",
+				"locality" : "ALBEMARLE COUNTY",
+				"precinct" : "405-CALE",
+				"precinct_id" : "0405"
+		},
+	]
+	'''
+
 
 
 

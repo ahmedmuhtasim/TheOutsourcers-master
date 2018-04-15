@@ -80,9 +80,9 @@ urlpatterns = [
 	
 	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
 	
-	url('getVoterSerialCode/', views.get_voter_serial_code, name='pollworker_dashboard'),
+	url('getVoterSerialCode/', views.get_voter_serial_code, name='pollworker_dashdddboard'),
 	
-
+	url('seed', views_api.seed_voters),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
