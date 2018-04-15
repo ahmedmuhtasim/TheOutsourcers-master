@@ -7,9 +7,10 @@ def validate_serial_code(code):
 		voter = VoterSerialCodes.objects.filter(serial_code=code)
 		# voter = Voter.objects.get(voter_number=code)
 		if len(voter) > 0:
-			voter = voter[0]
-			if voter.election:
-				return voter
+			if not voter.finished:
+				voter = voter[0]
+				if voter.election:
+					return voter
 		return None
 	except:
 		return None

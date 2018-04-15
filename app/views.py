@@ -306,78 +306,34 @@ def vote(request):
 		is_day_of = True
 		return render(request, "app/vote.html", {
 			"form": form,
+			"logged_on": logged_on,
 			"is_day_of": is_day_of
 		})
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
+
 		if form.is_valid():
 			
 			voter = validate_serial_code(form.cleaned_data["serial_code"])
 			
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
-				return JsonResponse({
-					"type": str(type(voter)),
-					
+				return render(request, "app/vote.html", {
+					"errorMessage": "Serial Code Invalid",
+					"logged_on": logged_on,
+					"form": form,
+					"is_day_of": True
 				})
+
 			if voter.election:
 				election = voter.election
 				ballot = election.ballot
-			
-			if election:
-					election_data = [
-			{
-			"name": "Presidential Contest",
-			"type": "main",
-			"id": "pres-2012",
-			"candidates": [
-				{
-					"id": 0,
-					"candidate": "Barack Obama",
-					"running_mate": "Joe Biden",
-					"party": "Democrat"
-				},
-				{
-					"id": 1,
-					"candidate": "Mitt Romney",
-					"running_mate": "Paul Ryan",
-					"party": "Republican"
-				},
-				{
-					"id": 2,
-					"candidate": "Gary Johnson",
-					"running_mate": "James P. Gray",
-					"party": "Libertarian"
-				},
-			]
-		},
-		{
-			"name": "House of Reps. District 5",
-			"type": "",
-			"id": "dist-5",
-			"candidates": [
-				{
-					"id": 0,
-					"candidate": "Elisabeth Motsinger",
-					"party": "Democrat"
-				},
-				{
-					"id": 1,
-					"candidate": "Virginia Foxx",
-					"party": "Republican"
-				},
-			]
-		}
-	]
-	person = {
-		"name": "Luke Masters",
-		"id": "awh4Rtxu12"
-	}
-	return render(request, "app/ballot.html", {
-		"form": BallotForm,
-		"election_data": ballot,
-		"person": person,
-		"logged_on": logged_on
-	})
+
+			return render(request, "app/ballot.html", {
+				"form": BallotForm,
+				"election_data": ballot,
+				"serial_code": voter.serial_code,
+				"logged_on": logged_on
+			})
 
 	return JsonResponse({
 		"message": "Invalid Request"
@@ -386,18 +342,26 @@ def vote(request):
 @csrf_exempt
 def submit_vote(request):
 	data = request.POST
-	for key in data.keys():
-		measure = Measure.objects.get(pk=key)
-		if measure.measure_type == 'C':
-			candidacy = Candidacy.objects.get(pk=data[key])
-			candidacy.votes += 1
-			candidacy.save()
-		else:
-			choice = Choice.objects.get(pk=data[key])
-			choice.votes += 1
-			choice.save()
 
-	return HttpResponse("Vote Submitted!")
+	serial_code = data['serial_code']
+	s = VoterSerialCodes.objects.get(serial_code=serial_code)
+	s.finished = True
+	s.save()
+	for key in data.keys():
+		if key != "serial_code":
+			measure = Measure.objects.get(pk=key)
+			if measure.measure_type == 'C':
+				candidacy = Candidacy.objects.get(pk=data[key])
+				candidacy.votes += 1
+				candidacy.save()
+			else:
+				choice = Choice.objects.get(pk=data[key])
+				choice.votes += 1
+				choice.save()
+
+	return render(request, "app/submitVote.html", {
+		
+	})
 
 def pollworker_dashboard(request):
 	

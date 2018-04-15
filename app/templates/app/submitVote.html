@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>VA - Vote Submitted</title>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		<link rel="stylesheet" href="{% static 'css/login.css' %}">
+		<link rel="stylesheet" href="{% static 'css/vote.css' %}">
+	</head>
+	<body>
+		{% if logged_on %}
+			{% include './components/loggedInHeader.html' %}
+		{% else %}
+			{% include './components/header.html' %}
+		{% endif %}
+		<!-- Start Main Content -->
+			
+			<div class="main-content grid">
+				<p class="text-64 light italic">Vote Submitted</p>
+				<div class="form">
+					<form method="GET" action="/vote/">
+						<input type="Submit" value="Go Back To Vote Page">
+					</form>
+				</div>
+			</div>
+		<!-- End Main Content -->
+
+		{% include './components/footer.html' %}
+		
+	</body>
+	<script>
+		const url = "http://localhost:8000/vote/";
+
+	</script>
+</html>

@@ -31,6 +31,7 @@
 			</style>
 			<div class="main-content grid">
 				<div class="main">
+					<p class="text-24 red-text">{{errorMessage}}</p>
 					<div class="grid ballot-form">
 						{% if is_day_of %}
 							<form method="POST" action="/vote/" class="form">
