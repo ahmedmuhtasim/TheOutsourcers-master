@@ -163,7 +163,7 @@ class VoterSerialCodes(models.Model):
 	voter = models.ForeignKey(Voter, on_delete=models.SET_NULL, null=True, blank=True)
 	serial_code = models.CharField(max_length=250)
 	election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True)
-	finished = models.BooleanField()
+	finished = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "code for " + self.voter.person.first_name + " " + self.voter.person.last_name + " for election " + self.election.id
