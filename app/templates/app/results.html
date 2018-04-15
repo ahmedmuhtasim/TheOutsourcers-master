@@ -8,6 +8,7 @@
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
 		<link rel="stylesheet" href="{% static 'css/elections.css' %}">
+		<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -38,7 +39,7 @@
 							<div class="election" >
 								<p class="text-36">{{election.name}}</p>
 								<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
-							
+
 								<p class="text-16 italic">{{election.type}}</p>
 								<p class="text-16">Winner: {{election.winner.name}}</p>
 							</div>
@@ -50,6 +51,6 @@
 		<!-- End Main Content -->
 
 		{% include './components/footer.html' %}
-		
+
 	</body>
 </html>

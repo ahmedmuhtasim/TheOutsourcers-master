@@ -8,6 +8,7 @@
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
 		<link rel="stylesheet" href="{% static 'css/elections.css' %}">
+		<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -40,7 +41,7 @@
 							<div class="election">
 								<p class="text-36">{{election.name}}</p>
 								<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_votes}}</span></p>
-							
+
 								<p class="text-16 italic">{{election.type}}</p>
 							</div>
 						{% endfor %}
@@ -50,10 +51,10 @@
 							<div class="election" >
 								<p class="text-36">{{election.name}}</p>
 								<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
-							
+
 								<p class="text-16 italic">{{election.type}}</p>
 								<p><a class="text-16 " href="/results/{{election.id}}" style="text-decoration: underline">View Results</a></p>
-							
+
 							</div>
 						{% endfor %}
 					</div>
@@ -62,9 +63,9 @@
 						<div class="election">
 								<p class="text-36">{{election.name}}</p>
 								<p><a class="text-16 " href="/locations/{{election.id}}" style="text-decoration: underline">Find Polling Locations</a></p>
-							
+
 								<p class="text-16 italic">{{election.type}}</p>
-								
+
 						</div>
 						{% endfor %}
 					</div>
@@ -73,13 +74,13 @@
 		<!-- End Main Content -->
 
 		{% include './components/footer.html' %}
-		
+
 	</body>
 	<script>
 		$(".tab-nav li").click(function() {
 			console.log(this);
 			const id = $(this).attr("value");
-			
+
 			if (id != "all") {
 				$(".main .elections-section").css("display", "none");
 				$(`#${id}`).css("display", "block");
@@ -90,12 +91,12 @@
 			} else {
 				$(".main .elections-section").css("display", "block");
 			}
-			
+
 		});
 
 		var i = 1;
 
-		
+
 		const increment = function(target, currentValue, growthRate) {
 			console.log("runnign");
 			let inc = Math.floor(Math.random() * 3);
@@ -108,6 +109,6 @@
 
 
 
-		
+
 	</script>
 </html>

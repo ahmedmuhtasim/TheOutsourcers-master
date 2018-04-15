@@ -8,6 +8,7 @@
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
 		<link rel="stylesheet" href="{% static 'css/pollworkerDashboard.css' %}">
+		<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -27,7 +28,7 @@
 
 					<div class="title">
 						<p class="italic text-64 light text-center">Pollworker Dashboard</p>
-						
+
 					</div>
 					<div class="search form" id="search">
 						<div>
@@ -50,8 +51,8 @@
 								required>
 						</div>
 						<div>
-							<input type="submit" 
-								id="searchVoter" 
+							<input type="submit"
+								id="searchVoter"
 								value="Search">
 						</div>
 					</div>
@@ -63,7 +64,7 @@
 	</body>
 	<script>
 		$('#searchVoter').click(function() {
-			
+
 			const firstName = $('#firstName').val();
 			const lastName = $('#lastName').val();
 			const voterNumber = $('#voterNumber').val();
@@ -117,7 +118,7 @@
 					});
 				});
 
-				
+
 			}
 
 			console.log({

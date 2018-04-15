@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
 		<link rel="stylesheet" href="{% static 'css/login.css' %}">
 		<link rel="stylesheet" href="{% static 'css/vote.css' %}">
+		<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -45,13 +46,13 @@
 							</div>
 						{% endif %}
 					</div>
-					
+
 				</div>
 			</div>
 		<!-- End Main Content -->
 
 		{% include './components/footer.html' %}
-		
+
 	</body>
 	<script>
 		const dayof = new Date("2018-11-06");
@@ -59,7 +60,7 @@
 		$(document).ready(function() {
 			console.log(window.location.pathname);
 		});
-		
+
 		$("#id_serial_code").on('input', function() {
 			if ($(this).val().length === 13) {
 				$("#submitForm").click();
