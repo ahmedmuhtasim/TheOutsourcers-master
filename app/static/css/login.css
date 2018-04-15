@@ -32,11 +32,40 @@
 	letter-spacing: 1pt;
 	display: block;
 }
+.form select {
+
+	height: 48pt;
+	width: 300pt;
+	background-color: #EEEEEE;
+	color: black;
+	border-radius: 3pt;
+	font-size: 16pt;
+	border: none;
+	padding: 12pt 6pt;
+	margin-bottom: 24pt;
+	font-weight: 100;
+	letter-spacing: 1pt;
+	display: block;
+}
 
 .form input::placeholder {
 	color: #929292;
 	font-weight: 200;
 	letter-spacing: 1pt;
+}
+
+.form select::placeholder {
+	width: 300pt;
+	background-color: #EEEEEE;
+	color: black;
+	border-radius: 3pt;
+	font-size: 16pt;
+	border: none;
+	padding: 12pt 6pt;
+	margin-bottom: 24pt;
+	font-weight: 100;
+	letter-spacing: 1pt;
+	display: block;
 }
 
 .form input[type=submit] {

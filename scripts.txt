@@ -4,4 +4,4 @@ delete all non-running containers: docker system prune
 
 enter container: docker exec -it CONTAINERNAME bash
 
-python manage.py dumpdata --natural-foreign --indent=4 -e contenttypes -e auth.Permission -e sessions  > db.json
+python3 manage.py dumpdata --natural-foreign --indent=4 -e contenttypes -e auth.Permission -e sessions  > db.json

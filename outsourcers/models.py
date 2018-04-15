@@ -1,5 +1,5 @@
 from django.db import models
-
+from choices import STATES_CHOICES
 
 class Office(models.Model):
 	title = models.CharField(max_length=30)
@@ -21,6 +21,19 @@ class Person(models.Model):
 	federal_district = models.IntegerField()
 	state_district = models.IntegerField()
 
+class User(models.Model):
+	person = models.ForeignKey(Person)
+
+	USER_TYPES = (
+		('P', 'Pollworker'),
+		('S', 'Sysadmin'),
+		('V', 'Voters')
+	)
+
+	user_type = models.CharField(
+		max_length=1,
+		choices = USER_TYPES
+	)
 
 class Voter(models.Model):
 	# on_delete tells what to do if person is deleted - in that case, do SQL CASCADE
@@ -90,6 +103,7 @@ class Ballot(models.Model):
 	# and referendums in a single place and assigns a voter to this ballet
 	# It might also work with many to many, many voters per ballot and many ballots per voter
 
+
 class Precinct(models.Model):
 	name = models.CharField()
 	id = models.IntegerField(max_length=4)
@@ -98,6 +112,7 @@ class Precinct(models.Model):
 class Poll_Worker(models.Model):
 	person = models.OneToOneField(Person, on_delete=models.CASCADE)
 	precinct = models.OneToOneField(Precinct, on_delete=models.CASCADE)
+
 
 class Election(models.Model):
 	id = models.CharField(max_length=7)

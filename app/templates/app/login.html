@@ -28,10 +28,14 @@
 				color: #226FC8;
 			}
 		</style>
-		{% include './components/header.html' %}
-
+		{% if logged_on %}
+			{% include './components/loggedInHeader.html' %}
+		{% else %}
+			{% include './components/header.html' %}
+		{% endif %}
 		<!-- Start Main Content -->
 		<div class="main grid">
+			{{errorMessage}}
 			<div class="form-container grid">
 				<form method="POST" action="/login/" class="form login-form">
 					{{form}}

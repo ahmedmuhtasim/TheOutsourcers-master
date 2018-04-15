@@ -1,13 +1,13 @@
 <html>
 	<head>
-		<title>VA - Elections</title>
+		<title>VA - Get Voter Serial Code</title>
 		<script
 			src="https://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			crossorigin="anonymous"></script>
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
-		<link rel="stylesheet" href="{% static 'css/elections.css' %}">
+		<link rel="stylesheet" href="{% static 'css/pollworkerDashboard.css' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -18,22 +18,19 @@
 		<!-- Start Main Content -->
 			<style>
 				.main-content {
-					grid-template-columns: 1fr min-content 1fr;
+					grid-template-columns: 1fr 10fr 1fr;
 					grid-template-areas: ". main .";
-				}
-				.main {
 				}
 			</style>
 			<div class="main-content grid">
-				<div class="main">
-					<div class="page-title">
-						<p class="italic text-64 light text-center">Results - {{election.name}}</p>
-					</div>
+				get voter serial code
+
+				<div class="form">
+					<form method="POST" action="/getVoterSerialCode/">
+
+						<input type="submit" value="Print Code">
+					</form>
 				</div>
 			</div>
-		<!-- End Main Content -->
-
-		{% include './components/footer.html' %}
-		
 	</body>
 </html>

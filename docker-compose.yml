@@ -12,7 +12,7 @@ services:
       && python3 manage.py migrate
       && python3 manage.py makemigrations app
       && python3 manage.py migrate app
-      && python manage.py loaddata db.json
+      && python3 manage.py loaddata db.json
       && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code

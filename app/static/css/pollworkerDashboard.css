@@ -1,0 +1,30 @@
+.pollworker-dashboard {
+	grid-template-rows: min-content 1fr;
+	grid-template-areas:
+	"title title"
+	"search results"; 
+}
+@media only screen and (max-width: 600px) {
+	.pollworker-dashboard {
+		grid-template-rows: min-content min-content 1fr;
+		grid-template-areas:
+		"title"
+		"search"
+		"results"; 
+	}
+	.search {
+		margin: auto;
+	}
+	.results {
+		margin: 0 auto;
+	}
+}
+.title {
+	grid-area: title;
+}
+.search {
+	grid-area: search;
+}
+.results {
+	grid-area: results;
+}
