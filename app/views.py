@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
@@ -311,7 +311,9 @@ def vote(request):
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
 		if form.is_valid():
+			
 			voter = validate_serial_code(form.cleaned_data["serial_code"])
+			
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
 				return JsonResponse({
 					"type": str(type(voter)),
@@ -436,38 +438,40 @@ def get_voter_serial_code(request):
 	# initialize reused vars
 	serial_code = gen_alphanumeric(12)
 	the_voter = Voter.objects.get(voter_number=args["voter_number"])
-	the_election = Election.objects.get(pk=args["election_id"])
+	the_election = Election.objects.get(id=args["election_id"])
 
 	# 1)
-	the_voter.update(election=the_election)
-	the_voter.save()
+	the_voter.election = the_election
+	the_voter.save(update_fields=['election'])
 
 	# 2) 
 	new_serial = VoterSerialCodes(
 		voter = the_voter,
 		election = the_election,
-		serial_code = serial_code
+		serial_code = serial_code,
+		finished=False
 	)
 	new_serial.save()
 
 	# 3) TODO
 	# Print the page
-	EVAN_IP = "172.27.98.179"
-	EVAN_PORT = "5000"
-	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
-	# build the body
-	values = {
-		'voter' : serial_code,
-	}
+	'''
+		EVAN_IP = "172.27.98.179"
+		EVAN_PORT = "5000"
+		PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
+		# build the body
+		values = {
+			'voter' : serial_code,
+		}
 
-	encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	req = urllib.request.Request(PRINT_URL, encoded_values)
-	
-	with urllib.request.urlopen(req) as response:
-		response.read()
-
+		encoded_values = urllib.parse.urlencode(values).encode('ascii')
+		req = urllib.request.Request(PRINT_URL, encoded_values)
+		
+		with urllib.request.urlopen(req) as response:
+			response.read()
+	'''
 	# Once everything's done, just redirect back to the dashboard
-	reverse('pollworker_dashboard')
+	return HttpResponseRedirect(reverse('pollworker_dashboard'))
 
 
 

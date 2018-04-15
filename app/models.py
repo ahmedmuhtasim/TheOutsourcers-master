@@ -164,3 +164,6 @@ class VoterSerialCodes(models.Model):
 	serial_code = models.CharField(max_length=250)
 	election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True)
 	finished = models.BooleanField()
+
+	def __str__(self):
+		return "code for " + self.voter.person.first_name + " " + self.voter.person.last_name + " for election " + self.election.id

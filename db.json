@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$100000$HHyukdE8rX2y$gKCl+AUKFk7AIQerXImfDgsIilnEEF4K5YIcquGbv54=",
-        "last_login": "2018-04-15T19:03:27.120Z",
+        "last_login": "2018-04-15T19:10:00.511Z",
         "is_superuser": true,
         "username": "root",
         "first_name": "",
@@ -15,6 +15,28 @@
         "date_joined": "2018-04-15T16:09:07.688Z",
         "groups": [],
         "user_permissions": []
+    }
+},
+{
+    "model": "app.user",
+    "pk": 1,
+    "fields": {
+        "username": "out",
+        "first_name": "Out",
+        "last_name": "Sourcers",
+        "password": "pbkdf2_sha256$100000$Gurf0exuNcO9$ZBQ/TcbwuSZUMJf6zgaF+pRD+iNw6nxsKMSxpi/i41c=",
+        "ssn": "pbkdf2_sha256$100000$JYobCgHEUvDR$8JqlCNOVBHydMzxka0pjIH6fRolYKnxamSXrglOHJu4=",
+        "dob": "2018-04-09T00:00:00Z",
+        "join_date": "2018-04-15T19:14:14.844Z",
+        "role": "PW"
+    }
+},
+{
+    "model": "app.authenticator",
+    "pk": "vNLeJ5TFX9Q0NiroS5HZIwg8XdqZNO",
+    "fields": {
+        "user_id": "1",
+        "date_created": "2018-04-15T19:14:14.851Z"
     }
 },
 {

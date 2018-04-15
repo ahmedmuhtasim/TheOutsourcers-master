@@ -1,16 +1,10 @@
 # pseudomethod to validate a given serial code
 import random, string
-from app.models import Voter, Election
+from app.models import Voter, Election, VoterSerialCodes
 
 def validate_serial_code(code):
 	try:
-		'''
-		serial code:
-			- voter object
-			- code
-			- election
-		'''
-		voter = SerialCode.objects.filter(serial_code=code)
+		voter = VoterSerialCodes.objects.filter(serial_code=code)
 		# voter = Voter.objects.get(voter_number=code)
 		if len(voter) > 0:
 			voter = voter[0]

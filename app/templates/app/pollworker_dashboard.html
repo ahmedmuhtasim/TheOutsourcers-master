@@ -107,7 +107,7 @@
 								<h3>First 4 Digits of VN: ${voter.voter_number.substring(0, 4)}</h3>
 								<form class="form" method="GET" action="/getVoterSerialCode/">
 									<input type="hidden" name="voter_number" value="${voter.voter_number}">
-									<input type="hidden" name="election_id" value="${1}">
+									<input type="hidden" name="election_id" value="${'2012-09'}">
 									<input type="Submit" value="Get Serial Code">
 								</form>
 								<hr>
