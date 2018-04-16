@@ -4,11 +4,11 @@ from app.models import Voter, Election, VoterSerialCodes
 
 def validate_serial_code(code):
 	try:
-		voter = VoterSerialCodes.objects.filter(serial_code=code)
-		if len(voter) > 0:
-			voter = voter[0]
-			if voter.election:
-				return voter
+		code = VoterSerialCodes.objects.filter(serial_code=code)
+		if len(code) > 0:
+			code = code[0]
+			if code.election and not code.finished:
+				return code
 		return None
 	except:
 		return None
