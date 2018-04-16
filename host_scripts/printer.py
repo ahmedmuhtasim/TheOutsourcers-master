@@ -44,6 +44,43 @@ def encode(location, time, id):							#method to send relevant data to the print
 
 	return string
 
+def encode(id):							#method to send relevant data to the printer
+													#we need to set sizes for each of the 3 parts (sum of 3 must be 12 digits). Current configuration: loc: 3, tim: 3, id: 6
+	list = []										#array of size	13
+
+	list.append((id//10000000000)%10)
+	list.append((id//1000000000)%10)
+	list.append((id//100000000)%10)
+	list.append((id//10000000)%10)
+	list.append((id//1000000)%10)
+	list.append((id//100000)%10)
+	list.append((id//100000)%10)	
+	list.append((id//10000)%10)
+	list.append((id//1000)%10)
+	list.append((id//100)%10)		
+	list.append((id//10)%10)
+	list.append(id%10)
+
+	sum = 0											#keep track of sum
+	
+	for i in range(1, 12, 2):
+			sum += list[i]
+			
+	sum *= 3
+	
+	for i in range(0, 11, 2):
+			sum += list[i]	
+			
+					
+	list.append(((((sum//10)+1)*10)-sum)%10)	   #append parity bit
+
+	string = ''									   #string to return
+	
+	for i in range(0, len(list)):
+			string += str(list[i])
+
+	return string
+
 def decode(string):									   #method to extract info from scanned barcode
 	num = int(string)
 	num //= 10									   #get rid of parity
@@ -57,7 +94,7 @@ def decode(string):									   #method to extract info from scanned barcode
 
 @app.route('/voternumber', methods=['POST'])
 def result():
-	p.text(' ' + request.form['voter'])
+	p.barcode(encode(int(request.form['voter'])))
 	p.cut()
 	print(request.form['voter'])
 	return 'Received!' # response to your request.
