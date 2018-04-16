@@ -50,7 +50,6 @@
 						{% endif %}
 						{% if measure.referendums.all %}
 							{% for referendum in measure.referendums.all %}
-								<h2>{{referendum}}</h2>
 								{% for choice in referendum.choices.all %}
 									<div class="ballot-option grid">
 										<div class="radio-btn">

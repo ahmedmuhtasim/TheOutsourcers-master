@@ -346,21 +346,25 @@ def submit_vote(request):
 	serial_code = data['serial_code']
 	s = VoterSerialCodes.objects.get(serial_code=serial_code)
 	s.finished = True
+	v = s.voter
+	v.election = None
+	v.save()
 	s.save()
 
 	print_data = {}
-
+	# Printing the serial code will change eventually - it's to ensure receipts look different
+	print_data['serial_code'] = serial_code 
 	for key in data.keys():
 		if key != "serial_code":
 			measure = Measure.objects.get(pk=key)
 			if measure.measure_type == 'C':
 				candidacy = Candidacy.objects.get(pk=data[key])
-				print_data[key] = str(data[key])
+				print_data[measure.__str__()] = candidacy.__str__()
 				candidacy.votes += 1
 				candidacy.save()
 			else:
 				choice = Choice.objects.get(pk=data[key])
-				print_data[key] = str(data[key])
+				print_data[measure.__str__()] = choice.__str__()
 				choice.votes += 1
 				choice.save()
 
@@ -368,7 +372,7 @@ def submit_vote(request):
 	# Print the page
 	EVAN_IP = "172.27.98.179"
 	EVAN_PORT = "5000"
-	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
+	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/ballot"
 	# build the body
 	values = print_data
 
