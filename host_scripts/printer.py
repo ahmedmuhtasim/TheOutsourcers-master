@@ -3,7 +3,8 @@ from escpos.printer import Usb
 import os
 
 app = Flask(__name__)
-p = Usb(0x416, 0x5011)
+#p = Usb(0x416, 0x5011)
+p = Usb(0x456, 0x0808, 0, 0x81, 0x03)
 
 def encode(location, time, id):							#method to send relevant data to the printer
 													#we need to set sizes for each of the 3 parts (sum of 3 must be 12 digits). Current configuration: loc: 3, tim: 3, id: 6
@@ -94,7 +95,9 @@ def decode(string):									   #method to extract info from scanned barcode
 
 @app.route('/voternumber', methods=['POST'])
 def result():
-	p.barcode(encode(int(request.form['voter'])))
+    #p.barcode(request.form['voter'], 'EAN13', 64, 2)
+	p.qr(request.form['voter'], size=10)
+	p.text(request.form['voter'])
 	p.cut()
 	print(request.form['voter'])
 	return 'Received!' # response to your request.
