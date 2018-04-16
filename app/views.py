@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_alphanumeric, is_logged_on
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -423,7 +423,7 @@ def get_voter_serial_code(request):
 		})
 	
 	# initialize reused vars
-	serial_code = gen_alphanumeric(12)
+	serial_code = gen_numeric(12)
 	the_voter = Voter.objects.get(voter_number=args["voter_number"])
 	the_election = Election.objects.get(id=args["election_id"])
 
