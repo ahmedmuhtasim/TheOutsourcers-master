@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, EVAN_IP, EVAN_PORT
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -370,8 +370,6 @@ def submit_vote(request):
 
 	# 3) TODO
 	# Print the page
-	EVAN_IP = "172.27.98.179"
-	EVAN_PORT = "5000"
 	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/ballot"
 	# build the body
 	values = print_data
@@ -442,8 +440,6 @@ def get_voter_serial_code(request):
 
 	# 3) TODO
 	# Print the page
-	EVAN_IP = "172.27.98.179"
-	EVAN_PORT = "5000"
 	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
 	# build the body
 	values = {

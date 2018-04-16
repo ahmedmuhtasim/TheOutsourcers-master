@@ -22,3 +22,7 @@ def gen_numeric(length=16):
 def is_logged_on(request):
 	auth = request.COOKIES.get("auth")
 	return auth
+
+
+EVAN_IP = "172.27.45.240"
+EVAN_PORT = "5000"
