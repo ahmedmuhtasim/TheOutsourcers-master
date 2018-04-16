@@ -7,7 +7,7 @@ class GeneralTests(TestCase):
 	def language_is_english(self):
 		self.client.cookies.load({settings.LANGUAGE_COOKIE_NAME: 'en'})
 		response = self.client.get('/')
-		self.assertEqual(response.content, b"Hello, welcome to Housing.")
+		self.assertEqual(response.content, b"Hello, welcome to the OutSource Page.")
 		
 class FixtureTests(TestCase):
 	fixtures = ['sulavfixture.json']
