@@ -111,3 +111,7 @@
 	padding: 6pt 12pt;
 	background-color: white;
 }
+.action-btn:hover {
+	color: white;
+	background-color: #226FC8;
+}

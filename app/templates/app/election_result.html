@@ -15,23 +15,15 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<style>
-				.main-content {
-					grid-template-columns: 1fr min-content 1fr;
-					grid-template-areas: ". main .";
-				}
-				.main {
-				}
-			</style>
-			<div class="main-content grid">
-				<div class="main">
-					<div class="page-title">
-						<p class="italic text-64 light text-center">Results - {{election.name}}</p>
-					</div>
-				</div>
+
+		<div class="body">
+			<div class="body-title">
+				<p>Results - {{election.name}} <span class="text-24 red-text">{{errorMessage}}</span></p>
 			</div>
-		<!-- End Main Content -->
+			<div class="body-contents">
+				
+			</div>
+		</div>
 
 		{% include './components/footer.html' %}
 		

@@ -1,0 +1,43 @@
+.header-container {
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-areas: "links logo login"; 
+	padding: 0pt 12pt;
+}
+.header-container a {
+	text-decoration: none;
+	font-size: 13pt;
+	color: black;
+	padding: 0pt 6pt;
+}
+.header-container a:hover {
+	color: #226FC8;
+}
+.header-container .logo img {
+	height: 62px;
+	width: 285px;
+}
+.header-container .logo {
+	grid-area: logo;
+	margin: auto;
+}
+.header-container .links {
+	grid-area: links;
+	margin: auto 0;
+	text-align: start;
+}
+.header-container .login {
+	grid-area: login;
+	margin: auto 0;
+	text-align: end;
+}
+
+.login a {
+	background-color: #A52019;
+	color: white;
+	padding: 4pt 8pt;
+	border-radius: 3pt;
+}
+.login a:hover {
+	background-color: #A52019;
+	color: white;
+}

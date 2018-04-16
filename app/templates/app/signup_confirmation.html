@@ -16,11 +16,15 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<div class="main-content grid">
+
+		<div class="body">
+			<div class="body-title">
+				<p>Signup Successful! <span class="text-24 red-text">{{errorMessage}}</span></p>
+			</div>
+			<div class="body-contents">
 				
 			</div>
-		<!-- End Main Content -->
+		</div>
 
 		{% include './components/footer.html' %}
 		

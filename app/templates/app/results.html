@@ -15,39 +15,31 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<style>
-				.main-content {
-					grid-template-columns: 1fr min-content 1fr;
-					grid-template-areas: ". main .";
-				}
-			</style>
-			<div class="main-content grid">
-				<div class="main">
-					<div class="page-title">
-						<p class="italic text-100 light text-center">Results</p>
-					</div>
-					<ul class="tab-nav">
-						<li value="open">Current</li>
-						<li value="closed">Passed</li>
-						<li value="all">All</li>
-					</ul>
-					<div class="elections-section" id="closed">
-						{{election_data}}
-						{% for election in election_data.closed %}
-							<div class="election" >
-								<p class="text-36">{{election.name}}</p>
-								<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
-							
-								<p class="text-16 italic">{{election.type}}</p>
-								<p class="text-16">Winner: {{election.winner.name}}</p>
-							</div>
-						{% endfor %}
-					</div>
-				</div>
 
+		<div class="body">
+			<div class="body-title">
+				<p>Election Results <span class="text-24 red-text">{{errorMessage}}</span></p>
 			</div>
-		<!-- End Main Content -->
+			<div class="body-contents">
+				<ul class="tab-nav">
+					<li value="open">Current</li>
+					<li value="closed">Passed</li>
+					<li value="all">All</li>
+				</ul>
+				<div class="elections-section" id="closed">
+					{{election_data}}
+					{% for election in election_data.closed %}
+						<div class="election" >
+							<p class="text-36">{{election.name}}</p>
+							<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
+						
+							<p class="text-16 italic">{{election.type}}</p>
+							<p class="text-16">Winner: {{election.winner.name}}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 
 		{% include './components/footer.html' %}
 		

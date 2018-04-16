@@ -15,62 +15,53 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<style>
-				.main-content {
-					grid-template-columns: 1fr min-content 1fr;
-					grid-template-areas: ". main .";
-				}
-				.main {
-				}
-			</style>
-			<div class="main-content grid">
-				<div class="main">
-					<div class="page-title">
-						<p class="italic text-100 light text-center">Elections</p>
-					</div>
-					<ul class="tab-nav">
-						<li value="open">Open</li>
-						<li value="closed">Closed</li>
-						<li value="future">Future</li>
-						<li value="all">All</li>
-					</ul>
-					<div class="elections-section" id="open">
-						{% for election in election_data.open %}
-							<div class="election">
-								<p class="text-36">{{election.name}}</p>
-								<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_votes}}</span></p>
-							
-								<p class="text-16 italic">{{election.type}}</p>
-							</div>
-						{% endfor %}
-					</div>
-					<div class="elections-section" id="closed">
-						{% for election in election_data.closed %}
-							<div class="election" >
-								<p class="text-36">{{election.name}}</p>
-								<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
-							
-								<p class="text-16 italic">{{election.type}}</p>
-								<p><a class="text-16 " href="/results/{{election.id}}" style="text-decoration: underline">View Results</a></p>
-							
-							</div>
-						{% endfor %}
-					</div>
-					<div class="elections-section" id="future">
-						{% for election in election_data.future %}
+		
+		<div class="body">
+			<div class="body-title">
+				<p>Elections <span class="text-24 red-text">{{errorMessage}}</span></p>
+			</div>
+			<div class="body-contents">
+				<ul class="tab-nav">
+					<li value="open">Open</li>
+					<li value="closed">Closed</li>
+					<li value="future">Future</li>
+					<li value="all">All</li>
+				</ul>
+				<div class="elections-section" id="open">
+					{% for election in election_data.open %}
 						<div class="election">
-								<p class="text-36">{{election.name}}</p>
-								<p><a class="text-16 " href="/locations/{{election.id}}" style="text-decoration: underline">Find Polling Locations</a></p>
-							
-								<p class="text-16 italic">{{election.type}}</p>
-								
+							<p class="text-36">{{election.name}}</p>
+							<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_votes}}</span></p>
+						
+							<p class="text-16 italic">{{election.type}}</p>
 						</div>
-						{% endfor %}
+					{% endfor %}
+				</div>
+				<div class="elections-section" id="closed">
+					{% for election in election_data.closed %}
+						<div class="election" >
+							<p class="text-36">{{election.name}}</p>
+							<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
+						
+							<p class="text-16 italic">{{election.type}}</p>
+							<p><a class="text-16 " href="/results/{{election.id}}" style="text-decoration: underline">View Results</a></p>
+						
+						</div>
+					{% endfor %}
+				</div>
+				<div class="elections-section" id="future">
+					{% for election in election_data.future %}
+					<div class="election">
+							<p class="text-36">{{election.name}}</p>
+							<p><a class="text-16 " href="/locations/{{election.id}}" style="text-decoration: underline">Find Polling Locations</a></p>
+						
+							<p class="text-16 italic">{{election.type}}</p>
+							
 					</div>
+					{% endfor %}
 				</div>
 			</div>
-		<!-- End Main Content -->
+		</div>
 
 		{% include './components/footer.html' %}
 		
@@ -94,7 +85,6 @@
 		});
 
 		var i = 1;
-
 		
 		const increment = function(target, currentValue, growthRate) {
 			console.log("runnign");
@@ -104,10 +94,5 @@
 		}
 
 		var interval = setInterval(increment, 1000);
-
-
-
-
-		
 	</script>
 </html>

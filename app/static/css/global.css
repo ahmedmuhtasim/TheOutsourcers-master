@@ -1,173 +1,268 @@
+
+/* Global layout 
+	header 
+	body   --->     body = pageTitle
+	footer                 pageBody
+*/
+/* Palette
+	Medium Blue: #226FC8
+	Red: #D0021B
+	Dark Red: #A52019
+*/
+
 body {
 	margin: 0px;
 	padding: 0px;
 	display: grid;
 	grid-template-areas:
 	"header"
-	"main"
+	"body"
 	"footer";
 }
+
 .header-container {
 	grid-area: header;
-}
-.main {
-	grid-area: main;
-	min-height: 85vh;
 }
 .footer-container {
 	grid-area: footer;
 }
-a {
-	text-decoration: none;
-	font-size: 24px;
-}
-.center-text {
-	text-align: center;
-}
-.grid {
+
+.body {
+	grid-area: body;
+	min-height: 85vh;
+	padding: 12pt;
 	display: grid;
-}
-.red-text {
-	color: #D0021B;
-}
-.blue-text {
-	color: #226FC8;
-}
-.green-text {
-	color: green;
+	grid-template-rows: min-content 1fr;
+	grid-template-areas:
+	"bodyTitle"
+	"bodyContents";
 }
 
+/* Standard Elements */
+	div, p, input, a, h1, h2, h3, h4, h5, h6, li, ul {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		margin: 0pt;
+	}
+	a {
+		text-decoration: none;
+		font-size: 24px;
+	}
 
-div, p, input, a, h1, h2, h3, h4, h5, h6, li, ul {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	margin: 0pt;
-}
-.text-center {
-	text-align: center;
-}
-.light {
-	font-weight: 200;
-}
-.italic {
-	font-style: italic;
-}
-.text-144 {
-	font-size: 144pt;
-}
-.text-120 {
-	font-size: 120pt;
-}
-.text-100 {
-	font-size: 100pt;
-}
-.text-80 {
-	font-size: 80pt;
-}
-.text-64 {
-	font-size: 64pt;
-}
-.text-56 {
-	font-size: 56pt;
-}
-.text-48 {
-	font-size: 48pt;
-}
-.text-36 {
-	font-size: 36pt;
-}
-.text-30 {
-	font-size: 30pt;
-}
-.text-24 {
-	font-size: 24pt;
-}
-.text-18 {
-	font-size: 18pt;
-}
-.text-16 {
-	font-size: 16pt;
-}
-.text-14 {
-	font-size: 14pt;
-}
+	input {
+		width: 300pt;
+		background-color: #EEEEEE;
+		color: black;
+		border-radius: 3pt;
+		font-size: 16pt;
+		border: none;
+		padding: 12pt 6pt;
+		margin-bottom: 24pt;
+		font-weight: 100;
+		letter-spacing: 1pt;
+		display: block;
+	}
+	select {
+
+		height: 48pt;
+		width: 300pt;
+		background-color: #EEEEEE;
+		color: black;
+		border-radius: 3pt;
+		font-size: 16pt;
+		border: none;
+		padding: 12pt 6pt;
+		margin-bottom: 24pt;
+		font-weight: 100;
+		letter-spacing: 1pt;
+		display: block;
+	}
+
+	input::placeholder {
+		color: #929292;
+		font-weight: 200;
+		letter-spacing: 1pt;
+	}
+
+	select::placeholder {
+		width: 300pt;
+		background-color: #EEEEEE;
+		color: black;
+		border-radius: 3pt;
+		font-size: 16pt;
+		border: none;
+		padding: 12pt 6pt;
+		margin-bottom: 24pt;
+		font-weight: 100;
+		letter-spacing: 1pt;
+		display: block;
+	}
+
+	input[type=submit] {
+		background-color: #226FC8;
+		text-align: center;
+		color: white;
+		margin: 0pt;
+	}
+/* Special Elements */
+
+	/* TEMPLATE
+		<div class="body-title">
+			<p>PAGE TITLE</p>
+		</div>
+	*/
+	div.body-title {
+		grid-area: bodyTitle;
+		width: 100%;
+		border-bottom: 1pt solid #D3D3D3;
+		margin-bottom: 12pt;
+	}
+		div.body-title p {
+			font-style: italic;
+			font-weight: 200;
+			font-size: 48pt;
+			text-align: start;
+		}
+	div.body-contents {
+		grid-area: bodyContents;
+		width: 100%;
+		padding-bottom: 12pt;
+		margin: 0 auto;
+		max-width: 1024px;
+	}
+
+	/* TEMPLATE
+		<ul class="tab-nav">
+			<li value="open">Current</li>
+			<li value="closed">Passed</li>
+			<li value="all">All</li>
+		</ul>
+	*/	
+	ul.tab-nav {
+		list-style: none;
+		border-bottom: 1pt solid #226FC8;
+		white-space: nowrap;
+		padding: 0pt;
+		text-align: center;
+	}
+	ul.tab-nav li {
+		display: inline-block;
+		padding: 12pt 36pt;
+		margin: 1pt;
+		background-color: lightgray;
+		border-bottom: 0pt;
+		border-radius: 10pt 10pt 0pt 0pt;
+		color: white;
+		letter-spacing: 0.6pt;
+		font-size: 14pt;
+		background-color: #226FC8;
+		cursor: pointer;
+		min-width: 100pt;
+		text-align: center;
+	}
+
+/* Attachable Modifiers */
+	.serif {
+		font-family: Georgia, 'Times New Roman', Times, serif !important;
+	}
+	.san-serif {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+	}
+	.center {
+		margin: auto;
+	}
+	.red-text {
+		color: #D0021B;
+	}
+	.blue-text {
+		color: #226FC8;
+	}
+	.green-text {
+		color: green;
+	}
+	.text-center {
+		text-align: center;
+	}
+	.light {
+		font-weight: 200;
+	}
+	.italic {
+		font-style: italic;
+	}
+	.text-144 {
+		font-size: 144pt;
+	}
+	.text-120 {
+		font-size: 120pt;
+	}
+	.text-100 {
+		font-size: 100pt;
+	}
+	.text-80 {
+		font-size: 80pt;
+	}
+	.text-64 {
+		font-size: 64pt;
+	}
+	.text-56 {
+		font-size: 56pt;
+	}
+	.text-48 {
+		font-size: 48pt;
+	}
+	.text-36 {
+		font-size: 36pt;
+	}
+	.text-30 {
+		font-size: 30pt;
+	}
+	.text-24 {
+		font-size: 24pt;
+	}
+	.text-18 {
+		font-size: 18pt;
+	}
+	.text-16 {
+		font-size: 16pt;
+	}
+	.text-14 {
+		font-size: 14pt;
+	}
+	.grid {
+		display: grid;
+	}
+
+/* TEMPLATE PAGE FOR COPY & PASTE
+
+	<html>
+		<head>
+			<title>VA - {PAGE TITLE}</title>
+			<script
+				src="https://code.jquery.com/jquery-3.3.1.min.js"
+				integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+				crossorigin="anonymous"></script>
+			{% load static %}
+			<link rel="stylesheet" href="{% static 'css/global.css' %}">
+		</head>
+		<body>
+			{% if logged_on %}
+				{% include './components/loggedInHeader.html' %}
+			{% else %}
+				{% include './components/header.html' %}
+			{% endif %}
+
+			<div class="body">
+				<div class="body-title">
+					<p>{PAGE TITLE} <span class="text-24 red-text">{{errorMessage}}</span></p>
+				</div>
+				<div class="body-contents">
+					
+				</div>
+			</div>
+
+			{% include './components/footer.html' %}
+			
+		</body>
+	</html>
 
 
-
-.tab-nav {
-	list-style: none;
-	border-bottom: 1pt solid #226FC8;
-	white-space: nowrap;
-	padding: 0pt;
-}
-.tab-nav li {
-	display: inline-block;
-	padding: 12pt 36pt;
-	margin: 1pt;
-	background-color: lightgray;
-	border-bottom: 0pt;
-	border-radius: 10pt 10pt 0pt 0pt;
-	color: white;
-	letter-spacing: 0.6pt;
-	font-size: 14pt;
-	background-color: #226FC8;
-	cursor: pointer;
-	min-width: 100pt;
-	text-align: center;
-}
-
-
-.form input {
-	width: 300pt;
-	background-color: #EEEEEE;
-	color: black;
-	border-radius: 3pt;
-	font-size: 16pt;
-	border: none;
-	padding: 12pt 6pt;
-	margin-bottom: 24pt;
-	font-weight: 100;
-	letter-spacing: 1pt;
-	display: block;
-}
-.form select {
-
-	height: 48pt;
-	width: 300pt;
-	background-color: #EEEEEE;
-	color: black;
-	border-radius: 3pt;
-	font-size: 16pt;
-	border: none;
-	padding: 12pt 6pt;
-	margin-bottom: 24pt;
-	font-weight: 100;
-	letter-spacing: 1pt;
-	display: block;
-}
-
-.form input::placeholder {
-	color: #929292;
-	font-weight: 200;
-	letter-spacing: 1pt;
-}
-
-.form select::placeholder {
-	width: 300pt;
-	background-color: #EEEEEE;
-	color: black;
-	border-radius: 3pt;
-	font-size: 16pt;
-	border: none;
-	padding: 12pt 6pt;
-	margin-bottom: 24pt;
-	font-weight: 100;
-	letter-spacing: 1pt;
-	display: block;
-}
-
-.form input[type=submit] {
-	background-color: #226FC8;
-	text-align: center;
-	color: white;
-	margin: 0pt;
-}
+*/

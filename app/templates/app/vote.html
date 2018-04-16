@@ -16,39 +16,30 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<style>
-				.main-content {
-					grid-template-areas: "main";
-				}
-				.main {
-					text-align: center;
-					align-self: center;
-				}
-				.main p {
-					font-size: 24px;
-				}
-			</style>
-			<div class="main-content grid">
-				<div class="main">
-					<p class="text-24 red-text">{{errorMessage}}</p>
-					<div class="grid ballot-form">
-						{% if is_day_of %}
-							<form method="POST" action="/vote/" class="form">
-							{{form}}
-							<input type="submit" value="Go To Ballot" id="submitForm">
-							</form>
-						{% else %}
-							<div class="message">
-								<p>Next General Election: <span class="blue-text">November 6th, 2018</span></p>
-								<h1>Come back then and enter the serial code provided to you by your poll-worker.</h1>
-							</div>
-						{% endif %}
-					</div>
-					
+
+		<div class="body">
+
+			<div class="body-title">
+				<p>Vote <span class="text-24 red-text">{{errorMessage}}</span></p>
+			</div>
+
+			<div class="body-contents">
+				<div class="grid ballot-form">
+					{% if is_day_of %}
+						<form method="POST" action="/vote/" class="form">
+						{{form}}
+						<input type="submit" value="Go To Ballot" id="submitForm">
+						</form>
+					{% else %}
+						<div class="message">
+							<p>Next General Election: <span class="blue-text">November 6th, 2018</span></p>
+							<h1>Come back then and enter the serial code provided to you by your poll-worker.</h1>
+						</div>
+					{% endif %}
 				</div>
 			</div>
-		<!-- End Main Content -->
+
+		</div>
 
 		{% include './components/footer.html' %}
 		
@@ -58,6 +49,7 @@
 		const today = new Date("2018-11-06");
 		$(document).ready(function() {
 			console.log(window.location.pathname);
+			$("#id_serial_code").focus();
 		});
 		
 		$("#id_serial_code").on('input', function() {
@@ -65,5 +57,7 @@
 				$("#submitForm").click();
 			}
 		})
+
+
 	</script>
 </html>

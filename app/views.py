@@ -370,6 +370,8 @@ def submit_vote(request):
 
 	# 3) TODO
 	# Print the page
+	EVAN_IP = "172.27.45.240"
+	EVAN_PORT = "5000"
 	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/ballot"
 	# build the body
 	values = print_data
@@ -440,6 +442,8 @@ def get_voter_serial_code(request):
 
 	# 3) TODO
 	# Print the page
+	EVAN_IP = "172.27.45.240"
+	EVAN_PORT = "5000"
 	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
 	# build the body
 	values = {

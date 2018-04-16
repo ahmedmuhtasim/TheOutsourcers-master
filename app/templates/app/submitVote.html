@@ -16,23 +16,21 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			
-			<div class="main-content grid">
-				<p class="text-64 light italic">Vote Submitted</p>
+		
+		<div class="body">
+			<div class="body-title">
+				<p>Vote Submitted <span class="text-24 red-text">{{errorMessage}}</span></p>
+			</div>
+			<div class="body-contents">
 				<div class="form">
 					<form method="GET" action="/vote/">
 						<input type="Submit" value="Go Back To Vote Page">
 					</form>
 				</div>
 			</div>
-		<!-- End Main Content -->
+		</div>
 
 		{% include './components/footer.html' %}
 		
 	</body>
-	<script>
-		const url = "http://localhost:8000/vote/";
-
-	</script>
 </html>

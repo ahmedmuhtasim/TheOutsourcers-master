@@ -15,51 +15,45 @@
 		{% else %}
 			{% include './components/header.html' %}
 		{% endif %}
-		<!-- Start Main Content -->
-			<style>
-				.main-content {
-					grid-template-columns: 1fr 10fr 1fr;
-					grid-template-areas: ". main .";
-				}
-			</style>
-			<div class="main-content grid">
-				<div class="main pollworker-dashboard grid">
+		
+		<div class="body">
+			<div class="body-title">
+				<p>Pollworker Dashboard <span class="text-24 red-text">{{errorMessage}}</span></p>
+			</div>
+			<div class="body-contents">
+				<div class="search form" id="search">
+					<div>
+						<input placeholder="First Name"
+							id="firstName"
+							value="John"
+							required>
 
-					<div class="title">
-						<p class="italic text-64 light text-center">Pollworker Dashboard</p>
-						
 					</div>
-					<div class="search form" id="search">
-						<div>
-							<input placeholder="First Name"
-								id="firstName"
-								value="John"
-								required>
-
-						</div>
-						<div>
-							<input placeholder="Last Name"
-								id="lastName"
-								value="Newsom"
-								required>
-						</div>
-						<div>
-							<input placeholder="Voter Number"
-								id="voterNumber"
-								value="2"
-								required>
-						</div>
-						<div>
-							<input type="submit" 
-								id="searchVoter" 
-								value="Search">
-						</div>
+					<div>
+						<input placeholder="Last Name"
+							id="lastName"
+							value="Newsom"
+							required>
 					</div>
-					<div class="results" id="results">
+					<div>
+						<input placeholder="Voter Number"
+							id="voterNumber"
+							value="2"
+							required>
+					</div>
+					<div>
+						<input type="submit" 
+							id="searchVoter" 
+							value="Search">
 					</div>
 				</div>
+				<div class="results" id="results">
 
+				</div>
 			</div>
+		</div>
+
+		{% include './components/footer.html' %}
 	</body>
 	<script>
 		$('#searchVoter').click(function() {

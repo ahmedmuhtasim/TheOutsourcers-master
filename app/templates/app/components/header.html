@@ -18,42 +18,22 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 </head>
-<style>
-	.header-container {
-		grid-template-areas: "logo . links"; 
-		padding: 0pt 12pt;
-	}
-	.header-container a {
-		font-family: Georgia, 'Times New Roman', Times, serif;
-		text-decoration: none;
-		font-size: 24px;
-		color: black;
-		padding: 0pt 6pt;
-	}
-	.header-container .logo img {
-		height: 82px;
-		width: 380px;
-	}
-	.header-container .logo {
-		grid-area: logo;
-	}
-	.header-container .links {
-		grid-area: links;
-		align-self: center;
-		text-align: end;
-	}
-</style>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+
 <div class="header-container grid">
+	<div class="links">
+		<a href="/vote/">Vote</a>
+		<a href="/results/">Results</a>
+		<a href="/elections/">Past Elections</a>
+	</div>
 	<div class="logo">
 		<a href="/">
 			{% load static %}
 			<img src="{% static 'img/va-elect-logo.jpg' %}" />
 		</a>
 	</div>
-	<div class="links">
-		<a href="/vote/">Vote</a>
-		<a href="/results/">Results</a>
-		<a href="/elections/">Past Elections</a>
+	<div class="login">
 		<a href="/login/">Login</a>
 	</div>
 </div>
