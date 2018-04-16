@@ -1,6 +1,14 @@
 from django.test import TestCase
+from django.models import *
+from .forms import SignupForm
+from .forms import LoginForm
 
-
+class GeneralTests(TestCase):
+	def language_is_english(self):
+		self.client.cookies.load({settings.LANGUAGE_COOKIE_NAME: 'en'})
+		response = self.client.get('/')
+		self.assertEqual(response.content, b"Hello, welcome to Housing.")
+		
 class FixtureTests(TestCase):
 	fixtures = ['sulavfixture.json']
 	
@@ -20,24 +28,24 @@ class FixtureTests(TestCase):
 		form = SignupForm({
 			'first_name': "Firstname",
 			'last_name': "Lastname",
-			'email': "myemail@test.com",
-			'username': "user1234",
-		    'password1': "testPass9",
-		    'password2': "testPass9",
+			'email': "myemail@email.com",
+			'username': "testuser",
+		    'password1': "testPass",
+		    'password2': "testPass",
 		})
 
 		form.save(commit=False);
-		user = authenticate(username="user1234", password="testPass9")
+		user = authenticate(username="root", password="outsourcers")
 		self.assertTrue(user.is_active)
 
 	def test_signup_preexisting_user(self):
 		form = SignupForm({
 			'first_name': "Firstname",
 			'last_name': "Lastname",
-			'email': "myemail@test.com",
-			'username': "willsmith",
-		    'password1': "testPass9",
-		    'password2': "testPass9",
+			'email': "myemail@email.com",
+			'username': "newuser",
+		    'password1': "outsourcers",
+		    'password2': "outsourcers",
 		})
 		self.assertFalse(form.is_valid())
 
@@ -49,21 +57,21 @@ class LoggingTests(TestCase):
 
 	def test_log_in(self):
 		form = LoginForm({
-			'username': "username123",
-			'password': "testPass123",
+			'username': "newuser",
+			'password': "newpassword",
 		})
 		self.assertTrue(form.is_valid())
 		
 	def test_log_in_without_username(self):
 		form = LoginForm({
 			'username': "",
-			'password': "testPass123",
+			'password': "newpassword",
 		})
 		self.assertFalse(form.is_valid())
 
 	def test_log_in_without_password(self):
 		form = LoginForm({
-			'username': "username123",
+			'username': "newpassword",
 			'password': "",
 		})
 		self.assertFalse(form.is_valid())
@@ -101,4 +109,3 @@ class ViewTests(TestCase):
     def test_basicmap_view(self):
         response = self.client.get(reverse('mapapp:vote'))
         self.assertEqual(response.status_code, 200)
-
