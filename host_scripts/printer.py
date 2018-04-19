@@ -95,7 +95,6 @@ def decode(string):									   #method to extract info from scanned barcode
 
 @app.route('/voternumber', methods=['POST'])
 def result():
-    #p.barcode(request.form['voter'], 'EAN13', 64, 2)
 	p.qr(request.form['voter'], size=10)
 	p.text(request.form['voter'])
 	p.cut()
@@ -113,4 +112,5 @@ def votedfor():
 	p.cut()
 	return 'Received a ballot!' # response to your request.
 
-app.run(host='172.27.98.179', port=5000)
+
+app.run(host='0.0.0.0', port=5000)

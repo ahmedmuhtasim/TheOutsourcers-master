@@ -23,6 +23,12 @@ def is_logged_on(request):
 	auth = request.COOKIES.get("auth")
 	return auth
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
-EVAN_IP = "172.27.45.240"
-EVAN_PORT = "5000"
+PRINT_PORT = "5000"

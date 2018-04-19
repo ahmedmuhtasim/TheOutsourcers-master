@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, EVAN_IP, EVAN_PORT
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -368,12 +368,9 @@ def submit_vote(request):
 				choice.votes += 1
 				choice.save()
 
-	# 3) TODO
-	# Print the page
-	EVAN_IP = "172.27.45.240"
-	EVAN_PORT = "5000"
-	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/ballot"
-	# build the body
+	ip = get_client_ip(request)
+	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/ballot"
+
 	values = print_data
 
 	encoded_values = urllib.parse.urlencode(values).encode('ascii')
@@ -440,15 +437,8 @@ def get_voter_serial_code(request):
 	)
 	new_serial.save()
 
-	# 3) TODO
-	# Print the page
-	EVAN_IP = "172.27.45.240"
-	EVAN_PORT = "5000"
-	PRINT_URL = "http://" + EVAN_IP + ":" + EVAN_PORT + "/voternumber"
-	# build the body
-	values = {
-		'voter' : serial_code,
-	}
+	ip = get_client_ip(request)
+	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
 
 	encoded_values = urllib.parse.urlencode(values).encode('ascii')
 	req = urllib.request.Request(PRINT_URL, encoded_values)
