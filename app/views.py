@@ -420,7 +420,7 @@ def get_voter_serial_code(request):
 		})
 	
 	# initialize reused vars
-	serial_code = gen_numeric(12)
+	serial_code = gen_alphanumeric(12)
 	the_voter = Voter.objects.get(voter_number=args["voter_number"])
 	the_election = Election.objects.get(id=args["election_id"])
 
@@ -439,7 +439,9 @@ def get_voter_serial_code(request):
 
 	ip = get_client_ip(request)
 	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
-
+	values = {
+		'voter' : serial_code,
+	}
 	encoded_values = urllib.parse.urlencode(values).encode('ascii')
 	req = urllib.request.Request(PRINT_URL, encoded_values)
 	
