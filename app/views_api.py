@@ -29,6 +29,66 @@ def election(request, pk):
 		measures.append(json)
 	return JsonResponse({ election.id : measures})
 
+def election_results(request):
+    args = {}
+    elections = []
+    open_elections = []
+    closed_elections = []
+    future_elections = []
+    all_ballots = Ballot.objects.all()
+    for ballot in all_ballots:
+        total_votes = 0
+        election = ballot.election
+        measures = ballot.measures.all()
+        for measure in measures:
+            if measure.measure_type == "C":
+                candidacies = measure.candidacies.all()
+                for candidate in candidacies:
+                    total_votes += candidate.votes
+        json = {}
+        json["name"] = measure.__str__()
+        json["id"] = election.id
+        json["total_votes"] = total_votes
+        json["type"] = election.get_type_display()
+        json["state"] = "open"
+        if json["state"] == "open":
+            open_elections.append(json)
+        elif json["state"] == "closed":
+            closed_elections.append(json)
+        else:
+            future_elections.append(json)
+    return JsonResponse({"open": open_elections, "closed": closed_elections, "future": future_elections})
+#       election_data = {
+#           "open": [
+#               {
+#                   "name": "Equifax new President",
+#                   "id": "equifax-2018",
+#                   "total_votes": 651,
+#                   "type": "general",
+#                   "state": "open"
+#               }
+#           ],
+#           "closed": [
+#               {
+#                   "name": "Presidential Race 2012",
+#                   "id": "pres-2012",
+#                   "total_votes": 22347000,
+#                   "type": "general",
+#                   "state": "closed"
+#               }
+#           ],
+#           "future": [
+#               {
+#                   "name": "Midterm 2018",
+#                   "id": "midterm-2018",
+#                   "total_votes": 0,
+#                   "type": "general",
+#                   "state": "not-yet-open"
+#               },
+#           ]
+#       }
+
+
 def voters(request):
 	args = {}
 	voters =[]

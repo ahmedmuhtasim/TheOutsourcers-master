@@ -81,47 +81,49 @@ def election_result(request, pk):
 		})
 
 def page_elections(request):
-	logged_on = is_logged_on(request)
-	
-	if request.method == "GET":
-		election_data = {}
-		req = urllib.request.Request("http://localhost:8000/api/elections/")
-		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
-		election_data["body"] = json.loads(resp_json)
-		election_data = {
-			"open": [
-				{
-					"name": "Equifax new President",
-					"id": "equifax-2018",
-					"total_votes": 651,
-					"type": "general",
-					"state": "open"
-				}
-			],
-			"closed": [
-				{
-					"name": "Presidential Race 2012",
-					"id": "pres-2012",
-					"total_votes": 22347000,
-					"type": "general",
-					"state": "closed"
-				}
-			],
-			"future": [
-				{
-					"name": "Midterm 2018",
-					"id": "midterm-2018",
-					"total_votes": 0,
-					"type": "general",
-					"state": "not-yet-open"
-				},
-			]
-		}
+    logged_on = is_logged_on(request)
+    
+    if request.method == "GET":
+        election_data = {}
+        req = urllib.request.Request("http://localhost:8000/api/election_results/")
+        resp_json = urllib.request.urlopen(req).read().decode("utf-8")
+        election_data = json.loads(resp_json)
+#       return JsonResponse(election_data)
+#       election_data = {
+#           "open": [
+#               {
+#                   "name": "Equifax new President",
+#                   "id": "equifax-2018",
+#                   "total_votes": 651,
+#                   "type": "general",
+#                   "state": "open"
+#               }
+#           ],
+#           "closed": [
+#               {
+#                   "name": "Presidential Race 2012",
+#                   "id": "pres-2012",
+#                   "total_votes": 22347000,
+#                   "type": "general",
+#                   "state": "closed"
+#               }
+#           ],
+#           "future": [
+#               {
+#                   "name": "Midterm 2018",
+#                   "id": "midterm-2018",
+#                   "total_votes": 0,
+#                   "type": "general",
+#                   "state": "not-yet-open"
+#               },
+#           ]
+#       }
 
-		return render(request, "app/elections.html", {
-			"election_data": election_data,
-			"logged_on": logged_on
-		})
+        return render(request, "app/elections.html", {
+            "election_data": election_data,
+            "logged_on": logged_on
+        })
+
 
 # Signup/Login Flow
 @csrf_exempt
