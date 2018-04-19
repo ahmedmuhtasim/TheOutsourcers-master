@@ -140,3 +140,4 @@ STATIC_ROOT = '/'
 MEDIA_URL = '/pics/'
 
 MEDIA_ROOT = BASE_DIR
+
