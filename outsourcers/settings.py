@@ -141,5 +141,3 @@ MEDIA_URL = '/pics/'
 
 MEDIA_ROOT = BASE_DIR
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
