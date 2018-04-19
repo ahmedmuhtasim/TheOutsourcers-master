@@ -64,6 +64,7 @@ urlpatterns = [
 	url(r'^api/candidacies/', candidacy_endpoint, name='candidacy-list'),
 	url(r'^api/election_results/', views_api.election_results, name="election_results"),
 
+	url(r'elections/(?P<pk>[0-9-]+)', views_api.election),
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home, name='home'),
 	url('login/', views.login),

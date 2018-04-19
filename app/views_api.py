@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db import IntegrityError
 from .models import *
 from rest_framework import viewsets, status
@@ -7,7 +7,6 @@ from .serializers import *
 from rest_framework.response import Response
 import urllib
 import json
-
 # API
 def elections(request):
 	args = {}
@@ -24,9 +23,36 @@ def election(request, pk):
 	election = Election.objects.get(pk=pk)
 	measures = []
 	for measure in election.ballot.measures.all():
-		json = {}
-		json["measure_type"] = measure.get_measure_type_display()
-		measures.append(json)
+		total_votes = 0
+		if measure.measure_type == "C":
+			candidates = []
+			m_json = {}
+			m_json["type"] = measure.get_measure_type_display()
+			m_json["office"] = measure.__str__()
+			for candidacy in measure.candidacies.all():
+				c_json = {}
+				c_json["candidate"] = candidacy.politician.__str__()
+				c_json["votes"] = candidacy.votes
+				total_votes += candidacy.votes
+				candidates.append(c_json)
+			m_json["total_votes"] = total_votes
+			m_json["candidates"] = candidates
+			measures.append(m_json)
+		else:
+			choices = []
+			m_json = {}
+			m_json["type"] = measure.get_measure_type_display()
+			m_json["question_text"] = measure.__str__()
+			for referendum in measure.referendums.all():
+				for choice in referendum.choices.all():
+					c_json = {}
+					c_json["choice_text"] = choice.__str__()
+					c_json["votes"] = choice.votes
+					total_votes += choice.votes
+					choices.append(c_json)
+			m_json["total_votes"] = total_votes
+			m_json["choices"] = choices
+			measures.append(m_json)
 	return JsonResponse({ election.id : measures})
 
 def election_results(request):
