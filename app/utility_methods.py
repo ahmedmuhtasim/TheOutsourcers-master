@@ -1,6 +1,6 @@
 # pseudomethod to validate a given serial code
 import random, string
-from app.models import Voter, Election, VoterSerialCodes
+from app.models import Voter, Election, VoterSerialCodes, Authenticator
 
 def validate_serial_code(code):
 	try:
@@ -20,8 +20,11 @@ def gen_numeric(length=16):
 	return ''.join(random.choice(string.digits) for _ in range(length))
 
 def is_logged_on(request):
+	
 	auth = request.COOKIES.get("auth")
-	return auth
+	results = Authenticator.objects.filter(token=auth)
+	
+	return len(results) > 0
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

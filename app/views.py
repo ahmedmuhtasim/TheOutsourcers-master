@@ -13,6 +13,8 @@ import urllib
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
 
+IN_PROD = False
+
 # Public Pages
 def home(request):
 	""" GET DATA FROM API & FORMAT
@@ -88,36 +90,36 @@ def page_elections(request):
         req = urllib.request.Request("http://localhost:8000/api/election_results/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
-#       return JsonResponse(election_data)
-#       election_data = {
-#           "open": [
-#               {
-#                   "name": "Equifax new President",
-#                   "id": "equifax-2018",
-#                   "total_votes": 651,
-#                   "type": "general",
-#                   "state": "open"
-#               }
-#           ],
-#           "closed": [
-#               {
-#                   "name": "Presidential Race 2012",
-#                   "id": "pres-2012",
-#                   "total_votes": 22347000,
-#                   "type": "general",
-#                   "state": "closed"
-#               }
-#           ],
-#           "future": [
-#               {
-#                   "name": "Midterm 2018",
-#                   "id": "midterm-2018",
-#                   "total_votes": 0,
-#                   "type": "general",
-#                   "state": "not-yet-open"
-#               },
-#           ]
-#       }
+	#       return JsonResponse(election_data)
+	#       election_data = {
+	#           "open": [
+	#               {
+	#                   "name": "Equifax new President",
+	#                   "id": "equifax-2018",
+	#                   "total_votes": 651,
+	#                   "type": "general",
+	#                   "state": "open"
+	#               }
+	#           ],
+	#           "closed": [
+	#               {
+	#                   "name": "Presidential Race 2012",
+	#                   "id": "pres-2012",
+	#                   "total_votes": 22347000,
+	#                   "type": "general",
+	#                   "state": "closed"
+	#               }
+	#           ],
+	#           "future": [
+	#               {
+	#                   "name": "Midterm 2018",
+	#                   "id": "midterm-2018",
+	#                   "total_votes": 0,
+	#                   "type": "general",
+	#                   "state": "not-yet-open"
+	#               },
+	#           ]
+	#       }
 
         return render(request, "app/elections.html", {
             "election_data": election_data,
@@ -426,6 +428,19 @@ def get_voter_serial_code(request):
 	the_voter = Voter.objects.get(voter_number=args["voter_number"])
 	the_election = Election.objects.get(id=args["election_id"])
 
+	# check if serial code already generated for voter for this election
+	matching_serial_codes = VoterSerialCodes.objects.filter(
+		voter=the_voter
+	).filter(
+		election=the_election
+	)
+
+	if len(matching_serial_codes) > 0:
+		return JsonResponse({
+			"status": "400 - Bad Request",
+			"message": "Voter has already voted in this election"
+		})
+
 	# 1)
 	the_voter.election = the_election
 	the_voter.save(update_fields=['election'])
@@ -439,21 +454,25 @@ def get_voter_serial_code(request):
 	)
 	new_serial.save()
 
-	ip = get_client_ip(request)
-	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
-	values = {
-		'voter' : serial_code,
-	}
-	encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	req = urllib.request.Request(PRINT_URL, encoded_values)
-	
-	with urllib.request.urlopen(req) as response:
-		response.read()
+	if IN_PROD:
+
+		ip = get_client_ip(request)
+		PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
+		values = {
+			'voter' : serial_code,
+		}
+		encoded_values = urllib.parse.urlencode(values).encode('ascii')
+		req = urllib.request.Request(PRINT_URL, encoded_values)
+		
+		with urllib.request.urlopen(req) as response:
+			response.read()
 	
 	# Once everything's done, just redirect back to the dashboard
-	return HttpResponseRedirect(reverse('pollworker_dashboard'))
-
-
+	return JsonResponse({
+		"status": "200 - OK",
+		"message": "Voter ok! Created serial code!",
+		"serial_code": serial_code
+	})
 
 # End Vote/Ballot Flow
 # END PROTECTED PAGES
