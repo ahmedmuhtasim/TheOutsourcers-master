@@ -403,7 +403,8 @@ def pollworker_dashboard(request):
 
 	return render(request, "app/pollworker_dashboard.html", {
 		"auth": auth,
-		"role": user.role
+		"role": user.role,
+		"logged_on": logged_on
 	})
 	
 @csrf_exempt
