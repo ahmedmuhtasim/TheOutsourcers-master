@@ -436,8 +436,9 @@ def get_voter_serial_code(request):
 
 	if "voter_number" not in args or "election_id" not in args:
 		return JsonResponse({
-			"status": "404 - Not Found",
-			"message": "Please provide both voter_number and election_id"
+			"status": "400 - BAD REQUEST",
+			"message": "Please provide both voter_number and election_id",
+			"serial_code": "None generated"
 		})
 	
 	# initialize reused vars
@@ -454,8 +455,9 @@ def get_voter_serial_code(request):
 
 	if len(matching_serial_codes) > 0:
 		return JsonResponse({
-			"status": "400 - Bad Request",
-			"message": "Voter has already voted in this election"
+			"status": "400 - BAD REQUEST",
+			"message": "Voter has already voted in this election",
+			"serial_code": "None generated"
 		})
 
 	# 1)
@@ -471,25 +473,28 @@ def get_voter_serial_code(request):
 	)
 	new_serial.save()
 
-	if IN_PRODUCTION:
+	final_response = {
+		"status": "200 - OK",
+		"message": "Voter ok! Created serial code!",
+		"serial_code": serial_code
+	}
 
-		ip = get_client_ip(request)
-		PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
-		values = {
-			'voter' : serial_code,
-		}
+	ip = get_client_ip(request)
+	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
+	values = {
+		'voter' : serial_code,
+	}
+	try:
 		encoded_values = urllib.parse.urlencode(values).encode('ascii')
 		req = urllib.request.Request(PRINT_URL, encoded_values)
 		
 		with urllib.request.urlopen(req) as response:
 			response.read()
-	
+	except:
+		final_response["error"] = "Couldn't find printer server."
+
 	# Once everything's done, just redirect back to the dashboard
-	return JsonResponse({
-		"status": "200 - OK",
-		"message": "Voter ok! Created serial code!",
-		"serial_code": serial_code
-	})
+	return JsonResponse(final_response)
 
 # End Vote/Ballot Flow
 # END PROTECTED PAGES
