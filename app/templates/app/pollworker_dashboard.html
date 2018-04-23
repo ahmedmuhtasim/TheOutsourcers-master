@@ -65,7 +65,7 @@
 			if (!firstName || !lastName || !voterNumber) {
 				return false;
 			} else {
-				const url = `http://theoutsourcers.herokuapp.com/api/searchVoters/?
+				const url = `https://theoutsourcers.herokuapp.com/api/searchVoters/?
 					firstName=${firstName}&
 					lastName=${lastName}&
 					voterNumber=${voterNumber}&`;
@@ -107,7 +107,7 @@
 			const voter_number = $(this).attr('voter_number');
 			const election_id = $(this).attr('election_id');
 			const _this = this;
-			const url = `http://theoutsourcers.herokuapp.com/getVoterSerialCode/?
+			const url = `https://theoutsourcers.herokuapp.com/getVoterSerialCode/?
 				voter_number=${voter_number}&
 				election_id=${election_id}&`;
 			
