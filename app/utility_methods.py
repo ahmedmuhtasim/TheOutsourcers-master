@@ -3,6 +3,8 @@ import random, string
 from app.models import Voter, Election, VoterSerialCodes
 
 def validate_serial_code(code):
+    
+	code = code[:12]
 	try:
 		voter = VoterSerialCodes.objects.filter(serial_code=code)
 		if len(voter) > 0:
@@ -22,3 +24,7 @@ def gen_numeric(length=16):
 def is_logged_on(request):
 	auth = request.COOKIES.get("auth")
 	return auth
+    
+    
+   
+    
