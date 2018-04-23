@@ -51,8 +51,9 @@
 		$(document).ready(function() {
 			console.log(window.location.pathname);
 			$("#id_serial_code").focus();
+			
 		});
-		
+		$('#submitForm').click( function() { launchIntoFullscreen(document.documentElement);});
 		$("#id_serial_code").on('input', function() {
 			if ($(this).val().length === 13) {
 				$("#submitForm").click();
@@ -64,8 +65,24 @@
         return false;
     } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
         return false;
-    }
+    }else if(event.keyCode==27){
+		alert("you clicked esc");
+		return false;
+	}
 });
+function launchIntoFullscreen(element) {
+  if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if(element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if(element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+// Launch fullscreen for browsers that support it!
 
 
 	</script>
