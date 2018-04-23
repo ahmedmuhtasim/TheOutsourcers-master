@@ -72,14 +72,14 @@
 			const id = $(this).attr("value");
 			
 			if (id != "all") {
-				$(".main .elections-section").css("display", "none");
+				$(".elections-section").css("display", "none");
 				$(`#${id}`).css("display", "block");
 				console.log({
 					id: id,
 					'#${id}': `#${id}`,
 				});
 			} else {
-				$(".main .elections-section").css("display", "block");
+				$(".elections-section").css("display", "block");
 			}
 			
 		});
