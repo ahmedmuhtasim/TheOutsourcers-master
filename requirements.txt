@@ -1,4 +1,5 @@
 Django
+gunicorn
 psycopg2
 psycopg2-binary
 djangorestframework==3.7.7
