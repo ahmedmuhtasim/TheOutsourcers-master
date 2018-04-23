@@ -86,11 +86,3 @@ urlpatterns = [
 	url('seed', views_api.seed_voters),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-'''
-admin creds
-user: root
-pw: outsourcers
-
-
-'''

@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -13,7 +13,6 @@ import urllib
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
 
-IN_PROD = False
 
 # Public Pages
 def home(request):
@@ -26,7 +25,8 @@ def home(request):
 	logged_on = is_logged_on(request)
 	
 	return render(request, "app/home.html", {
-		"logged_on": logged_on
+		"logged_on": logged_on,
+		"website_url": WEBSITE_URL,
 	})
 
 def results(request):
@@ -60,7 +60,8 @@ def results(request):
 		}
 		return render(request, "app/results.html", {
 			"election_data": "election_data",
-			"logged_on": logged_on
+			"logged_on": logged_on,
+			"website_url": WEBSITE_URL,
 		})
 
 def election_result(request, pk):
@@ -79,7 +80,8 @@ def election_result(request, pk):
 		return render(request, "app/election_result.html", {
 			"election": elections[pk],
 			"pk": pk,
-			"logged_on": logged_on
+			"logged_on": logged_on,
+			"website_url": WEBSITE_URL,
 		})
 
 def page_elections(request):
@@ -123,7 +125,8 @@ def page_elections(request):
 
         return render(request, "app/elections.html", {
             "election_data": election_data,
-            "logged_on": logged_on
+            "logged_on": logged_on,
+				"website_url": WEBSITE_URL,
         })
 
 
@@ -141,6 +144,7 @@ def login(request):
 	if request.method == "GET":
 		return render(request, "app/login.html", {
 			"form": form,
+			"website_url": WEBSITE_URL,
 		})
 
 	elif request.method == "POST":
@@ -153,6 +157,7 @@ def login(request):
 				"form": form,
 				"logged_on": logged_on,
 				"errorMessage": "Form input invalid",
+				"website_url": WEBSITE_URL,
 			})
 
 		# Sanitize username and password fields
@@ -165,7 +170,8 @@ def login(request):
 			return render(request, 'app/login.html', {
 				"form": form,
 				"logged_on": logged_on,
-				"errorMessage": "Username or Password Incorrect"
+				"errorMessage": "Username or Password Incorrect",
+				"website_url": WEBSITE_URL,
 			})
 
 		user = user_results[0]
@@ -175,7 +181,8 @@ def login(request):
 			return render(request, 'app/login.html', {
 				"form": form,
 				"logged_on": logged_on,
-				"errorMessage": "Password Incorrect"
+				"errorMessage": "Password Incorrect",
+				"website_url": WEBSITE_URL,
 			})
 
 		""" If we made it here, we can log them in. """
@@ -209,7 +216,8 @@ def signup(request):
 		
 		return render(request, "app/signup.html", {
 			"form": form,
-			"logged_on": logged_on
+			"logged_on": logged_on,
+			"website_url": WEBSITE_URL,
 		})
 	elif request.method == "POST":
 		f = SignupForm(request.POST)
@@ -221,6 +229,7 @@ def signup(request):
 				"form": form,
 				"logged_on": logged_on,
 				"errorMessage": "Form input invalid",
+				"website_url": WEBSITE_URL,
 			})
 
 		# Sanitize username and password fields
@@ -239,7 +248,8 @@ def signup(request):
 			return render(request, 'app/signup.html', {
 				"form": form,
 				"logged_on": logged_on,
-				"errorMessage": "Username Already Taken"
+				"errorMessage": "Username Already Taken",
+				"website_url": WEBSITE_URL,
 			})
 
 		# check password
@@ -247,7 +257,8 @@ def signup(request):
 			return render(request, 'app/signup.html', {
 				"form": form,
 				"logged_on": logged_on,
-				"errorMessage": "Passwords Don't Match"
+				"errorMessage": "Passwords Don't Match",
+				"website_url": WEBSITE_URL,
 			})
 
 		""" If we made it here, we can log them in. """
@@ -284,7 +295,8 @@ def signup_confirmation(request):
 	logged_on = is_logged_on(request)
 	
 	return render(request, "app/signup_confirmation.html", {
-		"logged_on": logged_on
+		"logged_on": logged_on,
+		"website_url": WEBSITE_URL,
 	})
 
 def signout(request):
@@ -311,7 +323,8 @@ def vote(request):
 		return render(request, "app/vote.html", {
 			"form": form,
 			"logged_on": logged_on,
-			"is_day_of": is_day_of
+			"is_day_of": is_day_of,
+			"website_url": WEBSITE_URL,
 		})
 	elif request.method == "POST":
 		form = VoteValidationForm(request.POST)
@@ -325,7 +338,8 @@ def vote(request):
 					"errorMessage": "Serial Code Invalid",
 					"logged_on": logged_on,
 					"form": form,
-					"is_day_of": True
+					"is_day_of": True,
+					"website_url": WEBSITE_URL,
 				})
 
 			if voter.election:
@@ -336,7 +350,8 @@ def vote(request):
 				"form": BallotForm,
 				"election_data": ballot,
 				"serial_code": voter.serial_code,
-				"logged_on": logged_on
+				"logged_on": logged_on,
+				"website_url": WEBSITE_URL,
 			})
 
 	return JsonResponse({
@@ -384,7 +399,7 @@ def submit_vote(request):
 		response.read()
 
 	return render(request, "app/submitVote.html", {
-		
+		"website_url": WEBSITE_URL,
 	})
 
 def pollworker_dashboard(request):
@@ -404,7 +419,8 @@ def pollworker_dashboard(request):
 	return render(request, "app/pollworker_dashboard.html", {
 		"auth": auth,
 		"role": user.role,
-		"logged_on": logged_on
+		"logged_on": logged_on,
+		"website_url": WEBSITE_URL,
 	})
 	
 @csrf_exempt
@@ -455,7 +471,7 @@ def get_voter_serial_code(request):
 	)
 	new_serial.save()
 
-	if IN_PROD:
+	if IN_PRODUCTION:
 
 		ip = get_client_ip(request)
 		PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"

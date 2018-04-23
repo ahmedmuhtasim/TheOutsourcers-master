@@ -21,10 +21,3 @@ admin.site.register(User)
 admin.site.register(Authenticator)
 admin.site.register(VoterSerialCodes)
 
-
-'''
-	admin creds
-	user: root
-	pw: outsourcers
-
-'''

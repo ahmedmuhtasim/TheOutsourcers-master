@@ -65,7 +65,7 @@
 			if (!firstName || !lastName || !voterNumber) {
 				return false;
 			} else {
-				const url = `https://theoutsourcers.herokuapp.com/api/searchVoters/?
+				const url = `{{website_url}}api/searchVoters/?
 					firstName=${firstName}&
 					lastName=${lastName}&
 					voterNumber=${voterNumber}&`;
@@ -92,7 +92,7 @@
 								<div class="form gen-serial-code" voter_number=${voter.voter_number} election_id="${'2012-09'}">
 									<input type="hidden" name="voter_number" value="${voter.voter_number}">
 									<input type="hidden" name="election_id" value="${'2012-09'}">
-									<input type="Submit" value="Get Serial Code">
+									<input type="Submit" value="Get Serial Code" id="get-serial-code-btn">
 								</div>
 								<hr>
 							</div>
@@ -107,7 +107,7 @@
 			const voter_number = $(this).attr('voter_number');
 			const election_id = $(this).attr('election_id');
 			const _this = this;
-			const url = `https://theoutsourcers.herokuapp.com/getVoterSerialCode/?
+			const url = `{{website_url}}getVoterSerialCode/?
 				voter_number=${voter_number}&
 				election_id=${election_id}&`;
 			
@@ -129,9 +129,12 @@
 				});
 
 				if (data.message === "Voter has already voted in this election") {
-					$(_this).append('<p class="red-text text-18">User has already voted in this election.</p>')
+					
+					$(_this).append('<p class="red-text text-18">User has already voted in this election.</p>');
+
 				} else if (data.status === "200 - OK") {
-					$(_this).append(`<p class="blue-text text-18">Serial Code: ${data.serial_code}</p>`)
+					$(_this).find('#get-serial-code-btn').remove();
+					$(_this).append(`<p class="blue-text text-18">Serial Code: ${data.serial_code}</p>`);
 				}
 
 			});

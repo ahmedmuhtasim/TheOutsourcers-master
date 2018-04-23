@@ -35,3 +35,15 @@ def get_client_ip(request):
     return ip
 
 PRINT_PORT = "5000"
+
+
+# UPDATE FOR DEPLOYMENT
+IN_PRODUCTION = False
+
+def get_website_url(in_production):
+	URL_BASE = 'http://localhost:8000/'
+	if in_production:
+		URL_BASE = 'https://theoutsourcers.herokuapp.com/'
+	return URL_BASE
+
+WEBSITE_URL = get_website_url(IN_PRODUCTION)
