@@ -218,7 +218,7 @@ def search_voters(request):
 		},
 	]
 
-	req = urllib.request.Request('http://localhost:8000/api/voters/')
+	req = urllib.request.Request(WEBSITE_URL + 'api/voters/')
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	response = json.loads(resp_json)
 

@@ -89,7 +89,7 @@ def page_elections(request):
     
     if request.method == "GET":
         election_data = {}
-        req = urllib.request.Request("http://localhost:8000/api/election_results/")
+        req = urllib.request.Request(WEBSITE_URL + "api/election_results/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
 	#       return JsonResponse(election_data)
