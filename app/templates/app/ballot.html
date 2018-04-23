@@ -8,6 +8,7 @@
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
 		<link rel="stylesheet" href="{% static 'css/ballot.css' %}">
+		<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico/favicon/ico' %}"/>
 	</head>
 	<body>
 		{% if logged_on %}
@@ -45,7 +46,7 @@
 											{% if election.type == "main" %}
 											<h3>{{candidate.running_mate}}</h3>
 											{% endif %}
-											
+
 											<p>{{candidate.party_affiliation}}</p>
 										</div>
 									</div>
@@ -100,9 +101,9 @@
 		$(document).ready(function() {
 			// Launch fullscreen for browsers that support it!
 			launchFullScreen(document.documentElement); // the whole page
-		
+
 		})
-			
+
 		const addMinutes = function(date, minutes) {
 			return new Date(new Date(date).getTime() + minutes*60000);
 		}
@@ -111,21 +112,21 @@
 		countDownDate = countDownDate.getTime();
 		// Update the count down every 1 second
 		var x = setInterval(function() {
-	
+
 			// Get todays date and time
 			var now = new Date().getTime();
-			
+
 			// Find the distance between now an the count down date
 			var distance = countDownDate - now;
-			
+
 			// Time calculations for days, hours, minutes and seconds
 			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-			
+
 			// Output the result in an element with id="demo"
 			document.getElementById("time-left").innerHTML = `${minutes}m ${seconds}s`;
-			
-			// If the count down is over, write some text 
+
+			// If the count down is over, write some text
 			if (distance < 0) {
 				clearInterval(x);
 				window.location.replace(`/`);
