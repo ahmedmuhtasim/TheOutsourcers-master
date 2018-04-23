@@ -37,6 +37,9 @@ class Election(models.Model):
 	def __str__(self):
 		return self.id
 
+	def markup_str(self):
+		return str(self.get_type_display())[0].upper() + str(self.get_type_display())[1:] + " Election: " + str(self.id)
+
 class Office(models.Model):
 	title = models.CharField(max_length=30)
 	term = models.IntegerField()

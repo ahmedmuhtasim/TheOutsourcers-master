@@ -84,6 +84,76 @@ def election_result(request, pk):
 			"website_url": WEBSITE_URL,
 		})
 
+import datetime
+
+def election_brief(request):
+	open = []
+	closed = []
+	future = []
+	elections = Election.objects.all()
+	for election in elections:
+		# get id
+		election_id = election.id
+		# get type
+		election_type = election.get_type_display()
+		# get vote counts through voter serial codes
+		participant_count = len(VoterSerialCodes.objects.filter(election=election))
+		# format title
+		title = election.markup_str()
+		# check if opened, closed, or current
+		today = date.today()
+		election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+		json = {
+			"name": title,
+			"id": election_id,
+			"total_participants": participant_count,
+			"type" : election_type
+		}
+		# append to relevant list
+		if election_date < today:
+			closed.append(json)
+		elif election_date > today:
+			open.append(json)
+		else:
+			future.append(json)
+		
+	results = {
+		"open": open,
+		"closed": closed,
+		"future": future,
+	}
+	return JsonResponse(results)
+
+	'''
+	#       election_data = {
+	#           "open": [
+	#               {
+	#                   "name": "General Election : 2012-09",
+	#                   "id": "2012-09",
+	#                   "total_participants": 651,
+	#                   "type": "general",
+	#               }
+	#           ],
+	#           "closed": [
+	#               {
+	#                   "name": "General Election : 2012-09",
+	#                   "id": "2012-09",
+	#                   "total_participants": 651,
+	#                   "type": "general",
+	#               }
+	#           ],
+	#           "future": [
+	#               {
+	#                   "name": "General Election : 2012-09",
+	#                   "id": "2012-09",
+	#                   "total_participants": 651,
+	#                   "type": "general",
+	#               },
+	#           ]
+	#       }
+
+	'''
+
 def page_elections(request):
     logged_on = is_logged_on(request)
     
