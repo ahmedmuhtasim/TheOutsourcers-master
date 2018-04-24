@@ -112,7 +112,7 @@ def election_brief(request):
 		# append to relevant list
 		if election_date < today:
 			closed.append(json)
-		elif election_date > today:
+		elif election_date == today:
 			open.append(json)
 		else:
 			future.append(json)
@@ -159,7 +159,7 @@ def page_elections(request):
     
     if request.method == "GET":
         election_data = {}
-        req = urllib.request.Request("http://localhost:8000/api/election_results/")
+        req = urllib.request.Request("http://localhost:8000/api/election_brief/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
 	#       return JsonResponse(election_data)

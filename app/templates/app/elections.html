@@ -29,9 +29,10 @@
 				</ul>
 				<div class="elections-section" id="open">
 					{% for election in election_data.open %}
+					<h1>{{election.name}}</h1>
 						<div class="election">
-							<p class="text-36">{{election.name}}</p>
-							<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_votes}}</span></p>
+							<p class="text-36">{{election.id}}</p>
+							<p class="text-24 italic">Votes: <span class="green-text" id={{election.id}}>{{election.total_participants}}</span></p>
 						
 							<p class="text-16 italic">{{election.type}}</p>
 						</div>
@@ -39,9 +40,10 @@
 				</div>
 				<div class="elections-section" id="closed">
 					{% for election in election_data.closed %}
+						<h1>{{election.name}}</h1>
 						<div class="election" >
-							<p class="text-36">{{election.name}}</p>
-							<p class="text-24 italic">Votes: <span class="red-text" >{{election.total_votes}}</span></p>
+							<p class="text-36">{{election.id}}</p>
+							<p class="text-24 italic">Participants: <span class="red-text" >{{election.total_participants}}</span></p>
 						
 							<p class="text-16 italic">{{election.type}}</p>
 							<p><a class="text-16 " href="/results/{{election.id}}" style="text-decoration: underline">View Results</a></p>
