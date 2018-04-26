@@ -105,6 +105,24 @@
 					`;
 					$('#results').append(markup);
 				});
+				if (voters.length === 0) {
+					$('#results').append(`
+					<div class='result'>
+							<div class='voter-info'>
+								<h1>No results for search: </h1>
+								<h3>First Name: ${firstName.length > 0 ? firstName : '""'}</h3>
+								<h3>Last Name: ${lastName.length > 0 ? lastName : '""'}</h3>
+								<h3>Voter Number: ${voterNumber.length > 0 ? voterNumber : '""'}</h3>
+								
+							</div>
+							<div class="form gen-serial-code">
+							</div>
+							<div class="response-result">
+								
+							</div>
+						</div>
+					`);
+				}
 			});
 			
 		})
