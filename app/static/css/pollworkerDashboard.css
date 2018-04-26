@@ -1,7 +1,8 @@
-.pollworker-dashboard {
+.body-contents {
 	grid-template-rows: min-content 1fr;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 	grid-template-areas:
-	"title title"
 	"search results"; 
 }
 @media only screen and (max-width: 600px) {
@@ -19,12 +20,50 @@
 		margin: 0 auto;
 	}
 }
-.title {
-	grid-area: title;
-}
 .search {
 	grid-area: search;
+	padding: 12pt;
 }
 .results {
 	grid-area: results;
+	padding: 12pt;
+	max-height:350pt;
+	overflow-y: scroll;
+}
+
+.result {
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	grid-auto-rows: 1fr 3fr 1fr;
+	grid-template-areas: 
+	'. .'
+	'info btn'
+	'result result';
+	border-bottom: 1px solid black;
+}
+.voter-info {
+	grid-area: info;
+}
+.response-result {
+	grid-area: result;
+}
+.gen-serial-code {
+	grid-area: btn;
+}
+.gen-serial-code input[type=submit] {
+	width: initial;
+	background-color: #43B047;
+}
+p.serial-code {
+	text-align: center;
+	color: #226FC8;
+	font-size: 18pt;
+	padding-top: 4pt;
+}
+
+p.error-code {
+	text-align: center;
+	color: #D0021B;
+	font-size: 18pt;
+	padding-top: 4pt;
 }

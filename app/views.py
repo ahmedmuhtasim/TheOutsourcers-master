@@ -477,14 +477,14 @@ def pollworker_dashboard(request):
 	logged_on = is_logged_on(request)
 	# If the authenticator cookie wasn't set...
 	if not logged_on:
-		return HttpResponseRedirect(reverse('home'))
+		return HttpResponseRedirect(reverse('login'))
 	
 	auth = Authenticator.objects.get(token=request.COOKIES.get("auth"))
 	user = User.objects.get(pk=auth.user_id)
 
 	# even if the user is logged in, they need to be a pollworker to access this page
 	if user.role != "PW":
-		return HttpResponseRedirect(reverse('home'))
+		return HttpResponseRedirect(reverse('login'))
 
 	return render(request, "app/pollworker_dashboard.html", {
 		"auth": auth,
