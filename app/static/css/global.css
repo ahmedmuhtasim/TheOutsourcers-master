@@ -30,7 +30,7 @@ body {
 
 .body {
 	grid-area: body;
-	min-height: calc(100vh - 62px - 24pt - 119px);
+	min-height: calc(100vh - 62px);
 	padding: 12pt;
 	display: grid;
 	grid-template-rows: min-content 1fr;
@@ -50,7 +50,7 @@ body {
 	}
 
 	input {
-		width: 300pt;
+		width: 100%;
 		background-color: #EEEEEE;
 		color: black;
 		border-radius: 3pt;
