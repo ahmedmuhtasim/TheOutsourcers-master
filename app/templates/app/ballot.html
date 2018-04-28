@@ -96,25 +96,8 @@
 	}
 });
 		document.addEventListener('contextmenu', event => event.preventDefault());
-		// Find the right method, call on correct element
-		function launchFullScreen(element) {
-			console.log('clickin');
-			if(element.requestFullScreen) {
-			element.requestFullScreen();
-			} else if(element.mozRequestFullScreen) {
-			element.mozRequestFullScreen();
-			} else if(element.webkitRequestFullScreen) {
-			element.webkitRequestFullScreen();
-			}
-		}
 
-		document.getElementById('fullscreen-btn').addEventListener("click", launchFullScreen('body'));
 
-		$(document).ready(function() {
-			// Launch fullscreen for browsers that support it!
-			launchFullScreen(document.documentElement); // the whole page
-
-		})
 
 		const addMinutes = function(date, minutes) {
 			return new Date(new Date(date).getTime() + minutes*60000);
