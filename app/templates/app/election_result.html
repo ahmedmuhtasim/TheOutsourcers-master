@@ -18,7 +18,12 @@
 
 		<div class="body">
 			<div class="body-title">
-				<p>Results - {{election.name}} <span class="text-24 red-text">{{errorMessage}}</span></p>
+				{{election_data.pk}}
+				{{pk}}
+				{{election_data}}
+				{% for measure in election_data %}
+				<p>Results - {{measure.type}} <span class="text-24 red-text">{{errorMessage}}</span></p>
+				{% endfor %}
 			</div>
 			<div class="body-contents">
 				

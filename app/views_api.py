@@ -35,6 +35,8 @@ def election(request, pk):
 			for candidacy in measure.candidacies.all():
 				c_json = {}
 				c_json["candidate"] = candidacy.politician.__str__()
+				c_json["running_mate"] = candidacy.running_mate.__str__()
+				c_json["party"] = candidacy.get_party_affiliation_display()
 				c_json["votes"] = candidacy.votes
 				total_votes += candidacy.votes
 				candidates.append(c_json)

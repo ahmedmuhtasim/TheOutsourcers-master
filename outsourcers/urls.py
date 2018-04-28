@@ -75,7 +75,7 @@ urlpatterns = [
 	url('elections/', views.page_elections),
 	url('vote/', views.vote),
 	url('submitVote/', views.submit_vote),
-	url(r'^results/(?P<pk>[0-9a-zA-Z-]+)', views.election_result, name='specific-results'),
+	url(r'^results/(?P<pk>[0-9-]+)', views.election_result, name='specific-results'),
 
 	url(r'^results/', views.results, name='all-results'),
 	url('api/searchVoters/', views_api.search_voters),
