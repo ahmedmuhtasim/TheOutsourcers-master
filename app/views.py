@@ -100,47 +100,53 @@ def results(request):
 
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-	req = urllib.request.Request("http://localhost:8000/elections/" + pk)
+	req = urllib.request.Request("http://localhost:8000/api/election_full/" + pk)
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
+	election_data = {"election": election_data[pk]}
 	'''
 	{
-		"2012-09": [
-			{
-			"type": "Candidacy",
-			"office": "President",
-			"total_votes": 0,
-			"candidates": [
+		"2012-09": {
+			"name": "General Election : 2012-09"
+			"status" : "open"
+			"total_participants" : 651,
+			"measures" : [
 				{
-				"candidate": "Barack Obama",
-				"running_mate": "None",
-				"party": "Democrat",
-				"votes": 0
+				"type": "Candidacy",
+				"office": "President",
+				"total_votes": 0,
+				"candidates": [
+					{
+					"candidate": "Barack Obama",
+					"running_mate": "None",
+					"party": "Democrat",
+					"votes": 0
+					},
+					{
+					"candidate": "Mitt Romney",
+					"running_mate": "None",
+					"party": "Republican",
+					"votes": 0
+					}
+				]
 				},
 				{
-				"candidate": "Mitt Romney",
-				"running_mate": "None",
-				"party": "Republican",
-				"votes": 0
+				"type": "Referendum",
+				"question_text": "Should Congress call another Constitutional Convention and start over?",
+				"total_votes": 8,
+				"choices": [
+					{
+					"choice_text": "No, they shouldn't.",
+					"votes": 5
+					},
+					{
+					"choice_text": "Yes, they should.",
+					"votes": 3
+					}
+				]
 				}
 			]
-			},
-			{
-			"type": "Referendum",
-			"question_text": "Should Congress call another Constitutional Convention and start over?",
-			"total_votes": 8,
-			"choices": [
-				{
-				"choice_text": "No, they shouldn't.",
-				"votes": 5
-				},
-				{
-				"choice_text": "Yes, they should.",
-				"votes": 3
-				}
-			]
-			}
-		]
+		}
 	}
 	'''
 	return render(request, "app/election_result.html", {
