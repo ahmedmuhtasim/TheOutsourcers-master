@@ -401,7 +401,7 @@ def vote(request):
 
 		if form.is_valid():
 			
-			voter = validate_serial_code(form.cleaned_data["serial_code"])
+			voter = validate_serial_code(serial_code)
 			
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
 				return render(request, "app/vote.html", {
@@ -435,6 +435,12 @@ def submit_vote(request):
 
 	serial_code = data['serial_code']
 	s = VoterSerialCodes.objects.get(serial_code=serial_code)
+	if s.finished:
+		return render(request, "app/submitVote.html", {
+			"errorMessage": "Cannot submit vote twice - vote not counted!",
+			"website_url": WEBSITE_URL,
+		})
+
 	s.finished = True
 	v = s.voter
 	v.election = None
