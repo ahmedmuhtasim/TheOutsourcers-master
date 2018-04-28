@@ -401,6 +401,7 @@ def vote(request):
 
 		if form.is_valid():
 			
+			serial_code = form.cleaned_data["serial_code"]
 			voter = validate_serial_code(serial_code)
 			
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
