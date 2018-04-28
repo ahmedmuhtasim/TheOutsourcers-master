@@ -23,7 +23,7 @@ def home(request):
 	"""
 
 	logged_on = is_logged_on(request)
-	
+
 	return render(request, "app/home.html", {
 		"logged_on": logged_on,
 		"website_url": WEBSITE_URL,
@@ -31,7 +31,7 @@ def home(request):
 
 def results(request):
 	logged_on = is_logged_on(request)
-	
+
 	if request.method == "GET":
 		election_data = {}
 		election_data = {
@@ -66,7 +66,7 @@ def results(request):
 
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-	
+
 	if request.method == "GET":
 		elections = {
 			"pres-2012": {
@@ -116,7 +116,7 @@ def election_brief(request):
 			open.append(json)
 		else:
 			future.append(json)
-		
+
 	results = {
 		"open": open,
 		"closed": closed,
@@ -156,7 +156,7 @@ def election_brief(request):
 
 def page_elections(request):
     logged_on = is_logged_on(request)
-    
+
     if request.method == "GET":
         election_data = {}
         req = urllib.request.Request("http://localhost:8000/api/election_brief/")
@@ -204,7 +204,7 @@ def page_elections(request):
 @csrf_exempt
 def login(request):
 	logged_on = is_logged_on(request)
-	
+
 	# If the authenticator cookie wasn't set...
 	if logged_on:
 		# Handle user not logged in while trying to create a listing
@@ -258,20 +258,20 @@ def login(request):
 		""" If we made it here, we can log them in. """
 		# Set their login cookie and redirect to back to wherever they came from
 		authenticator = gen_alphanumeric(30)
-		
+
 		auth = Authenticator(
 			token=authenticator,
 			user_id=user.pk
 		)
 		auth.save()
-		
+
 		message = "okie dokie"
 		response = HttpResponseRedirect(reverse('home'))
 		response.set_cookie("auth", authenticator)
 		response.set_cookie("responseMessage", message)
 
 		return response
-		
+
 @csrf_exempt
 def signup(request):
 	logged_on = is_logged_on(request)
@@ -283,7 +283,7 @@ def signup(request):
 	form = SignupForm
 
 	if request.method == "GET":
-		
+
 		return render(request, "app/signup.html", {
 			"form": form,
 			"logged_on": logged_on,
@@ -311,7 +311,7 @@ def signup(request):
 		ssn = f.cleaned_data['ssn']
 		role = f.cleaned_data['role']
 		dob = f.cleaned_data['dob']
-		
+
 		user_results = User.objects.filter(username=username)
 
 		if len(user_results) > 0:
@@ -333,7 +333,7 @@ def signup(request):
 
 		""" If we made it here, we can log them in. """
 		# Set their login cookie and redirect to back to wherever they came from
-		
+
 		user = User(
 			username = username,
 			first_name = first_name,
@@ -345,15 +345,15 @@ def signup(request):
 		)
 
 		user.save()
-		
+
 		authenticator = gen_alphanumeric(30)
-		
+
 		auth = Authenticator(
 			token=authenticator,
 			user_id=user.pk
 		)
 		auth.save()
-		
+
 		message = "okie dokie"
 		response = HttpResponseRedirect(reverse('signup_confirmation'))
 		response.set_cookie("auth", authenticator)
@@ -363,7 +363,7 @@ def signup(request):
 
 def signup_confirmation(request):
 	logged_on = is_logged_on(request)
-	
+
 	return render(request, "app/signup_confirmation.html", {
 		"logged_on": logged_on,
 		"website_url": WEBSITE_URL,
@@ -383,7 +383,7 @@ def signout(request):
 @csrf_exempt
 def vote(request):
 	logged_on = is_logged_on(request)
-	
+
 	form = VoteValidationForm
 	if request.method == "GET":
 		is_day_of = False
@@ -400,9 +400,9 @@ def vote(request):
 		form = VoteValidationForm(request.POST)
 
 		if form.is_valid():
-			
+
 			voter = validate_serial_code(form.cleaned_data["serial_code"])
-			
+
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
 				return render(request, "app/vote.html", {
 					"errorMessage": "Serial Code Invalid",
@@ -442,7 +442,7 @@ def submit_vote(request):
 
 	print_data = {}
 	# Printing the serial code will change eventually - it's to ensure receipts look different
-	print_data['serial_code'] = serial_code 
+	print_data['serial_code'] = serial_code
 	for key in data.keys():
 		if key != "serial_code":
 			measure = Measure.objects.get(pk=key)
@@ -464,7 +464,7 @@ def submit_vote(request):
 
 	encoded_values = urllib.parse.urlencode(values).encode('ascii')
 	req = urllib.request.Request(PRINT_URL, encoded_values)
-	
+
 	with urllib.request.urlopen(req) as response:
 		response.read()
 
@@ -473,12 +473,12 @@ def submit_vote(request):
 	})
 
 def pollworker_dashboard(request):
-	
+
 	logged_on = is_logged_on(request)
 	# If the authenticator cookie wasn't set...
 	if not logged_on:
 		return HttpResponseRedirect(reverse('login'))
-	
+
 	auth = Authenticator.objects.get(token=request.COOKIES.get("auth"))
 	user = User.objects.get(pk=auth.user_id)
 
@@ -492,7 +492,29 @@ def pollworker_dashboard(request):
 		"logged_on": logged_on,
 		"website_url": WEBSITE_URL,
 	})
-	
+
+def pollworker_buffer(request):
+
+	logged_on = is_logged_on(request)
+	if not logged_on:
+		return HttpResponseRedirect(reverse('login'))
+
+	auth = Authenticator.objects.get(token=request.COOKIES.get("auth"))
+	user = User.objects.get(pk=auth.user_id)
+
+	if user.role != "PW":
+		return HttpResponseRedirect(reverse('login'))
+
+	form = PollworkerForm
+
+	return render(request, "app/pollworker_buffer.html", {
+		"auth": auth,
+		"role": user.role,
+		"logged_on": logged_on,
+		"website_url": WEBSITE_URL,
+	})
+
+
 @csrf_exempt
 def get_voter_serial_code(request):
 	'''
@@ -510,7 +532,7 @@ def get_voter_serial_code(request):
 			"message": "Please provide both voter_number and election_id",
 			"serial_code": "None generated"
 		})
-	
+
 	# initialize reused vars
 	serial_code = gen_alphanumeric(12)
 	the_voter = Voter.objects.get(voter_number=args["voter_number"])
@@ -534,7 +556,7 @@ def get_voter_serial_code(request):
 	the_voter.election = the_election
 	the_voter.save(update_fields=['election'])
 
-	# 2) 
+	# 2)
 	new_serial = VoterSerialCodes(
 		voter = the_voter,
 		election = the_election,
@@ -557,7 +579,7 @@ def get_voter_serial_code(request):
 	try:
 		encoded_values = urllib.parse.urlencode(values).encode('ascii')
 		req = urllib.request.Request(PRINT_URL, encoded_values)
-		
+
 		with urllib.request.urlopen(req) as response:
 			response.read()
 	except:
