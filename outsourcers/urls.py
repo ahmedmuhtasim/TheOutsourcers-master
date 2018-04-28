@@ -79,11 +79,11 @@ urlpatterns = [
 
 	url(r'^results/', views.results, name='all-results'),
 	url('api/searchVoters/', views_api.search_voters),
-
-	url('pollworkerDashboard/', views.pollworker_buffer, name='pollworker_buffer'),
+	
+	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
 	
 	url('getVoterSerialCode/', views.get_voter_serial_code),
-
+	
 	url('seed', views_api.seed_voters),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
