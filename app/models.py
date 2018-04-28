@@ -100,6 +100,7 @@ class Measure(models.Model):
 class Candidacy(models.Model):
 	measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
 	politician = models.ForeignKey(Politician, on_delete=models.CASCADE)
+	running_mate = models.ForeignKey(Politician, on_delete=models.CASCADE, related_name='running_mate', null=True)
 	PARTY = (
 		('D', 'Democrat'),
 		('R', 'Republican'),

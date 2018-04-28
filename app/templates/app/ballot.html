@@ -28,11 +28,7 @@
 						{% for measure in election_data.measures.all %}
 						<div class="ballot-section">
 							<div class="ballot-header">
-								{% if measure.type == "main" %}
-								<p class="text-48 italic light">{{measure.measure_type}}</p>
-								{% else %}
 								<p class="text-30 italic light">{{measure}}</p>
-								{% endif %}
 								<hr>
 							</div>
 							{% if measure.candidacies.all %}
@@ -42,12 +38,16 @@
 											<input type="radio" name={{measure.id}} value={{candidate.id}}>
 										</div>
 										<div class="description">
-											<h2>{{candidate.politician}}</h2>
-											{% if election.type == "main" %}
-											<h3>{{candidate.running_mate}}</h3>
-											{% endif %}
+											<h2>Candidate: {{candidate.politician}}</h2>
+											<h3>Running mate: {{candidate.running_mate}}</h3>
 
-											<p>{{candidate.party_affiliation}}</p>
+                      {% if candidate.party_affiliation == 'D' %}
+                        <p>Democrat</p>
+                      {% elif candidate.party_affiliation == 'R' %}
+                        <p>Republican</p>
+                      {% else %}
+                        <p>Independent</p>
+                      {% endif %}
 										</div>
 									</div>
 								{% endfor %}
