@@ -56,7 +56,7 @@ PRINT_PORT = "5000"
 
 
 # UPDATE FOR DEPLOYMENT
-IN_PRODUCTION = False
+IN_PRODUCTION = True
 
 def get_website_url(in_production):
 	URL_BASE = 'http://localhost:8000/'

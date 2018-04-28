@@ -160,12 +160,14 @@ def search_voters(request):
 	for key in request.GET:
 		args[key] = request.GET[key]
 
+
 	if len(args["precinctId"]) > 0:
 		URL = 'http://cs3240votingproject.org/pollingsite/'+ str(args["precinctId"]) + '/?key=outsourcers'
 	else: 
 		URL = 'http://cs3240votingproject.org/voters/?key=outsourcers'
 	
 	req = urllib.request.Request(URL)
+
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	response = json.loads(resp_json)
 	
