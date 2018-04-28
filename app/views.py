@@ -421,6 +421,7 @@ def vote(request):
 				"election_data": ballot,
 				"serial_code": voter.serial_code,
 				"logged_on": logged_on,
+				"primary": "R",			# R is republican, D democrat, G general
 				"website_url": WEBSITE_URL,
 			})
 

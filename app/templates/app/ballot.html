@@ -33,6 +33,7 @@
 							</div>
 							{% if measure.candidacies.all %}
 								{% for candidate in measure.candidacies.all %}
+								{% if primary == 'G' or primary == candidate.party_affiliation %}
 									<div class="ballot-option grid">
 										<div class="radio-btn">
 											<input type="radio" name={{measure.id}} value={{candidate.id}}>
@@ -41,15 +42,16 @@
 											<h2>Candidate: {{candidate.politician}}</h2>
 											<h3>Running mate: {{candidate.running_mate}}</h3>
 
-                      {% if candidate.party_affiliation == 'D' %}
-                        <p>Democrat</p>
-                      {% elif candidate.party_affiliation == 'R' %}
-                        <p>Republican</p>
-                      {% else %}
-                        <p>Independent</p>
-                      {% endif %}
+											{% if candidate.party_affiliation == 'D' %}
+												<p>Democrat</p>
+											{% elif candidate.party_affiliation == 'R' %}
+												<p>Republican</p>
+											{% else %}
+												<p>Independent</p>
+											{% endif %}
 										</div>
 									</div>
+								{% endif %}
 								{% endfor %}
 							{% endif %}
 							{% if measure.referendums.all %}
