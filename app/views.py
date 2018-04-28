@@ -470,11 +470,14 @@ def submit_vote(request):
 
 	values = print_data
 
-	encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	req = urllib.request.Request(PRINT_URL, encoded_values)
-	
-	with urllib.request.urlopen(req) as response:
-		response.read()
+	try:
+		encoded_values = urllib.parse.urlencode(values).encode('ascii')
+		req = urllib.request.Request(PRINT_URL, encoded_values)
+		
+		with urllib.request.urlopen(req) as response:
+			response.read()
+	except:
+		pass
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
