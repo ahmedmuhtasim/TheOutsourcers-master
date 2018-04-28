@@ -18,11 +18,35 @@
 
 		<div class="body">
 			<div class="body-title">
-				<p>Home <span class="text-24 red-text">{{errorMessage}}</span></p>
+				<p>
+					Home <span class="text-24 red-text">{{errorMessage}}</span>
+				</p>
 			</div>
-			<div class="body-contents">
-				<p class="text-center text-18">Next General Election: <span class="blue-text">November 6th, 2018</span></p>
-				<p class="text-center text-18">Deadline to Register: <span class="red-text">October 15th, 2018</span></p>
+			<div class="body-contents grid" >
+				<div class="poll-date-reminder ">
+					<p class="text-center text-18">Next General Election: <span class="blue-text">November 6th, 2018</span></p>
+					<p class="text-center text-18">Deadline to Register: <span class="red-text">October 15th, 2018</span></p>			
+				</div>
+				
+				<div class="choice grid">
+					<div class="vote-choice-container">
+						<p class="text-48 text-center">Voter?</p>
+						<div class="text-center" style="margin-top: 24pt;">
+							<button>
+								<a href="/vote/"  style="width: 100%; height: 100%; display: inline-block;">Go to Booth</a>
+							</button>
+						</div>
+					</div>
+					<div class="pollworker-choice-container">
+						<p class="text-48 text-center">Pollworker?</p>
+						<div class="text-center" style="margin-top: 24pt;">
+							
+							<button style="background-color: #A52019;">
+								<a href="/pollworkerDashboard/" style="width: 100%; height: 100%; display: inline-block;">Go To Dashboard</a>
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 

@@ -13,6 +13,24 @@ def validate_serial_code(code):
 	except:
 		return None
 
+# credit goes to https://stackoverflow.com/questions/1143671/python-sorting-list-of-dictionaries-by-multiple-keys
+from operator import itemgetter as i
+from functools import cmp_to_key
+def cmp(a, b):
+   return (a > b) - (a < b) 
+def multikeysort(items, columns):
+    comparers = [
+        ((i(col[1:].strip()), -1) if col.startswith('-') else (i(col.strip()), 1))
+        for col in columns
+    ]
+    def comparer(left, right):
+        comparer_iter = (
+            cmp(fn(left), fn(right)) * mult
+            for fn, mult in comparers
+        )
+        return next((result for result in comparer_iter if result), 0)
+    return sorted(items, key=cmp_to_key(comparer))
+
 def gen_alphanumeric(length=16):
 	return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(length))
 

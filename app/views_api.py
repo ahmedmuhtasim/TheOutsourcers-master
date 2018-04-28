@@ -8,7 +8,7 @@ from rest_framework.response import Response
 import urllib
 import json
 
-from .utility_methods import WEBSITE_URL
+from .utility_methods import WEBSITE_URL, multikeysort
 
 # API
 def elections(request):
@@ -155,89 +155,87 @@ def search_voters(request):
 		"firstName": "",
 		"lastName": "",
 		"voterNumber": "",
+		"precinctId": "",
 	}
 	for key in request.GET:
 		args[key] = request.GET[key]
 
-	voters = [
-		{
-				"voter_number" : "020342357",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Garcia",
-				"first_name" : "Juan",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "12345",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Doe",
-				"first_name" : "John",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "1",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Chan",
-				"first_name" : "Jackie",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "1",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Baratheon",
-				"first_name" : "Joffrey",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-	]
 
-	req = urllib.request.Request(WEBSITE_URL + 'api/voters/')
+	if len(args["precinctId"]) > 0:
+		URL = 'http://cs3240votingproject.org/pollingsite/'+ str(args["precinctId"]) + '/?key=outsourcers'
+	else: 
+		URL = 'http://cs3240votingproject.org/voters/?key=outsourcers'
+	
+	req = urllib.request.Request(URL)
+
 	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 	response = json.loads(resp_json)
-
-	voters = response["result"]
+	
+	voters = response["voters"]
 
 	matching_voters = []
 	for voter in voters:
+		voter_first_name = voter["first_name"]
+		voter_last_name = voter["last_name"]
+		voter_voter_number = voter["voter_number"]
+
+		voter_query = Voter.objects.filter(voter_number=voter_voter_number)
+		precinct_query = Precinct.objects.filter(id=voter["precinct_id"])
+
+
+
+		voter_in_database = len(voter_query) > 0
+		precinct_in_database = len(precinct_query) > 0
+		if not precinct_in_database:
+			insert_precinct = Precinct(
+				name=voter["precinct"],
+				id=voter["precinct_id"]
+			)
+			insert_precinct.save()
+			
+		if not voter_in_database:
+			insert_person = Person(
+				first_name=voter["first_name"],
+				last_name=voter["last_name"],
+				SSN=str(''),
+				federal_district=1,
+				state_district=2
+			)
+			insert_person.save()
+
+			insert_voter = Voter(
+				person=Person.objects.get(pk=insert_person.pk),
+				voter_status=voter["voter_status"],
+				date_registered=voter["date_registered"],
+				street_address=voter["street_address"],
+				city=voter["city"],
+				state=voter["state"],
+				zip_code=voter["zip"],
+				locality=voter["locality"],
+				precinct=Precinct.objects.get(id=voter["precinct_id"]),
+				voter_number=voter["voter_number"],
+			)
+			insert_voter.save()
+
 		# first name, last, etc not provided so we have to query
-
-		person = Person.objects.get(pk=voter["person"])
-
-		fn = person.first_name == args["firstName"]
-		ln = person.last_name == args["lastName"]
-		vn = voter["voter_number"] == args["voterNumber"]
+		fn = True
+		ln = True
+		vn = True
+		if len(args["firstName"]) > 0:
+			fn = voter["first_name"] == args["firstName"]
+		if len(args["lastName"]) > 0:
+			ln = voter["last_name"] == args["lastName"]
+		if len(args["voterNumber"]) > 0:
+			ln = voter["voter_number"] == args["voterNumber"]
 
 		if fn and ln and vn:
-			voter["first_name"] = person.first_name
-			voter["last_name"] = person.last_name
-			matching_voters.append(voter)
+			matching_voter = {}
+			matching_voter["first_name"] = voter["first_name"]
+			matching_voter["last_name"] = voter["last_name"]
+			matching_voter["voter_number"] = voter["voter_number"]
+			matching_voters.append(matching_voter)
+	if len(matching_voters) < 500: # don't want to spend too long sorting, establish maximum size where it's still okay to sort
+		matching_voters = multikeysort(matching_voters, ['first_name', 'last_name'])
 	return JsonResponse({
 		'voters': matching_voters,
 		'status': '200 - OK',
@@ -280,9 +278,7 @@ def seed_voters(request):
 				"precinct" : "405-CALE",
 				"precinct_id" : "0405"
 			}
-
 			
-
 			v = Voter(
 				person=Person.objects.get(pk=p.pk),
 				voter_status="A",
@@ -300,73 +296,6 @@ def seed_voters(request):
 			v.save()
 
 			i += 1
-
-
-
-
-	'''
-	voters = [
-		{
-				"voter_number" : "020342357",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Garcia",
-				"first_name" : "Juan",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "12345",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Doe",
-				"first_name" : "John",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "1",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Chan",
-				"first_name" : "Jackie",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-		{
-				"voter_number" : "1",
-				"voter_status" : "active",
-				"date_registered" : "2007-08-20",
-				"last_name" : "Baratheon",
-				"first_name" : "Joffrey",
-				"street_address" : "123 Main Street",
-				"city" : "Charlottesville",
-				"state" : "VA",
-				"zip" : "22902",
-				"locality" : "ALBEMARLE COUNTY",
-				"precinct" : "405-CALE",
-				"precinct_id" : "0405"
-		},
-	]
-	'''
-
-
-
 
 
 class VoterViewSet(viewsets.ModelViewSet):

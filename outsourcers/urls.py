@@ -63,11 +63,12 @@ urlpatterns = [
 	url(r'^api/candidacies/(?P<pk>[0-9-]+)',candidacy_endpoint, name='candidacy-detail'),
 	url(r'^api/candidacies/', candidacy_endpoint, name='candidacy-list'),
 	url(r'^api/election_results/', views_api.election_results, name="election_results"),
+	url(r'^api/election_brief/', views.election_brief, name='election_brief'),
 
 	url(r'elections/(?P<pk>[0-9-]+)', views_api.election),
 	url('admin/', admin.site.urls),
 	url(r'^$', views.home, name='home'),
-	url('login/', views.login),
+	url('login/', views.login, name='login'),
 	url('signupConfirmation/', views.signup_confirmation, name='signup_confirmation'),
 	url('signup/', views.signup),
 	url('signout/', views.signout),

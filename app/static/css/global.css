@@ -8,6 +8,7 @@
 	Medium Blue: #226FC8
 	Red: #D0021B
 	Dark Red: #A52019
+	Green: #43B047
 */
 
 body {
@@ -29,7 +30,7 @@ body {
 
 .body {
 	grid-area: body;
-	min-height: 85vh;
+	min-height: calc(100vh - 62px);
 	padding: 12pt;
 	display: grid;
 	grid-template-rows: min-content 1fr;
@@ -49,7 +50,7 @@ body {
 	}
 
 	input {
-		width: 300pt;
+		width: 100%;
 		background-color: #EEEEEE;
 		color: black;
 		border-radius: 3pt;
@@ -60,6 +61,17 @@ body {
 		font-weight: 100;
 		letter-spacing: 1pt;
 		display: block;
+	}
+	button {
+		background-color: #226FC8;
+		color: white;
+		border:none;
+		width: 200pt;
+		border-radius: 3pt;
+		padding: 12pt 6pt;
+		margin-bottom: 24pt;
+		font-weight: 100;
+		letter-spacing: 1pt;
 	}
 	select {
 
@@ -102,6 +114,9 @@ body {
 		text-align: center;
 		color: white;
 		margin: 0pt;
+	}
+	button a {
+		color: white !important;
 	}
 /* Special Elements */
 

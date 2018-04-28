@@ -37,6 +37,9 @@ class Election(models.Model):
 	def __str__(self):
 		return self.id
 
+	def markup_str(self):
+		return str(self.get_type_display())[0].upper() + str(self.get_type_display())[1:] + " Election: " + str(self.id)
+
 class Office(models.Model):
 	title = models.CharField(max_length=30)
 	term = models.IntegerField()
@@ -97,6 +100,7 @@ class Measure(models.Model):
 class Candidacy(models.Model):
 	measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name='candidacies')
 	politician = models.ForeignKey(Politician, on_delete=models.CASCADE)
+	running_mate = models.ForeignKey(Politician, on_delete=models.CASCADE, related_name='running_mate', null=True)
 	PARTY = (
 		('D', 'Democrat'),
 		('R', 'Republican'),
@@ -127,7 +131,7 @@ class Choice(models.Model):
 
 class Precinct(models.Model):
 	name = models.CharField(max_length=250)
-	id = models.CharField(max_length=4, primary_key=True)
+	id = models.CharField(max_length=10, primary_key=True)
 
 class Poll_Worker(models.Model):
 	person = models.OneToOneField(Person, on_delete=models.CASCADE)
@@ -138,12 +142,8 @@ class Voter(models.Model):
 	# This guarantees that a Voter will have a person, it won't become null
 	# Default null value for django one to one field is false, so person will never be false
 	person = models.OneToOneField(Person, on_delete=models.CASCADE)
-	STATUS_TYPES = (
-		('A', 'Active'),
-		('I', 'Inactive')
-	)
-	voter_status = models.CharField(max_length=1,
-	choices = STATUS_TYPES)
+	
+	voter_status = models.CharField(max_length=100)
 	date_registered = models.CharField(max_length=10)
 	street_address = models.CharField(max_length=40)
 	city = models.CharField(max_length=30)
@@ -155,7 +155,7 @@ class Voter(models.Model):
 	# When they cannot vote - so they have not checked in/election over, should be False
 	# voting_eligible should be made false with a ballot submission
 	voter_number = models.CharField(max_length=12, null=True)
-	election = models.OneToOneField(Election, on_delete=models.SET_NULL, null=True, blank=True)
+	election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True)
 	def __str__(self):
 		return self.person.__str__()
 
