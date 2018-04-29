@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from .models import *
-from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm
+from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm, PollworkerForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION
@@ -517,9 +517,44 @@ def pollworker_buffer(request):
 		return HttpResponseRedirect(reverse('login'))
 
 	form = PollworkerForm
+	precinctList = Precinct.objects.all()
+	electionList = Election.objects.all()
 
-	return render(request, "app/pollworker_buffer.html", {
+	if request.method == "GET":
+		return render(request, "app/pollworker_buffer.html", {
+			"auth": auth,
+			"form": form,
+			'precinctList': precinctList,
+			'electionList': electionList,
+			"role": user.role,
+			"logged_on": logged_on,
+			"website_url": WEBSITE_URL,
+		})
+	elif request.method == "POST":
+		f = PollworkerForm(request.POST)
+
+		if not f.is_valid():
+			return render(request, "app/pollworker_buffer.html", {
+				"auth": auth,
+				"form": form,
+				'precinctList': precinctList,
+				'electionList': electionList,
+				"role": user.role,
+				"logged_on": logged_on,
+				"errorMessage": "Form input invalid",
+				"website_url": WEBSITE_URL,
+			})
+
+		precinct = f.cleaned_data['precinct']
+		election = f.cleaned_data['election']
+
+		current_Time = datetime.datetime.today().strftime('%Y-%m')
+		election_Time = datetime.datetime.strptime(election, '%Y-%m').date()
+
+	return render(request, "app/pollworker_dashboard.html", {
 		"auth": auth,
+		'precinct_ID': precinct,
+		'election_ID': election,
 		"role": user.role,
 		"logged_on": logged_on,
 		"website_url": WEBSITE_URL,

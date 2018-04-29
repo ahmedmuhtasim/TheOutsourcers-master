@@ -81,7 +81,7 @@ urlpatterns = [
 	url('api/searchVoters/', views_api.search_voters),
 
 	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
-	#	url('pollworkerDashboard/', views.pollworker_buffer, name='pollworker_buffer'),
+	url('pollworkerBuffer/', views.pollworker_buffer, name='pollworker_buffer'),
 
 	url('getVoterSerialCode/', views.get_voter_serial_code),
 

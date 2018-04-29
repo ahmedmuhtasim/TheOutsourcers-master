@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>VA - PW Buffer</title>
+		<title>VA - PW Entry</title>
 		<script
 			src="https://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -19,10 +19,17 @@
 		<div class="body">
 			<div class="body-title">
 				<p>
-					Home <span class="text-24 red-text">{{errorMessage}}</span>
+					Pollworker Form <span class="text-24 red-text">{{errorMessage}}</span>
 				</p>
 			</div>
 			<div class="body-contents" >
+				<form method="POST" action="/pollworkerDashboard/" class="form pollworker-form">
+					{% csrf_token %}
+					{{form}}
+					<div class="submit">
+						<input type="submit" value="Submit">
+					</div>
+				</form>
 
 
 			</div>

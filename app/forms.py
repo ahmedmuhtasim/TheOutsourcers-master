@@ -1,4 +1,5 @@
 from django import forms
+from app.models import Precinct, Election
 from .choices import ROLE_CHOICES
 
 class SignupForm(forms.Form):
@@ -28,6 +29,7 @@ class BallotForm(forms.Form):
 	like = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
 
 class PollworkerForm(forms.Form):
-	precinct_ID = forms.CharField(label='precinct ID', max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Precinct ID'}))
-	election_ID = forms.CharField(label='election ID', max_length=7, widget=forms.TextInput(attrs={'placeholder': 'Election ID'}))
-	
+	#precinct_ID = forms.CharField(label='precinct ID', max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Precinct ID'}))
+	#election_ID = forms.CharField(label='election ID', max_length=7, widget=forms.TextInput(attrs={'placeholder': 'Election ID'}))
+	precinct = forms.ModelChoiceField(queryset = Precinct.objects.all())
+	election = forms.ModelChoiceField(queryset = Election.objects.all())
