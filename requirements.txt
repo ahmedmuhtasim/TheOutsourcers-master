@@ -13,3 +13,4 @@ six==1.10.0
 urllib3==1.20
 whitenoise==3.3.1
 django-cors-headers==2.2.0
+Adafruit_IO

@@ -11,6 +11,7 @@ import json
 from django.urls import reverse
 import urllib
 import hmac
+import logging
 from django.contrib.auth.hashers import make_password, check_password
 
 
@@ -33,7 +34,7 @@ def results(request):
 	logged_on = is_logged_on(request)
 
 	if request.method == "GET":
-		req = urllib.request.Request("http://localhost:8000/api/elections_full/")
+		req = urllib.request.Request(WEBSITE_URL + "api/elections_full/")
 		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		election_data = json.loads(resp_json)
 
@@ -75,7 +76,7 @@ def results(request):
 
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-	req = urllib.request.Request("http://localhost:8000/api/elections_full/" + pk)
+	req = urllib.request.Request(WEBSITE_URL + "api/elections_full/" + pk)
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
 	election_data = {"election": election_data[pk]}
@@ -166,7 +167,7 @@ def page_elections(request):
 
     if request.method == "GET":
         election_data = {}
-        req = urllib.request.Request("http://localhost:8000/api/elections_brief/")
+        req = urllib.request.Request(WEBSITE_URL + "api/elections_brief/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
 	#       election_data = {
@@ -317,7 +318,7 @@ def signup(request):
 		ssn = f.cleaned_data['ssn']
 		role = f.cleaned_data['role']
 		dob = f.cleaned_data['dob']
-
+		precinct_id = f.cleaned_data['precinct_id']
 		user_results = User.objects.filter(username=username)
 
 		if len(user_results) > 0:
@@ -340,17 +341,36 @@ def signup(request):
 		""" If we made it here, we can log them in. """
 		# Set their login cookie and redirect to back to wherever they came from
 
+
+		hashed_ssn = make_password(ssn)
 		user = User(
 			username = username,
 			first_name = first_name,
 			last_name = last_name,
 			password = make_password(password),
-			ssn = make_password(ssn),
+			ssn = hashed_ssn,
 			dob = dob,
 			role = role
 		)
 
 		user.save()
+
+		person = Person(
+			first_name = first_name,
+			last_name = last_name,
+			SSN = hashed_ssn
+		)
+
+		person.save()
+
+		pw = Poll_Worker(
+			precinct = Precinct.objects.get(id=precinct_id),
+			person=person
+		)
+
+		pw.save()
+
+
 
 		authenticator = gen_alphanumeric(30)
 
@@ -549,16 +569,17 @@ def pollworker_buffer(request):
 		precinct = f.cleaned_data['precinct']
 		election = f.cleaned_data['election']
 
-
 		user_id = auth.user_id
 		person = Person.objects.get(SSN = user.ssn)
 		pollworker = Poll_Worker.objects.get(person=person)
 
-		if (precinct.id != pollworker.precinct.id):
+		if (precinct != pollworker.precinct.id):
 			return render(request, "app/pollworker_buffer.html", {
 				"auth": auth,
 				'precinct_ID': precinct,
 				'election_ID': election,
+				"errorMessage": "Pollworker not registered for chosen precinct",
+				"form": form,
 				"role": user.role,
 				"logged_on": logged_on,
 				"website_url": WEBSITE_URL,

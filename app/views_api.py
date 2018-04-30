@@ -20,7 +20,7 @@ def documentation(request):
 	results = []
 	for api in apis.keys():
 		api_json = {}
-		req = urllib.request.Request("http://localhost:8000/api/" + api)
+		req = urllib.request.Request(WEBSITE_URL + "api/" + api)
 		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		response = json.loads(resp_json)
 		api_json["url"] = "/api/" + api
