@@ -35,6 +35,8 @@ def election(request, pk):
 			for candidacy in measure.candidacies.all():
 				c_json = {}
 				c_json["candidate"] = candidacy.politician.__str__()
+				c_json["running_mate"] = candidacy.running_mate.__str__()
+				c_json["party"] = candidacy.get_party_affiliation_display()
 				c_json["votes"] = candidacy.votes
 				total_votes += candidacy.votes
 				candidates.append(c_json)
@@ -57,6 +59,146 @@ def election(request, pk):
 			m_json["choices"] = choices
 			measures.append(m_json)
 	return JsonResponse({ election.id : measures})
+
+import datetime
+
+def elections_full(request):
+	elections = Election.objects.all()
+	open = []
+	closed = []
+	future = []
+	for election in elections:
+		# check if opened, closed, or current
+		today = datetime.date.today()
+		election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+		# set status
+		status = ""
+		if election_date < today:
+			status = "closed"
+		elif election_date == today:
+			status = "open"
+		else:
+			status = "future"
+		# get type
+		election_type = election.get_type_display()
+		# get vote counts through voter serial codes
+		participant_count = len(VoterSerialCodes.objects.filter(election=election))
+		# format title
+		title = election.markup_str()
+		measures = []
+		# pull measures
+		for measure in election.ballot.measures.all():
+			total_votes = 0
+			if measure.measure_type == "C":
+				candidates = []
+				m_json = {}
+				m_json["type"] = measure.get_measure_type_display()
+				m_json["office"] = measure.__str__()
+				for candidacy in measure.candidacies.all():
+					c_json = {}
+					c_json["candidate"] = candidacy.politician.__str__()
+					c_json["running_mate"] = candidacy.running_mate.__str__()
+					c_json["party"] = candidacy.get_party_affiliation_display()
+					c_json["votes"] = candidacy.votes
+					total_votes += candidacy.votes
+					candidates.append(c_json)
+				m_json["total_votes"] = total_votes
+				m_json["candidates"] = candidates
+				measures.append(m_json)
+			else:
+				choices = []
+				m_json = {}
+				m_json["type"] = measure.get_measure_type_display()
+				m_json["question_text"] = measure.__str__()
+				for referendum in measure.referendums.all():
+					for choice in referendum.choices.all():
+						c_json = {}
+						c_json["choice_text"] = choice.__str__()
+						c_json["votes"] = choice.votes
+						total_votes += choice.votes
+						choices.append(c_json)
+				m_json["total_votes"] = total_votes
+				m_json["choices"] = choices
+				measures.append(m_json)
+		json = { election.id : {
+					"name" : title,
+					"status": status,
+					"type": election_type,
+					"total_participants": participant_count,
+					"measures": measures,
+					}}
+		if election_date < today:
+			closed.append(json)
+		elif election_date == today:
+			open.append(json)
+		else:
+			future.append(json)
+		return JsonResponse({"open": open,
+							"closed": closed,
+							"future": future
+							})
+
+def election_full(request, pk):
+	election = Election.objects.get(pk=pk)
+	# check if opened, closed, or current
+	today = datetime.date.today()
+	election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+	# set status
+	status = ""
+	if election_date < today:
+		status = "closed"
+	elif election_date == today:
+		status = "open"
+	else:
+		status = "future"
+	# get type
+	election_type = election.get_type_display()
+	# get vote counts through voter serial codes
+	participant_count = len(VoterSerialCodes.objects.filter(election=election))
+	# format title
+	title = election.markup_str()
+	measures = []
+	# pull measures
+	for measure in election.ballot.measures.all():
+		total_votes = 0
+		if measure.measure_type == "C":
+			candidates = []
+			m_json = {}
+			m_json["type"] = measure.get_measure_type_display()
+			m_json["office"] = measure.__str__()
+			for candidacy in measure.candidacies.all():
+				c_json = {}
+				c_json["candidate"] = candidacy.politician.__str__()
+				c_json["running_mate"] = candidacy.running_mate.__str__()
+				c_json["party"] = candidacy.get_party_affiliation_display()
+				c_json["votes"] = candidacy.votes
+				total_votes += candidacy.votes
+				candidates.append(c_json)
+			m_json["total_votes"] = total_votes
+			m_json["candidates"] = candidates
+			measures.append(m_json)
+		else:
+			choices = []
+			m_json = {}
+			m_json["type"] = measure.get_measure_type_display()
+			m_json["question_text"] = measure.__str__()
+			for referendum in measure.referendums.all():
+				for choice in referendum.choices.all():
+					c_json = {}
+					c_json["choice_text"] = choice.__str__()
+					c_json["votes"] = choice.votes
+					total_votes += choice.votes
+					choices.append(c_json)
+			m_json["total_votes"] = total_votes
+			m_json["choices"] = choices
+			measures.append(m_json)
+	return JsonResponse({ election.id : {
+				"name" : title,
+				"status": status,
+				"type": election_type,
+				"total_participants": participant_count,
+				"measures": measures,}
+				})
 
 def election_results(request):
     args = {}

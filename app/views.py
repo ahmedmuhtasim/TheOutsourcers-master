@@ -33,6 +33,10 @@ def results(request):
 	logged_on = is_logged_on(request)
 
 	if request.method == "GET":
+		return request.DATA
+		req = urllib.request.Request("http://localhost:8000/elections")
+		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
+		response = json.loads(resp_json)
 		election_data = {}
 		election_data = {
 			"open": [
@@ -64,25 +68,119 @@ def results(request):
 			"website_url": WEBSITE_URL,
 		})
 
+'''
+	      election_data = {
+	          "open": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "closed": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "future": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              },
+	          ]
+	      }
+
+	'''
+
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-
-	if request.method == "GET":
-		elections = {
-			"pres-2012": {
-				"name": "Presidential Race 2012",
-				"id": "pres-2012",
-				"total_votes": 22347000,
-				"type": "general",
-				"state": "closed"
-			}
+	req = urllib.request.Request("http://localhost:8000/api/election_full/" + pk)
+	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
+	election_data = json.loads(resp_json)
+	election_data = {"election": election_data[pk]}
+	'''
+	{
+		"2012-09": {
+			"name": "General Election : 2012-09"
+			"status" : "open"
+			"total_participants" : 651,
+			"measures" : [
+				{
+				"type": "Candidacy",
+				"office": "President",
+				"total_votes": 0,
+				"candidates": [
+					{
+					"candidate": "Barack Obama",
+					"running_mate": "None",
+					"party": "Democrat",
+					"votes": 0
+					},
+					{
+					"candidate": "Mitt Romney",
+					"running_mate": "None",
+					"party": "Republican",
+					"votes": 0
+					}
+				]
+				},
+				{
+				"type": "Referendum",
+				"question_text": "Should Congress call another Constitutional Convention and start over?",
+				"total_votes": 8,
+				"choices": [
+					{
+					"choice_text": "No, they shouldn't.",
+					"votes": 5
+					},
+					{
+					"choice_text": "Yes, they should.",
+					"votes": 3
+					}
+				]
+				}
+			]
 		}
-		return render(request, "app/election_result.html", {
-			"election": elections[pk],
-			"pk": pk,
-			"logged_on": logged_on,
-			"website_url": WEBSITE_URL,
-		})
+	}
+	'''
+	return render(request, "app/election_result.html", {
+	"election_data": election_data,
+	"pk": pk,
+	"logged_on": logged_on,
+	"website_url": WEBSITE_URL,
+	})      
+		# election_data = {
+	    #       "open": [
+	    #           {
+	    #               "name": "General Election : 2012-09",
+	    #               "id": "2012-09",
+	    #               "total_participants": 651,
+	    #               "type": "general",
+	    #           }
+	    #       ],
+	    #       "closed": [
+	    #           {
+	    #               "name": "General Election : 2012-09",
+	    #               "id": "2012-09",
+	    #               "total_participants": 651,
+	    #               "type": "general",
+	    #           }
+	    #       ],
+	    #       "future": [
+	    #           {
+	    #               "name": "General Election : 2012-09",
+	    #               "id": "2012-09",
+	    #               "total_participants": 651,
+	    #               "type": "general",
+	    #           },
+	    #       ]
+	    #   }
 
 import datetime
 
@@ -125,32 +223,32 @@ def election_brief(request):
 	return JsonResponse(results)
 
 	'''
-	#       election_data = {
-	#           "open": [
-	#               {
-	#                   "name": "General Election : 2012-09",
-	#                   "id": "2012-09",
-	#                   "total_participants": 651,
-	#                   "type": "general",
-	#               }
-	#           ],
-	#           "closed": [
-	#               {
-	#                   "name": "General Election : 2012-09",
-	#                   "id": "2012-09",
-	#                   "total_participants": 651,
-	#                   "type": "general",
-	#               }
-	#           ],
-	#           "future": [
-	#               {
-	#                   "name": "General Election : 2012-09",
-	#                   "id": "2012-09",
-	#                   "total_participants": 651,
-	#                   "type": "general",
-	#               },
-	#           ]
-	#       }
+	      election_data = {
+	          "open": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "closed": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "future": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              },
+	          ]
+	      }
 
 	'''
 

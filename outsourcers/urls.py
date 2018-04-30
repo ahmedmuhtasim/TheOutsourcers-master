@@ -64,6 +64,8 @@ urlpatterns = [
 	url(r'^api/candidacies/', candidacy_endpoint, name='candidacy-list'),
 	url(r'^api/election_results/', views_api.election_results, name="election_results"),
 	url(r'^api/election_brief/', views.election_brief, name='election_brief'),
+	url(r'^api/election_full/(?P<pk>[0-9-]+)', views_api.election_full, name='election_full'),
+	url(r'^api/election_full/', views_api.elections_full, name='elections_full'),
 
 	url(r'elections/(?P<pk>[0-9-]+)', views_api.election),
 	url('admin/', admin.site.urls),
@@ -75,7 +77,7 @@ urlpatterns = [
 	url('elections/', views.page_elections),
 	url('vote/', views.vote),
 	url('submitVote/', views.submit_vote),
-	url(r'^results/(?P<pk>[0-9a-zA-Z-]+)', views.election_result, name='specific-results'),
+	url(r'^results/(?P<pk>[0-9-]+)', views.election_result, name='specific-results'),
 
 	url(r'^results/', views.results, name='all-results'),
 	url('api/searchVoters/', views_api.search_voters),

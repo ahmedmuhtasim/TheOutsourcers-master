@@ -18,10 +18,30 @@
 
 		<div class="body">
 			<div class="body-title">
-				<p>Results - {{election.name}} <span class="text-24 red-text">{{errorMessage}}</span></p>
+				<p>Results - {{election_data.election.name}} <span class="text-24 red-text">{{errorMessage}}</span></p>
 			</div>
 			<div class="body-contents">
 				
+						<h1>{{election_data.election.name}}</h1>
+						<h2>Status: {{election_data.election.status}}</h2>
+						<h2>Participants: {{election_data.election.total_participants}}</h2>
+						{% for measure in election_data.election.measures %}
+							<h3>Type: {{measure.type}}</h3>
+							<h3>{{measure.office}}</h3>
+							<h3>{{measure.question_text}}</h3>
+							<h3>Total Votes: {{measure.total_votes}}</h3>
+							{% for candidate in measure.candidates %}
+								<h3>{{candidate.candidate}}</h3>
+								<h3>{{candidate.running_mate}}</h3>
+								<h3>{{candidate.party}}</h3>
+								<h3>{{candidate.votes}}</h3>
+							{% endfor %}
+							{% for choice in measure.choices %}
+								<h3>{{choice.choice_text}}</h3>
+								<h3>{{choice.votes}}</h3>
+							{% endfor %}
+						{% endfor %}
+	
 			</div>
 		</div>
 
