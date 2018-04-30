@@ -631,14 +631,12 @@ def pollworker_buffer(request):
 		return HttpResponseRedirect(reverse('login'))
 
 	form = PollworkerForm
-	precinctList = Precinct.objects.all()
 	electionList = Election.objects.all()
 
 	if request.method == "GET":
 		return render(request, "app/pollworker_buffer.html", {
 			"auth": auth,
 			"form": form,
-			'precinctList': precinctList,
 			'electionList': electionList,
 			"role": user.role,
 			"logged_on": logged_on,
@@ -651,7 +649,6 @@ def pollworker_buffer(request):
 			return render(request, "app/pollworker_buffer.html", {
 				"auth": auth,
 				"form": form,
-				'precinctList': precinctList,
 				'electionList': electionList,
 				"role": user.role,
 				"logged_on": logged_on,
@@ -662,17 +659,32 @@ def pollworker_buffer(request):
 		precinct = f.cleaned_data['precinct']
 		election = f.cleaned_data['election']
 
-		current_Time = datetime.datetime.today().strftime('%Y-%m')
-		election_Time = datetime.datetime.strptime(election, '%Y-%m').date()
 
-	return render(request, "app/pollworker_dashboard.html", {
-		"auth": auth,
-		'precinct_ID': precinct,
-		'election_ID': election,
-		"role": user.role,
-		"logged_on": logged_on,
-		"website_url": WEBSITE_URL,
-	})
+		user_id = auth.user_id
+		person = Person.objects.get(SSN = user.ssn)
+		pollworker = Poll_Worker.objects.get(person=person)
+
+		if (precinct.id != pollworker.precinct.id):
+			return render(request, "app/pollworker_buffer.html", {
+				"auth": auth,
+				'precinct_ID': precinct,
+				'election_ID': election,
+				"role": user.role,
+				"logged_on": logged_on,
+				"website_url": WEBSITE_URL,
+			})
+
+		else:
+			# current_Time = datetime.datetime.today().strftime('%Y-%m')
+			# election_Time = datetime.datetime.strptime(election, '%Y-%m').date()
+			return render(request, "app/pollworker_dashboard.html", {
+				"auth": auth,
+				'precinct_ID': precinct,
+				'election_ID': election,
+				"role": user.role,
+				"logged_on": logged_on,
+				"website_url": WEBSITE_URL,
+			})
 
 
 @csrf_exempt
