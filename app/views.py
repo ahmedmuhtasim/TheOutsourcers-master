@@ -34,7 +34,7 @@ def results(request):
 	logged_on = is_logged_on(request)
 
 	if request.method == "GET":
-		req = urllib.request.Request("http://localhost:8000/api/elections_full/")
+		req = urllib.request.Request(WEBSITE_URL + "api/elections_full/")
 		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		election_data = json.loads(resp_json)
 
