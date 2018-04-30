@@ -19,8 +19,13 @@ class LoginForm(forms.Form):
 	password = forms.CharField(label='password', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 class VoteValidationForm(forms.Form):
-	serial_code = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Serial Code'}))
-
+	serial_code = forms.CharField(label='serial code', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Serial Code'}))
+	ELECTION_CHOICES = (
+		('R', 'Republican Primary'),
+		('D', 'Democratic Primary'),
+		('G', 'General Election')
+	)
+	election_type = forms.ChoiceField(label='election type', choices=ELECTION_CHOICES)
 
 class BallotForm(forms.Form):
 	CHOICES = [

@@ -33,7 +33,6 @@ def results(request):
 	logged_on = is_logged_on(request)
 
 	if request.method == "GET":
-		return request.DATA
 		req = urllib.request.Request("http://localhost:8000/api/elections_full/")
 		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		election_data = json.loads(resp_json)
@@ -407,8 +406,10 @@ def vote(request):
 		form = VoteValidationForm(request.POST)
 
 		if form.is_valid():
-
+			
+			serial_code = form.cleaned_data['serial_code']
 			voter = validate_serial_code(serial_code)
+			election_type = form.cleaned_data['election_type']
 
 			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
 				return render(request, "app/vote.html", {
@@ -426,9 +427,9 @@ def vote(request):
 			return render(request, "app/ballot.html", {
 				"form": BallotForm,
 				"election_data": ballot,
-				"serial_code": voter.serial_code,
+				"serial_code": serial_code,
 				"logged_on": logged_on,
-				"primary": "R",			# R is republican, D democrat, G general
+				"primary": election_type,			# R is republican, D democrat, G general
 				"website_url": WEBSITE_URL,
 			})
 
