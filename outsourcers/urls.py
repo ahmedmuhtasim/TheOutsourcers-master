@@ -44,8 +44,6 @@ urlpatterns = [
 	# Internal API Endpoints
 	url(r'^api/voters/(?P<pk>[0-9-]+)', voter_endpoint, name='voter-detail'),
 	url(r'^api/voters/', voter_endpoint, name='voter-list'),
-	url(r'^api/elections/(?P<pk>[0-9-]+)', election_endpoint, name='election-detail'),
-	url(r'^api/elections/', election_endpoint, name='election-list'),
 	url(r'^api/ballots/(?P<pk>[0-9-]+)', ballot_endpoint, name='ballot-detail'),
 	url(r'^api/ballots/', ballot_endpoint, name='ballot-list'),
 	url(r'^api/persons/(?P<pk>[0-9-]+)', person_endpoint, name='person-detail'),
@@ -62,10 +60,16 @@ urlpatterns = [
 	url(r'^api/referendums/', referendum_endpoint, name='referendum-list'),
 	url(r'^api/candidacies/(?P<pk>[0-9-]+)',candidacy_endpoint, name='candidacy-detail'),
 	url(r'^api/candidacies/', candidacy_endpoint, name='candidacy-list'),
+
+	# External API Endpoints
+	url(r'api/documentation/', views_api.documentation, name='api-documenation'),
+	url(r'^api/elections/(?P<pk>[0-9-]+)', views_api.election, name='election-detail'),
+	url(r'^api/elections/', views_api.elections, name='election-list'),
 	url(r'^api/election_results/', views_api.election_results, name="election_results"),
-	url(r'^api/election_brief/', views.election_brief, name='election_brief'),
-	url(r'^api/election_full/(?P<pk>[0-9-]+)', views_api.election_full, name='election_full'),
-	url(r'^api/election_full/', views_api.elections_full, name='elections_full'),
+	url(r'^api/elections_brief/(?P<pk>[0-9-]+)', views_api.election_brief, name='election-brief'),
+	url(r'^api/elections_brief/', views_api.elections_brief, name='elections-brief'),
+	url(r'^api/elections_full/(?P<pk>[0-9-]+)', views_api.election_full, name='election-full'),
+	url(r'^api/elections_full/', views_api.elections_full, name='elections-full'),
 
 	url(r'elections/(?P<pk>[0-9-]+)', views_api.election),
 	url('admin/', admin.site.urls),
@@ -83,7 +87,7 @@ urlpatterns = [
 	url('api/searchVoters/', views_api.search_voters),
 
 	url('pollworkerDashboard/', views.pollworker_dashboard, name='pollworker_dashboard'),
-	url('pollworkerBuffer/', views.pollworker_buffer, name='pollworker_buffer'),
+#	url('pollworkerBuffer/', views.pollworker_buffer, name='pollworker_buffer'),
 
 	url('getVoterSerialCode/', views.get_voter_serial_code),
 

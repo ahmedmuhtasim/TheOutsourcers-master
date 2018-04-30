@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.db import IntegrityError
 from .models import *
 from rest_framework import viewsets, status
@@ -7,10 +8,15 @@ from .serializers import *
 from rest_framework.response import Response
 import urllib
 import json
-
+import datetime
 from .utility_methods import WEBSITE_URL, multikeysort
 
 # API
+# Documentation
+def documentation(request):
+	return render(request, "app/documentation.html")
+
+# Endpoint for all elections showing just id and type
 def elections(request):
 	args = {}
 	elections = []
@@ -22,6 +28,7 @@ def elections(request):
 		elections.append(json)
 	return JsonResponse({"elections": elections})
 
+# Endpoint for individual election showing all measures
 def election(request, pk):
 	election = Election.objects.get(pk=pk)
 	measures = []
@@ -60,8 +67,105 @@ def election(request, pk):
 			measures.append(m_json)
 	return JsonResponse({ election.id : measures})
 
-import datetime
+def election_brief(request, pk):
+	election = Election.objects.get(pk=pk)
+	# get id
+	election_id = election.id
+	# get type
+	election_type = election.get_type_display()
+	# get vote counts through voter serial codes
+	participant_count = len(VoterSerialCodes.objects.filter(election=election))
+	# format title
+	title = election.markup_str()
+	# check if opened, closed, or current
+	today = datetime.date.today()
+	election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+	# set status
+	if election_date < today:
+		status = "closed"
+	elif election_date == today:
+		status = "open"
+	else:
+		status = "future"
+	json = {
+		"name": title,
+		"id": election_id,
+		"total_participants": participant_count,
+		"type" : election_type,
+		"status": status
+	}
 
+	return JsonResponse({election_id: json})
+
+def elections_brief(request):
+	open = []
+	closed = []
+	future = []
+	elections = Election.objects.all()
+	for election in elections:
+		# get id
+		election_id = election.id
+		# get type
+		election_type = election.get_type_display()
+		# get vote counts through voter serial codes
+		participant_count = len(VoterSerialCodes.objects.filter(election=election))
+		# format title
+		title = election.markup_str()
+		# check if opened, closed, or current
+		today = datetime.date.today()
+		election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+		json = {
+			"name": title,
+			"id": election_id,
+			"total_participants": participant_count,
+			"type" : election_type
+		}
+		# append to relevant list
+		if election_date < today:
+			closed.append(json)
+		elif election_date == today:
+			open.append(json)
+		else:
+			future.append(json)
+		
+	results = {
+		"open": open,
+		"closed": closed,
+		"future": future,
+	}
+	return JsonResponse(results)
+
+	'''
+	      election_data = {
+	          "open": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "closed": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              }
+	          ],
+	          "future": [
+	              {
+	                  "name": "General Election : 2012-09",
+	                  "id": "2012-09",
+	                  "total_participants": 651,
+	                  "type": "general",
+	              },
+	          ]
+	      }
+
+	'''
+
+# Endpoint for all elections shows all measures plus additional info, categorizes based on status
 def elections_full(request):
 	elections = Election.objects.all()
 	open = []
@@ -138,6 +242,7 @@ def elections_full(request):
 							"future": future
 							})
 
+# Endpoint for individual election showing all measures and some additional info
 def election_full(request, pk):
 	election = Election.objects.get(pk=pk)
 	# check if opened, closed, or current
