@@ -64,3 +64,10 @@ ROLE_CHOICES = (
 	('PW', 'Poll Worker'),
 	('SA', 'System Admin')
 )
+
+PRECINCT_CHOICES = (
+	('0405', '405 - CALE'),
+	('0301', '301 - IVY'),
+	('0202', '202 - UNIVERSITY HALL'),
+	('0105', '105 - DUNLORA'),
+)

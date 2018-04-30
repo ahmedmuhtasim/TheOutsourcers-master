@@ -199,7 +199,8 @@ def search_voters(request):
 				last_name=voter["last_name"],
 				SSN=str(''),
 				federal_district=1,
-				state_district=2
+				state_district=2,
+				precinct=Precinct.objects.get(id=voter["precinct_id"]),
 			)
 			insert_person.save()
 

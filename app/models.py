@@ -57,9 +57,9 @@ class Office(models.Model):
 class Person(models.Model):
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
-	SSN = models.CharField(max_length=9)
-	federal_district = models.IntegerField()
-	state_district = models.IntegerField()
+	SSN = models.CharField(max_length=250)
+	federal_district = models.IntegerField(null=True)
+	state_district = models.IntegerField(null=True)
 
 	def __str__(self):
 		return self.first_name + " " + self.last_name

@@ -311,6 +311,7 @@ def signup(request):
 		ssn = f.cleaned_data['ssn']
 		role = f.cleaned_data['role']
 		dob = f.cleaned_data['dob']
+		precinct_id = f.cleaned_data['precinct_id']
 
 		user_results = User.objects.filter(username=username)
 
@@ -345,6 +346,21 @@ def signup(request):
 		)
 
 		user.save()
+
+		person = Person(
+			first_name = first_name,
+			last_name = last_name,
+			SSN = make_password(ssn)
+		)
+
+		person.save()
+
+		if role == 'PW':
+			pw = Poll_Worker(
+				person=person,
+				precinct=Precinct.objects.get(id=precinct_id)
+			)
+			pw.save()
 
 		authenticator = gen_alphanumeric(30)
 

@@ -1,6 +1,6 @@
 from django import forms
 from app.models import Precinct, Election
-from .choices import ROLE_CHOICES
+from .choices import ROLE_CHOICES, PRECINCT_CHOICES
 
 class SignupForm(forms.Form):
 	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
@@ -12,6 +12,7 @@ class SignupForm(forms.Form):
 	ssn = forms.CharField(label='ssn', max_length=100, widget=forms.PasswordInput(attrs={'placeholder': 'Social Security Number'}))
 	dob = forms.DateField(label='dob',  widget=forms.TextInput(attrs={'type':'date', 'placeholder': 'Date of Birth'}))
 	role = forms.ChoiceField(label='role', choices=ROLE_CHOICES)
+	precinct_id = forms.ChoiceField(label='precinct', choices=PRECINCT_CHOICES)
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='username', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
