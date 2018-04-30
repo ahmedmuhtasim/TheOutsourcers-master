@@ -506,7 +506,76 @@ def pollworker_dashboard(request):
 		"logged_on": logged_on,
 		"website_url": WEBSITE_URL,
 	})
-	
+
+def pollworker_buffer(request):
+
+	logged_on = is_logged_on(request)
+	if not logged_on:
+		return HttpResponseRedirect(reverse('login'))
+
+	auth = Authenticator.objects.get(token=request.COOKIES.get("auth"))
+	user = User.objects.get(pk=auth.user_id)
+
+	if user.role != "PW":
+		return HttpResponseRedirect(reverse('login'))
+
+	form = PollworkerForm
+	electionList = Election.objects.all()
+
+	if request.method == "GET":
+		return render(request, "app/pollworker_buffer.html", {
+			"auth": auth,
+			"form": form,
+			'electionList': electionList,
+			"role": user.role,
+			"logged_on": logged_on,
+			"website_url": WEBSITE_URL,
+		})
+	elif request.method == "POST":
+		f = PollworkerForm(request.POST)
+
+		if not f.is_valid():
+			return render(request, "app/pollworker_buffer.html", {
+				"auth": auth,
+				"form": form,
+				'electionList': electionList,
+				"role": user.role,
+				"logged_on": logged_on,
+				"errorMessage": "Form input invalid",
+				"website_url": WEBSITE_URL,
+			})
+
+		precinct = f.cleaned_data['precinct']
+		election = f.cleaned_data['election']
+
+
+		user_id = auth.user_id
+		person = Person.objects.get(SSN = user.ssn)
+		pollworker = Poll_Worker.objects.get(person=person)
+
+		if (precinct.id != pollworker.precinct.id):
+			return render(request, "app/pollworker_buffer.html", {
+				"auth": auth,
+				'precinct_ID': precinct,
+				'election_ID': election,
+				"role": user.role,
+				"logged_on": logged_on,
+				"website_url": WEBSITE_URL,
+			})
+
+		else:
+			# current_Time = datetime.datetime.today().strftime('%Y-%m')
+			# election_Time = datetime.datetime.strptime(election, '%Y-%m').date()
+			return render(request, "app/pollworker_dashboard.html", {
+				"auth": auth,
+				'precinct_ID': precinct,
+				'election_ID': election,
+				"role": user.role,
+				"logged_on": logged_on,
+				"website_url": WEBSITE_URL,
+			})
+
+
 @csrf_exempt
 def get_voter_serial_code(request):
 	'''

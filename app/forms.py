@@ -32,5 +32,5 @@ class BallotForm(forms.Form):
 class PollworkerForm(forms.Form):
 	#precinct_ID = forms.CharField(label='precinct ID', max_length=10, widget=forms.TextInput(attrs={'placeholder': 'Precinct ID'}))
 	#election_ID = forms.CharField(label='election ID', max_length=7, widget=forms.TextInput(attrs={'placeholder': 'Election ID'}))
-	precinct = forms.ModelChoiceField(queryset = Precinct.objects.all())
+	precinct = forms.ChoiceField(label='precinct', choices=PRECINCT_CHOICES)
 	election = forms.ModelChoiceField(queryset = Election.objects.all())
