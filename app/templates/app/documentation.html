@@ -21,7 +21,15 @@
 				<p>Documentation <span class="text-24 red-text">{{errorMessage}}</span></p>
 			</div>
 			<div class="body-contents">
-                <code>something</code>
+                {% for api in results %}
+                <div>
+                    <h1>{{api.url}}</h1>
+                    <h2>{{api.description}}</h2>
+                </div>
+                <div>
+                    <code>{{api.response}}</code>
+                </div>
+                {% endfor %}
 			</div>
 		</div>
 

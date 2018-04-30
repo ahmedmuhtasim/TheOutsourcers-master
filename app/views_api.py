@@ -14,7 +14,31 @@ from .utility_methods import WEBSITE_URL, multikeysort
 # API
 # Documentation
 def documentation(request):
-	return render(request, "app/documentation.html")
+	apis = {"elections": "Returns all elections currently in database with ID and Type fields", "elections/2012-09": "Returns all measures on the ballot for the specified election",
+	"elections_brief": "Returns a brief view of all elections in the database including the number of participants", "elections_brief/2012-09": "Returns brief view for specific election", 
+	"elections_full": "Returns all info for all elections", "elections_full/2012-09": "Returns all info for specified election"}
+	results = []
+	for api in apis.keys():
+		api_json = {}
+		req = urllib.request.Request("http://localhost:8000/api/" + api)
+		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
+		response = json.loads(resp_json)
+		api_json["url"] = "/api/" + api
+		api_json["response"] = response
+		api_json["description"] = apis[api]
+		results.append(api_json)
+	api_results = {"results": results}
+	return render(request, "app/documentation.html", api_results)
+	'''
+	api_resutls = {
+		results : [
+		{
+			"url": "/api/elections/",
+			"response": json,
+			"description": "Returns all elections with their types and ids"
+		}
+	]}
+	'''
 
 # Endpoint for all elections showing just id and type
 def elections(request):
