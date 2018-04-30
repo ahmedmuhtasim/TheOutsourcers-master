@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm, PollworkerForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION, ADAFRUIT_IO_KEY
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -12,6 +12,7 @@ from django.urls import reverse
 import urllib
 import hmac
 from django.contrib.auth.hashers import make_password, check_password
+from Adafruit_IO import Client
 
 
 # Public Pages
@@ -477,11 +478,14 @@ def submit_vote(request):
 
 	values = print_data
 
-	encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	req = urllib.request.Request(PRINT_URL, encoded_values)
+	#encoded_values = urllib.parse.urlencode(values).encode('ascii')
+	#req = urllib.request.Request(PRINT_URL, encoded_values)
 
-	with urllib.request.urlopen(req) as response:
-		response.read()
+	#with urllib.request.urlopen(req) as response:
+		#response.read()
+
+	client = Client(ADAFRUIT_IO_KEY)
+	client.send('vote', values)
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
@@ -638,14 +642,17 @@ def get_voter_serial_code(request):
 	values = {
 		'voter' : serial_code,
 	}
-	try:
-		encoded_values = urllib.parse.urlencode(values).encode('ascii')
-		req = urllib.request.Request(PRINT_URL, encoded_values)
+	#try:
+		#encoded_values = urllib.parse.urlencode(values).encode('ascii')
+		#req = urllib.request.Request(PRINT_URL, encoded_values)
 
-		with urllib.request.urlopen(req) as response:
-			response.read()
-	except:
-		final_response["error"] = "Couldn't find printer server."
+		#with urllib.request.urlopen(req) as response:
+			#response.read()
+	#except:
+		#final_response["error"] = "Couldn't find printer server."
+	
+	client = Client(ADAFRUIT_IO_KEY)
+	client.send('voter', values)
 
 	# Once everything's done, just redirect back to the dashboard
 	return JsonResponse(final_response)
