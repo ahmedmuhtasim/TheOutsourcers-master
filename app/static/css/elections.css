@@ -6,3 +6,21 @@
 .page-title {
 	white-space: nowrap;
 }
+
+.candidate-container {
+	grid-template-areas: "info votes";
+	margin-bottom: 12pt;
+}
+.info {
+	grid-area: info;
+}
+.votes {
+	grid-area: votes;
+	text-align: end;
+}
+.measure {
+	border-bottom: 1pt solid black;
+}
+.measure-body {
+	padding: 12pt;
+}

@@ -18,28 +18,52 @@
 
 		<div class="body">
 			<div class="body-title">
-				<p>Results - {{election_data.election.name}} <span class="text-24 red-text">{{errorMessage}}</span></p>
+				<p>Results - {{election_data.election.name}} 
+						{% if election_data.election.status == 'closed' %}
+						<span class="text-24 red-text">Closed</span>
+						{% else %}
+						<span class="text-24 green-text">Open</span>
+						{% endif %}
+				</p>
 			</div>
 			<div class="body-contents">
 				
-						<h2>Status: {{election_data.election.status}}</h2>
-						<h2>Participants: {{election_data.election.total_participants}}</h2>
-						{% for measure in election_data.election.measures %}
-							<h3>Type: {{measure.type}}</h3>
-							<h3>{{measure.office}}</h3>
-							<h3>{{measure.question_text}}</h3>
-							<h3>Total Votes: {{measure.total_votes}}</h3>
+				<h2>Total Voters: {{election_data.election.total_participants}}</h2>
+				<hr>
+				{% for measure in election_data.election.measures %}
+					<div class='measure'>
+						<div class='measure-header'>
+								<p class='text-56'>Office: {{measure.office}}</p>
+								<p class='text-30'>{{measure.question_text}}</p>
+								<p class='text-18 italic'>Total Participants in this Section: <span class='green-text'>{{measure.total_votes}}</span></p>
+								
+						</div>
+						<div class='measure-body'>
+							<!--<h3>Type: {{measure.type}}</h3>-->
 							{% for candidate in measure.candidates %}
-								<h3>{{candidate.candidate}}</h3>
-								<h3>{{candidate.running_mate}}</h3>
-								<h3>{{candidate.party}}</h3>
-								<h3>{{candidate.votes}}</h3>
-							{% endfor %}
-							{% for choice in measure.choices %}
-								<h3>{{choice.choice_text}}</h3>
-								<h3>{{choice.votes}}</h3>
-							{% endfor %}
+							<div class="candidate-container grid">
+								<div class='info'>
+										<h3>Candidate: {{candidate.candidate}}</h3>
+										<h3>Running Mate: {{candidate.running_mate}}</h3>
+										<h3>Party: {{candidate.party}}</h3>
+								</div>
+								<div class='votes'>
+
+									<p class='text-36'>Votes: {{candidate.votes}}</p>
+								</div>
+								
+							</div>
+							
 						{% endfor %}
+						{% for choice in measure.choices %}
+							<h3>{{choice.choice_text}}</h3>
+							<h3>{{choice.votes}}</h3>
+						{% endfor %}
+
+						</div>
+					</div>
+					
+				{% endfor %}
 	
 			</div>
 		</div>
