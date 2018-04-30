@@ -76,7 +76,7 @@ def results(request):
 
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-	req = urllib.request.Request("http://localhost:8000/api/elections_full/" + pk)
+	req = urllib.request.Request(WEBSITE_URL + "api/elections_full/" + pk)
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
 	election_data = {"election": election_data[pk]}
@@ -167,7 +167,7 @@ def page_elections(request):
 
     if request.method == "GET":
         election_data = {}
-        req = urllib.request.Request("http://localhost:8000/api/elections_brief/")
+        req = urllib.request.Request(WEBSITE_URL + "api/elections_brief/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
 	#       election_data = {
