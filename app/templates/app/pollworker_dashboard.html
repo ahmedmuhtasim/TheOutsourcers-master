@@ -63,12 +63,14 @@
 			const firstName = $('#firstName').val();
 			const lastName = $('#lastName').val();
 			const voterNumber = $('#voterNumber').val();
+      const precinct_ID = $('#precinct_ID').val();
+      const election = $('#election_ID').val();
 
 			const url = `{{website_url}}api/searchVoters/?
 				firstName=${firstName}&
 				lastName=${lastName}&
 				voterNumber=${voterNumber}&
-				precinctId=0405`;
+				precinctId=${precinct_ID}`;
 			fetch(url, {
 				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				credentials: 'same-origin', // include, same-origin, *omit
