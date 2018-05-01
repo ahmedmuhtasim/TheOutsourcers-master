@@ -56,7 +56,7 @@ PRINT_PORT = "5000"
 
 
 # UPDATE FOR DEPLOYMENT
-IN_PRODUCTION = not True
+IN_PRODUCTION = True
 
 def get_website_url(in_production):
 	URL_BASE = 'http://localhost:8000/'
@@ -65,3 +65,5 @@ def get_website_url(in_production):
 	return URL_BASE
 
 WEBSITE_URL = get_website_url(IN_PRODUCTION)
+
+ADAFRUIT_IO_KEY      = '8341795c01774027901eae1c9f822f2d'
