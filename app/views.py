@@ -493,7 +493,7 @@ def submit_vote(request):
 
 	print_data = {}
 	# Printing the serial code will change eventually - it's to ensure receipts look different
-	print_data['serial_code'] = serial_code
+	print_data['Total votes'] = VoterSerialCodes.objects.filter(finished=True).count()
 	for key in data.keys():
 		if key != "serial_code":
 			measure = Measure.objects.get(pk=key)
