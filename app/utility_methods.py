@@ -66,4 +66,3 @@ def get_website_url(in_production):
 
 WEBSITE_URL = get_website_url(IN_PRODUCTION)
 
-ADAFRUIT_IO_KEY      = '8341795c01774027901eae1c9f822f2d'

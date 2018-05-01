@@ -12,6 +12,7 @@ from django.urls import reverse
 import urllib
 import hmac
 import logging
+import os
 from django.contrib.auth.hashers import make_password, check_password
 from Adafruit_IO import Client
 
@@ -507,19 +508,13 @@ def submit_vote(request):
 				choice.votes += 1
 				choice.save()
 
-	ip = get_client_ip(request)
-	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/ballot"
 
-	values = print_data
-
-	#encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	#req = urllib.request.Request(PRINT_URL, encoded_values)
-
-	#with urllib.request.urlopen(req) as response:
-		#response.read()
-
-	client = Client(ADAFRUIT_IO_KEY)
-	client.send('vote', values)
+	try:
+		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
+		client = Client(ADAFRUIT_IO_KEY)
+		client.send('vote', values)
+	except:
+		final_response["error"] = "Couldn't find printer server."
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
@@ -672,22 +667,13 @@ def get_voter_serial_code(request):
 		"serial_code": serial_code
 	}
 
-	ip = get_client_ip(request)
-	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
-	values = {
-		'voter' : serial_code,
-	}
-	#try:
-		#encoded_values = urllib.parse.urlencode(values).encode('ascii')
-		#req = urllib.request.Request(PRINT_URL, encoded_values)
-
-		#with urllib.request.urlopen(req) as response:
-			#response.read()
-	#except:
-		#final_response["error"] = "Couldn't find printer server."
 	
-	client = Client(ADAFRUIT_IO_KEY)
-	client.send('voter', values)
+	try:
+		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
+		client = Client(ADAFRUIT_IO_KEY)
+		client.send('voter', serial_code)
+	except:
+		final_response["error"] = "Couldn't find printer server."
 
 	# Once everything's done, just redirect back to the dashboard
 	return JsonResponse(final_response)
