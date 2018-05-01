@@ -57,6 +57,8 @@
 		{% include './components/footer.html' %}
 	</body>
 	<script>
+
+		// When a user is focused on any one of the form inputs, and presses enter, it will act as a form submit click
 		$("#firstName, #lastName, #voterNumber").keydown(function (e) {
 			if (e.keyCode == 13) {
 				$('#searchVoter').click();
@@ -64,16 +66,19 @@
 		});
 		$('#searchVoter').click(function() {
 			
+			// Retrieves the entered information
 			const firstName = $('#firstName').val();
 			const lastName = $('#lastName').val();
 			const voterNumber = $('#voterNumber').val();
 			const precinct = $('#precinctID').val();
 
+			// {{website_url}} represents a context sensitive endpoint based on what environment the code is in, if its in prod, then herokuapp.outsourcers.blahblah, else localhost
 			const url = `{{website_url}}api/searchVoters/?
 				firstName=${firstName}&
 				lastName=${lastName}&
 				voterNumber=${voterNumber}&
-				precinctId=${precinct}`;
+				precinctId={{precinct_ID}}`;
+			
 			fetch(url, {
 				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				credentials: 'same-origin', // include, same-origin, *omit

@@ -1,0 +1,12 @@
+.api-definition{
+	display: grid;
+	grid-template-columns: 5fr 1fr 5fr;
+	grid-template-areas:
+	"left . right";
+}
+.left {
+	grid-area: left;
+}
+.right {
+	grid-area: right;
+}
