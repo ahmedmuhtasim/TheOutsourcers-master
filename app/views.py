@@ -4,14 +4,16 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm, PollworkerForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION, ADAFRUIT_IO_KEY
 from rest_framework.generics import *
 from .serializers import *
 import json
 from django.urls import reverse
 import urllib
 import hmac
+import logging
 from django.contrib.auth.hashers import make_password, check_password
+from Adafruit_IO import Client
 
 
 # Public Pages
@@ -33,7 +35,7 @@ def results(request):
 	logged_on = is_logged_on(request)
 
 	if request.method == "GET":
-		req = urllib.request.Request("http://localhost:8000/api/elections_full/")
+		req = urllib.request.Request(WEBSITE_URL + "api/elections_full/")
 		resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 		election_data = json.loads(resp_json)
 
@@ -75,7 +77,7 @@ def results(request):
 
 def election_result(request, pk):
 	logged_on = is_logged_on(request)
-	req = urllib.request.Request("http://localhost:8000/api/elections_full/" + pk)
+	req = urllib.request.Request(WEBSITE_URL + "api/elections_full/" + pk)
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
 	election_data = {"election": election_data[pk]}
@@ -180,7 +182,7 @@ def page_elections(request):
 
     if request.method == "GET":
         election_data = {}
-        req = urllib.request.Request("http://localhost:8000/api/elections_brief/")
+        req = urllib.request.Request(WEBSITE_URL + "api/elections_brief/")
         resp_json = urllib.request.urlopen(req).read().decode("utf-8")
         election_data = json.loads(resp_json)
 	#       election_data = {
@@ -331,7 +333,7 @@ def signup(request):
 		ssn = f.cleaned_data['ssn']
 		role = f.cleaned_data['role']
 		dob = f.cleaned_data['dob']
-
+		precinct_id = f.cleaned_data['precinct_id']
 		user_results = User.objects.filter(username=username)
 
 		if len(user_results) > 0:
@@ -354,17 +356,36 @@ def signup(request):
 		""" If we made it here, we can log them in. """
 		# Set their login cookie and redirect to back to wherever they came from
 
+
+		hashed_ssn = make_password(ssn)
 		user = User(
 			username = username,
 			first_name = first_name,
 			last_name = last_name,
 			password = make_password(password),
-			ssn = make_password(ssn),
+			ssn = hashed_ssn,
 			dob = dob,
 			role = role
 		)
 
 		user.save()
+
+		person = Person(
+			first_name = first_name,
+			last_name = last_name,
+			SSN = hashed_ssn
+		)
+
+		person.save()
+
+		pw = Poll_Worker(
+			precinct = Precinct.objects.get(id=precinct_id),
+			person=person
+		)
+
+		pw.save()
+
+
 
 		authenticator = gen_alphanumeric(30)
 
@@ -491,11 +512,14 @@ def submit_vote(request):
 
 	values = print_data
 
-	encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	req = urllib.request.Request(PRINT_URL, encoded_values)
+	#encoded_values = urllib.parse.urlencode(values).encode('ascii')
+	#req = urllib.request.Request(PRINT_URL, encoded_values)
 
-	with urllib.request.urlopen(req) as response:
-		response.read()
+	#with urllib.request.urlopen(req) as response:
+		#response.read()
+
+	client = Client(ADAFRUIT_IO_KEY)
+	client.send('vote', values)
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
@@ -563,16 +587,17 @@ def pollworker_buffer(request):
 		precinct = f.cleaned_data['precinct']
 		election = f.cleaned_data['election']
 
-
 		user_id = auth.user_id
 		person = Person.objects.get(SSN = user.ssn)
 		pollworker = Poll_Worker.objects.get(person=person)
 
-		if (precinct.id != pollworker.precinct.id):
+		if (precinct != pollworker.precinct.id):
 			return render(request, "app/pollworker_buffer.html", {
 				"auth": auth,
 				'precinct_ID': precinct,
 				'election_ID': election,
+				"errorMessage": "Pollworker not registered for chosen precinct",
+				"form": form,
 				"role": user.role,
 				"logged_on": logged_on,
 				"website_url": WEBSITE_URL,
@@ -652,14 +677,17 @@ def get_voter_serial_code(request):
 	values = {
 		'voter' : serial_code,
 	}
-	try:
-		encoded_values = urllib.parse.urlencode(values).encode('ascii')
-		req = urllib.request.Request(PRINT_URL, encoded_values)
+	#try:
+		#encoded_values = urllib.parse.urlencode(values).encode('ascii')
+		#req = urllib.request.Request(PRINT_URL, encoded_values)
 
-		with urllib.request.urlopen(req) as response:
-			response.read()
-	except:
-		final_response["error"] = "Couldn't find printer server."
+		#with urllib.request.urlopen(req) as response:
+			#response.read()
+	#except:
+		#final_response["error"] = "Couldn't find printer server."
+	
+	client = Client(ADAFRUIT_IO_KEY)
+	client.send('voter', values)
 
 	# Once everything's done, just redirect back to the dashboard
 	return JsonResponse(final_response)

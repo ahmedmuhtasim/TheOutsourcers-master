@@ -39,6 +39,10 @@
 							required>
 					</div>
 					<div>
+						<input type="hidden"
+							id="precinctID">
+					</div>
+					<div>
 						<input type="submit" 
 							id="searchVoter" 
 							value="Search">
@@ -63,12 +67,13 @@
 			const firstName = $('#firstName').val();
 			const lastName = $('#lastName').val();
 			const voterNumber = $('#voterNumber').val();
+			const precinct = $('#precinctID').val();
 
 			const url = `{{website_url}}api/searchVoters/?
 				firstName=${firstName}&
 				lastName=${lastName}&
 				voterNumber=${voterNumber}&
-				precinctId=0405`;
+				precinctId=${precinct}`;
 			fetch(url, {
 				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				credentials: 'same-origin', // include, same-origin, *omit
