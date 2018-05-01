@@ -512,7 +512,7 @@ def submit_vote(request):
 	try:
 		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
 		client = Client(ADAFRUIT_IO_KEY)
-		client.send('vote', print_data)
+		client.send('vote', str(print_data))
 	except:
 		pass
 

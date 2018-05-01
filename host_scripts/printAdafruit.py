@@ -1,5 +1,6 @@
 from escpos.printer import Usb
 from Adafruit_IO import MQTTClient
+import ast
 import time
 import json
 
@@ -25,8 +26,11 @@ def disconnected(client):
     print('Disconnected from Adafruit IO!')
 
 def vote_message(client, feed_id, payload):
-    print(payload)
-    #p.text(payload)
+    #print(payload)
+    d = ast.literal_eval(payload)
+    for key in d.keys():
+        print(key, ":", d[key])
+        #p.text(' ' + key + ': ' + value + '\n')
     #p.image("voted.jpg")
     #p.cut()
 
@@ -34,7 +38,7 @@ def vote_message(client, feed_id, payload):
 def voter_message(client, feed_id, payload):
     print(payload)
     #p.text(payload)
-    #p.image("voted.jpg")
+    #p.qr(payload)
     #p.cut()
 
 
