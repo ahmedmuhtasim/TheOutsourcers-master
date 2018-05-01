@@ -512,9 +512,9 @@ def submit_vote(request):
 	try:
 		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
 		client = Client(ADAFRUIT_IO_KEY)
-		client.send('vote', values)
+		client.send('vote', print_data)
 	except:
-		final_response["error"] = "Couldn't find printer server."
+		pass
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
