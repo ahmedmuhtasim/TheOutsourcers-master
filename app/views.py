@@ -79,6 +79,20 @@ def election_result(request, pk):
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
 	election_data = {"election": election_data[pk]}
+	# if election_data["election"]["status"] == "closed":
+	# 	measures = election_data["election"]["measures"]
+	# 	for measure in measures:
+	# 		winner = []
+	# 		if measure["type"] == "Candidacy":
+	# 			for candidacy in measure["candidates"]:
+	# 				if len(winner) < 1:
+	# 					winner = [candidacy["candidate"], candidacy["votes"]]
+	# 				elif winner[1] < candidacy["votes"]:
+	# 					winner = [candidacy["candidate"], candidacy["votes"]]
+	# 			for candidacy in measure["candidates"]:
+	# 				if winner[0] == candidacy["candidate"]:
+	# 					candidacy["winner"] = "true"
+	# return JsonResponse(election_data["election"])
 	'''
 	{
 		"2012-09": {
