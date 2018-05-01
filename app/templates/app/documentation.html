@@ -28,7 +28,7 @@
 							<p class='text-14'>{{api.description}}</p>
 						</div>
 						<div class='right'>
-							<code>{{api.response}}</code>
+							<code class='json'>{{api.response}}</code>
 						</div>
 					</div>
 				
@@ -39,4 +39,9 @@
 		{% include './components/footer.html' %}
 		
 	</body>
+	<script>
+		$('.json').each(function() {
+			console.log(this);
+		})
+	</script>
 </html>
