@@ -71,6 +71,7 @@
 			const lastName = $('#lastName').val();
 			const voterNumber = $('#voterNumber').val();
 			const precinct = $('#precinctID').val();
+			const election={{election_ID}};
 
 			// {{website_url}} represents a context sensitive endpoint based on what environment the code is in, if its in prod, then herokuapp.outsourcers.blahblah, else localhost
 			const url = `{{website_url}}api/searchVoters/?
@@ -103,9 +104,9 @@
 								<h3>First 4 Digits of VN: ${voter.voter_number.substring(0, 4)}</h3>
 								
 							</div>
-							<div class="form gen-serial-code" voter_number=${voter.voter_number} election_id="${'2012-09'}">
+										<div class="form gen-serial-code" voter_number=${voter.voter_number} election_id={{election_ID}}>
 								<input type="hidden" name="voter_number" value="${voter.voter_number}">
-								<input type="hidden" name="election_id" value="${'2012-09'}">
+								<input type="hidden" name="election_id" value="${{election_id}}">
 								<input type="Submit" value="Get Serial Code" id="get-serial-code-btn">
 							</div>
 							<div class="response-result">

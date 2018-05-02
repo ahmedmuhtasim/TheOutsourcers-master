@@ -124,9 +124,10 @@ def election_brief(request, pk):
 	election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
 	election_date.replace(day=today.day)
 	# set status
-	if election_date < today:
+
+	if (election_date.month < today.month and election_date.year == today.year) or election_date.year < today.year:
 		status = "closed"
-	elif election_date == today:
+	elif election_date.month == today.month and election_date.year == today.year:
 		status = "open"
 	else:
 		status = "future"
@@ -165,9 +166,9 @@ def elections_brief(request):
 			"type" : election_type
 		}
 		# append to relevant list
-		if election_date < today:
+		if (election_date.month < today.month and election_date.year == today.year) or election_date.year < today.year:
 			closed.append(json)
-		elif election_date == today:
+		elif election_date.month == today.month and election_date.year == today.year:
 			open.append(json)
 		else:
 			future.append(json)
@@ -222,9 +223,10 @@ def elections_full(request):
 		election_date.replace(day=today.day)
 		# set status
 		status = ""
-		if election_date < today:
+
+		if (election_date.month < today.month and election_date.year == today.year) or election_date.year < today.year:
 			status = "closed"
-		elif election_date == today:
+		elif election_date.month == today.month and election_date.year == today.year:
 			status = "open"
 		else:
 			status = "future"

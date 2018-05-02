@@ -463,8 +463,7 @@ def vote(request):
 				# check if opened, closed, or current
 				today = datetime.date.today()
 				election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
-				election_date.replace(day=today.day)
-				if election_date != today:
+				if election_date.month != today.month and election_date.year != today.year:
 					return render(request, "app/vote.html", {
 						"errorMessage": "Trying to vote on bad day. :(",
 						"logged_on": logged_on,
