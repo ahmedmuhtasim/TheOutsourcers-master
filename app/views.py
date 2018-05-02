@@ -4,7 +4,7 @@ from .models import *
 from .forms import LoginForm, SignupForm, VoteValidationForm, BallotForm, PollworkerForm
 from datetime import date
 from django.views.decorators.csrf import csrf_exempt
-from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION, ADAFRUIT_IO_KEY
+from .utility_methods import validate_serial_code, gen_numeric, gen_alphanumeric, is_logged_on, PRINT_PORT,  get_client_ip, WEBSITE_URL, IN_PRODUCTION
 from rest_framework.generics import *
 from .serializers import *
 import json
@@ -12,6 +12,8 @@ from django.urls import reverse
 import urllib
 import hmac
 import logging
+import os
+import datetime
 from django.contrib.auth.hashers import make_password, check_password
 from Adafruit_IO import Client
 
@@ -81,6 +83,20 @@ def election_result(request, pk):
 	resp_json = urllib.request.urlopen(req).read().decode("utf-8")
 	election_data = json.loads(resp_json)
 	election_data = {"election": election_data[pk]}
+	# if election_data["election"]["status"] == "closed":
+	# 	measures = election_data["election"]["measures"]
+	# 	for measure in measures:
+	# 		winner = []
+	# 		if measure["type"] == "Candidacy":
+	# 			for candidacy in measure["candidates"]:
+	# 				if len(winner) < 1:
+	# 					winner = [candidacy["candidate"], candidacy["votes"]]
+	# 				elif winner[1] < candidacy["votes"]:
+	# 					winner = [candidacy["candidate"], candidacy["votes"]]
+	# 			for candidacy in measure["candidates"]:
+	# 				if winner[0] == candidacy["candidate"]:
+	# 					candidacy["winner"] = "true"
+	# return JsonResponse(election_data["election"])
 	'''
 	{
 		"2012-09": {
@@ -159,7 +175,6 @@ def election_result(request, pk):
 	    #       ]
 	    #   }
 
-import datetime
 
 
 
@@ -413,9 +428,8 @@ def vote(request):
 
 	form = VoteValidationForm
 	if request.method == "GET":
-		is_day_of = False
-		day_of = date(2018, 4, 14)
-		today = date.today()
+		# Since elections only happen once a month, we no longer need is_day_of
+		# Was a requirements problem
 		is_day_of = True
 		return render(request, "app/vote.html", {
 			"form": form,
@@ -428,11 +442,13 @@ def vote(request):
 
 		if form.is_valid():
 			
+			# Get form data to go to ballot
 			serial_code = form.cleaned_data['serial_code']
 			voter = validate_serial_code(serial_code)
 			election_type = form.cleaned_data['election_type']
 
-			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
+
+			if str(type(voter)) == "<class 'NoneType'>" : 
 				return render(request, "app/vote.html", {
 					"errorMessage": "Serial Code Invalid",
 					"logged_on": logged_on,
@@ -444,6 +460,34 @@ def vote(request):
 			if voter.election:
 				election = voter.election
 				ballot = election.ballot
+				# check if opened, closed, or current
+				today = datetime.date.today()
+				election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+				election_date.replace(day=today.day)
+				if election_date != today:
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote on bad day. :(",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
+				if (election_type == "R" or election_type == "D") and election.type == 'G':
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote in a primary for a general election!",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
+				if (election_type == "G") and election.type == 'P':
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote in general election for a primary!",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
 
 			return render(request, "app/ballot.html", {
 				"form": BallotForm,
@@ -478,7 +522,7 @@ def submit_vote(request):
 
 	print_data = {}
 	# Printing the serial code will change eventually - it's to ensure receipts look different
-	print_data['serial_code'] = serial_code
+	print_data['Total votes'] = VoterSerialCodes.objects.filter(finished=True).count()
 	for key in data.keys():
 		if key != "serial_code":
 			measure = Measure.objects.get(pk=key)
@@ -493,19 +537,13 @@ def submit_vote(request):
 				choice.votes += 1
 				choice.save()
 
-	ip = get_client_ip(request)
-	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/ballot"
 
-	values = print_data
-
-	#encoded_values = urllib.parse.urlencode(values).encode('ascii')
-	#req = urllib.request.Request(PRINT_URL, encoded_values)
-
-	#with urllib.request.urlopen(req) as response:
-		#response.read()
-
-	client = Client(ADAFRUIT_IO_KEY)
-	client.send('vote', values)
+	try:
+		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
+		client = Client(ADAFRUIT_IO_KEY)
+		client.send('vote', str(print_data))
+	except:
+		pass
 
 	return render(request, "app/submitVote.html", {
 		"website_url": WEBSITE_URL,
@@ -658,22 +696,13 @@ def get_voter_serial_code(request):
 		"serial_code": serial_code
 	}
 
-	ip = get_client_ip(request)
-	PRINT_URL = "http://" + ip + ":" + PRINT_PORT + "/voternumber"
-	values = {
-		'voter' : serial_code,
-	}
-	#try:
-		#encoded_values = urllib.parse.urlencode(values).encode('ascii')
-		#req = urllib.request.Request(PRINT_URL, encoded_values)
-
-		#with urllib.request.urlopen(req) as response:
-			#response.read()
-	#except:
-		#final_response["error"] = "Couldn't find printer server."
 	
-	client = Client(ADAFRUIT_IO_KEY)
-	client.send('voter', values)
+	try:
+		ADAFRUIT_IO_KEY = os.environ['ADAFRUIT_IO_KEY']
+		client = Client(ADAFRUIT_IO_KEY)
+		client.send('voter', serial_code)
+	except:
+		final_response["error"] = "Couldn't find printer server."
 
 	# Once everything's done, just redirect back to the dashboard
 	return JsonResponse(final_response)

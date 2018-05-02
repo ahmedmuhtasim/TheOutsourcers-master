@@ -134,8 +134,8 @@ class Precinct(models.Model):
 	id = models.CharField(max_length=10, primary_key=True)
 
 class Poll_Worker(models.Model):
-	person = models.OneToOneField(Person, on_delete=models.CASCADE)
-	precinct = models.OneToOneField(Precinct, on_delete=models.CASCADE)
+	person = models.ForeignKey(Person, on_delete=models.CASCADE)
+	precinct = models.ForeignKey(Precinct, on_delete=models.CASCADE)
 
 class Voter(models.Model):
 	# on_delete tells what to do if person is deleted - in that case, do SQL CASCADE

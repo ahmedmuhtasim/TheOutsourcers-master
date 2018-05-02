@@ -5,8 +5,11 @@ services:
     image: postgres
   web:
     build: .
+    environment:
+        - ADAFRUIT_IO_KEY=${ADAFRUIT_IO_KEY}
     command: > 
-      bash -c "pip install --upgrade -r requirements.txt
+      bash -c "echo \"Environment variable ${ADAFRUIT_IO_KEY}\" 
+      && pip install --upgrade -r requirements.txt
       && pip install psycopg2-binary
       && python3 manage.py makemigrations
       && python3 manage.py migrate

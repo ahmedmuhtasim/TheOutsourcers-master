@@ -7,7 +7,7 @@
 			crossorigin="anonymous"></script>
 		{% load static %}
 		<link rel="stylesheet" href="{% static 'css/global.css' %}">
-		<link rel="stylesheet" href="{% static 'css/elections.css' %}">
+		<link rel="stylesheet" href="{% static 'css/documentation.css' %}">
 	</head>
 	<body>
 		{% if logged_on %}
@@ -20,20 +20,35 @@
 			<div class="body-title">
 				<p>Documentation <span class="text-24 red-text">{{errorMessage}}</span></p>
 			</div>
-			<div class="body-contents">
-                {% for api in results %}
-                <div>
-                    <h1>{{api.url}}</h1>
-                    <h2>{{api.description}}</h2>
-                </div>
-                <div>
-                    <code>{{api.response}}</code>
-                </div>
-                {% endfor %}
+			<div class="body-contents grid">
+				{% for api in results %}
+					<div class='api-definition' style="margin-top: 30px">
+						<div class='left'>
+							<h1>{{api.url}}</h1>
+							<p class='text-14'>{{api.description}}</p>
+							{% for field in api.fields %}
+							<br/>
+							<b>{{field}}</b>
+							<br/>
+							{% endfor %}
+						</div>
+						<div class='right'>
+							<pre class='json'>{{api.response}}</pre>
+						</div>
+					</div>
+				
+				{% endfor %}
 			</div>
 		</div>
 
 		{% include './components/footer.html' %}
 		
 	</body>
+	<script>
+		$('.json').each(function() {
+			var someObject = JSON.parse(this.innerHTML.replace(/\'/g, '"'));
+			this.innerHTML = JSON.stringify(someObject, undefined, 2);
+			console.log(this.innerHTML)
+		})
+	</script>
 </html>

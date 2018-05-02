@@ -14,9 +14,26 @@ from .utility_methods import WEBSITE_URL, multikeysort
 # API
 # Documentation
 def documentation(request):
-	apis = {"elections": "Returns all elections currently in database with ID and Type fields", "elections/2012-09": "Returns all measures on the ballot for the specified election",
-	"elections_brief": "Returns a brief view of all elections in the database including the number of participants", "elections_brief/2012-09": "Returns brief view for specific election", 
-	"elections_full": "Returns all info for all elections", "elections_full/2012-09": "Returns all info for specified election"}
+	apis = {"elections": ["Returns a list of all elections currently in database with id and type fields", "id - string of election date in the format of YYYY-MM",
+	"type - string of the elction type, either 'general' or 'primary'"],
+	"elections/2012-09": ["Returns a list of measures on the ballot for the specified election; use the format 'YYYY-MM'", "type - string referring to the type of measure, either 'Candidacy' or 'Referendum'",
+	"office - string referring to the title of the office the candidate is running for; this only appears if the measure type is Candidacy", 
+	"total_votes - int showing the number of votes cast for the particular measure; exists for both candiate and referendum measure types",
+	"candidates - list containing candidate objects in json form", "candidate - string with the name of the candidate", "running_mate - string with the name of the candidate's running mate",
+	"party - string displaying the name the political party of the candidate", "votes - int tallying the number of votes submitted for this particular candidate in the candidate measure or choice in a referendum measure", 
+	"question_text - string explaining the referendum on the balot; it is what a voter will see as a question or proposal on the official ballot", "choices - list of choice objects in json form", 
+	"choice_text - string containing a possible answer to be selected" ],
+	"elections_brief": ["Returns a brief view of all elections in the database including the number of participants categorized by status", "open - list of election objects in json form that are currently being voted in",
+	"closed - list of election objects in json form that are closed and no longer being voted in", "future - list of election objects in json form that will be open in the future", "name - string of displayble name for a particular election",
+	"total_participants - int tallying the number of voters who have participated in the election", "type - string of the elction type, either 'general' or 'primary'", "status - string giving the status of the election, either 'open', 'closed' or 'future'"],
+	"elections_brief/2012-09": ["Returns the brief view for specific election; use the format 'YYYY-MM'", "name - string of displayble name for a particular election",
+	"total_participants - int tallying the number of voters who have participated in the election", "type - string of the elction type, either 'general' or 'primary'", "status - string giving the status of the election, either 'open', 'closed' or 'future'"], 
+	"elections_full": ["Returns all info for all elections", "open - list of election objects in json form that are currently being voted in",
+	"closed - list of election objects in json form that are closed and no longer being voted in", "future - list of election objects in json form that will be open in the future",
+	"name - string of displayble name for a particular election", "status - string giving the status of the election, either 'open', 'closed' or 'future'", "total_participants - int tallying the number of voters who have participated in the election",
+	"meaures - list of measures (see above for fields in the measure object)"],
+	"elections_full/2012-09": ["Returns all info for specified election; use the format 'YYYY-MM'", "name - string of displayble name for a particular election", "status - string giving the status of the election, either 'open', 'closed' or 'future'", "total_participants - int tallying the number of voters who have participated in the election",
+	"meaures - list of measures (see above for fields in the measure object)"]}
 	results = []
 	for api in apis.keys():
 		api_json = {}
@@ -25,7 +42,8 @@ def documentation(request):
 		response = json.loads(resp_json)
 		api_json["url"] = "/api/" + api
 		api_json["response"] = response
-		api_json["description"] = apis[api]
+		api_json["description"] = apis[api][0]
+		api_json["fields"] = apis[api][1:]
 		results.append(api_json)
 	api_results = {"results": results}
 	return render(request, "app/documentation.html", api_results)
@@ -98,12 +116,13 @@ def election_brief(request, pk):
 	# get type
 	election_type = election.get_type_display()
 	# get vote counts through voter serial codes
-	participant_count = len(VoterSerialCodes.objects.filter(election=election))
+	participant_count = VoterSerialCodes.objects.filter(finished=True, election=election).count()
 	# format title
 	title = election.markup_str()
 	# check if opened, closed, or current
 	today = datetime.date.today()
 	election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+	election_date.replace(day=today.day)
 	# set status
 	if election_date < today:
 		status = "closed"
@@ -138,6 +157,7 @@ def elections_brief(request):
 		# check if opened, closed, or current
 		today = datetime.date.today()
 		election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+		election_date.replace(day=today.day)
 		json = {
 			"name": title,
 			"id": election_id,
@@ -199,6 +219,7 @@ def elections_full(request):
 		# check if opened, closed, or current
 		today = datetime.date.today()
 		election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+		election_date.replace(day=today.day)
 		# set status
 		status = ""
 		if election_date < today:
@@ -272,6 +293,7 @@ def election_full(request, pk):
 	# check if opened, closed, or current
 	today = datetime.date.today()
 	election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+	election_date.replace(day=today.day)
 	# set status
 	status = ""
 	if election_date < today:

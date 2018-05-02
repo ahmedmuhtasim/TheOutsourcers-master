@@ -46,31 +46,27 @@
 	</body>
 	<script>
 
-		const dayof = new Date("2018-11-06");
-		const today = new Date("2018-11-06");
 		$(document).ready(function() {
-			console.log(window.location.pathname);
+			// Focuses on the serial code input on page load
 			$("#id_serial_code").focus();
-			
 		});
 		$("#id_serial_code").on('input', function() {
+			// Submits the form once the serial code reaches its expected length
 			if ($(this).val().length === 13) {
 				$("#submitForm").click();
 			}
 		});
+		// Prevents right clicking to avoid snooping
 		document.addEventListener('contextmenu', event => event.preventDefault());
+		
 		$(document).keydown(function (event) {
-    if (event.keyCode == 123) { // Prevent F12
-        return false;
-    } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
-        return false;
-    }else if(event.keyCode==27){
-		return false;
-	}
-});
-
-
-
-
+			if (event.keyCode == 123) { // Prevent F12
+				return false;
+			} else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+				return false;
+			}else if(event.keyCode==27){
+				return false;
+			}
+		});
 	</script>
 </html>
