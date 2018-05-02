@@ -26,7 +26,6 @@ def disconnected(client):
     print('Disconnected from Adafruit IO!')
 
 def vote_message(client, feed_id, payload):
-    #print(payload)
     d = ast.literal_eval(payload)
     for key in d.keys():
         print(key, ":", d[key])
@@ -37,6 +36,19 @@ def vote_message(client, feed_id, payload):
 
 def voter_message(client, feed_id, payload):
     p.qr(payload, size=10)
+    p.text("Hi there!\n")
+    p.text("Thanks for choosing The \n")
+    p.text("Outsourcers, your primary\n")
+    p.text("voting experience!\n")
+    p.text("Take me to the booth\n")
+    p.text("and select either general,\n")
+    p.text("if voting in a general\n")
+    p.text("or the party whose primary\n")
+    p.text("you are voting for.\n")
+    p.text("Then, scan the QR code into\n")
+    p.text("the box.  Thanks!\n")
+    p.text("If that doesn't work,\n")
+    p.text("try typing this manually:\n")
     p.text(payload)
     p.cut()
     print(payload)
