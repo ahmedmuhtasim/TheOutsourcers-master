@@ -13,6 +13,7 @@ import urllib
 import hmac
 import logging
 import os
+import datetime
 from django.contrib.auth.hashers import make_password, check_password
 from Adafruit_IO import Client
 
@@ -174,7 +175,6 @@ def election_result(request, pk):
 	    #       ]
 	    #   }
 
-import datetime
 
 
 
@@ -428,9 +428,8 @@ def vote(request):
 
 	form = VoteValidationForm
 	if request.method == "GET":
-		is_day_of = False
-		day_of = date(2018, 4, 14)
-		today = date.today()
+		# Since elections only happen once a month, we no longer need is_day_of
+		# Was a requirements problem
 		is_day_of = True
 		return render(request, "app/vote.html", {
 			"form": form,
@@ -443,11 +442,13 @@ def vote(request):
 
 		if form.is_valid():
 			
+			# Get form data to go to ballot
 			serial_code = form.cleaned_data['serial_code']
 			voter = validate_serial_code(serial_code)
 			election_type = form.cleaned_data['election_type']
 
-			if str(type(voter)) == "<class 'NoneType'>" : # <-- shitty fix later
+
+			if str(type(voter)) == "<class 'NoneType'>" : 
 				return render(request, "app/vote.html", {
 					"errorMessage": "Serial Code Invalid",
 					"logged_on": logged_on,
@@ -459,6 +460,22 @@ def vote(request):
 			if voter.election:
 				election = voter.election
 				ballot = election.ballot
+				if (election_type == "R" or election_type == "D") and election.type == 'G':
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote in a primary for a general election!",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
+				if (election_type == "G") and election.type == 'P':
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote in general election for a primary!",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
 
 			return render(request, "app/ballot.html", {
 				"form": BallotForm,
