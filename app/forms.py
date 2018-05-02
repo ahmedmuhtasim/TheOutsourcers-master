@@ -21,9 +21,9 @@ class LoginForm(forms.Form):
 class VoteValidationForm(forms.Form):
 	serial_code = forms.CharField(label='serial code', max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Serial Code'}))
 	ELECTION_CHOICES = (
+		('G', 'General Election'),
 		('R', 'Republican Primary'),
-		('D', 'Democratic Primary'),
-		('G', 'General Election')
+		('D', 'Democratic Primary')
 	)
 	election_type = forms.ChoiceField(label='election type', choices=ELECTION_CHOICES)
 
