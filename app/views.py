@@ -460,6 +460,18 @@ def vote(request):
 			if voter.election:
 				election = voter.election
 				ballot = election.ballot
+				# check if opened, closed, or current
+				today = datetime.date.today()
+				election_date = datetime.datetime.strptime(election.id, '%Y-%m').date()
+				election_date.replace(day=today.day)
+				if election_date != today:
+					return render(request, "app/vote.html", {
+						"errorMessage": "Trying to vote on bad day. :(",
+						"logged_on": logged_on,
+						"form": form,
+						"is_day_of": True,
+						"website_url": WEBSITE_URL,
+					})
 				if (election_type == "R" or election_type == "D") and election.type == 'G':
 					return render(request, "app/vote.html", {
 						"errorMessage": "Trying to vote in a primary for a general election!",

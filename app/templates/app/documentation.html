@@ -22,10 +22,15 @@
 			</div>
 			<div class="body-contents grid">
 				{% for api in results %}
-					<div class='api-definition'>
+					<div class='api-definition' style="margin-top: 30px;">
 						<div class='left'>
 							<h1>{{api.url}}</h1>
 							<p class='text-14'>{{api.description}}</p>
+							{% for field in api.fields %}
+							<br/>
+							<b>{{field}}</b>
+							<br/>
+							{% endfor %}
 						</div>
 						<div class='right'>
 							<code class='json'>{{api.response}}</code>
