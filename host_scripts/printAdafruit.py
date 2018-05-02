@@ -4,7 +4,7 @@ import ast
 import time
 import json
 
-#p = Usb(0x456, 0x0808, 0, 0x81, 0x03)
+p = Usb(0x456, 0x0808, 0, 0x81, 0x03)
 
 secrets = open("../.env").readlines()
 ADAFRUIT_IO_KEY = secrets[0][secrets[0].find('=')+1:-1]
@@ -30,19 +30,16 @@ def vote_message(client, feed_id, payload):
     d = ast.literal_eval(payload)
     for key in d.keys():
         print(key, ":", d[key])
-        #p.text(' ' + key + ': ' + value + '\n')
-    #p.image("voted.jpg")
-    #p.cut()
+        p.text(' ' + str(key) + ': ' + str(d[key]) + '\n')
+    p.image("voted.jpg")
+    p.cut()
 
 
 def voter_message(client, feed_id, payload):
+    p.qr(payload, size=10)
+    p.text(payload)
+    p.cut()
     print(payload)
-    #p.text(payload)
-    #p.qr(payload)
-    #p.cut()
-
-
-
 
 vote_client = MQTTClient(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
 vote_client.on_connect    = vote_connected
@@ -57,7 +54,6 @@ voter_client.on_disconnect = disconnected
 voter_client.on_message = voter_message
 voter_client.connect()
 voter_client.loop_background()
-
 
 while True:
     pass
