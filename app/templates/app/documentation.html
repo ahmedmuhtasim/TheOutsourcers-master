@@ -22,7 +22,7 @@
 			</div>
 			<div class="body-contents grid">
 				{% for api in results %}
-					<div class='api-definition' style="margin-top: 30px;">
+					<div class='api-definition' style="margin-top: 30px">
 						<div class='left'>
 							<h1>{{api.url}}</h1>
 							<p class='text-14'>{{api.description}}</p>
@@ -33,7 +33,7 @@
 							{% endfor %}
 						</div>
 						<div class='right'>
-							<code class='json'>{{api.response}}</code>
+							<pre class='json'>{{api.response}}</pre>
 						</div>
 					</div>
 				
@@ -46,7 +46,9 @@
 	</body>
 	<script>
 		$('.json').each(function() {
-			console.log(this);
+			var someObject = JSON.parse(this.innerHTML.replace(/\'/g, '"'));
+			this.innerHTML = JSON.stringify(someObject, undefined, 2);
+			console.log(this.innerHTML)
 		})
 	</script>
 </html>
